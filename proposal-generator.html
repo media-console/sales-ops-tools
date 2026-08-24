@@ -269,7 +269,7 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
 .pdf-insights-text{flex:1;font-size:12px;color:var(--navy);font-weight:500;line-height:1.7;min-width:0;}
 .pdf-sdi-images{display:grid;gap:14px;}
 .pdf-sdi-images.pdf-sdi-one{grid-template-columns:1fr;}
-.pdf-sdi-images.pdf-sdi-two{grid-template-columns:1fr 1fr;}
+.pdf-sdi-images.pdf-sdi-two,.pdf-sdi-images.pdf-sdi-multi{grid-template-columns:1fr 1fr;}
 .pdf-sdi-img{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#f8f9fb;}
 .pdf-sdi-img img{width:100%;height:260px;display:block;}
 .pdf-sdi-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;font-size:12px;color:var(--muted);font-weight:500;}
@@ -325,6 +325,7 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
 .pdf-kpi-tbl td{padding:10px 3px;border-bottom:1px solid #eee;text-align:center;font-size:7.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pdf-kpi-tbl td:first-child,.pdf-kpi-tbl td:nth-child(2){text-align:left;font-weight:500;}
 .pdf-kpi-tbl .total-row td{background:var(--navy)!important;color:#fff!important;font-weight:700;}
+.pdf-kpi-tbl .grand-total-row td{background:#000!important;border-top:2px solid #fff;}
 
 /* Footer — campaign name only, centered, thin rule above */
 .pdf-footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);text-align:center;font-size:10px;color:var(--muted-soft);font-weight:600;letter-spacing:.03em;}
@@ -412,8 +413,8 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
       <a href="#sec-exec" class="side-link" data-target="sec-exec"><span class="side-badge">3</span>Executive Summary</a>
       <a href="#sec-sdi" class="side-link" data-target="sec-sdi"><span class="side-badge">4</span>Search Demand</a>
       <a href="#sec-geo" class="side-link" data-target="sec-geo"><span class="side-badge">5</span>Geography</a>
-      <a href="#sec-mp" class="side-link" data-target="sec-mp"><span class="side-badge">6</span>Media Plan</a>
-      <a href="#sec-kpi" class="side-link" data-target="sec-kpi"><span class="side-badge">7</span>KPI Performance</a>
+      <a href="#sec-kpi" class="side-link" data-target="sec-kpi"><span class="side-badge">6</span>KPI Performance</a>
+      <a href="#sec-mp" class="side-link" data-target="sec-mp"><span class="side-badge">7</span>Media Plan</a>
       <a href="#sec-sap" class="side-link" data-target="sec-sap"><span class="side-badge">8</span>Ad Placement</a>
       <a href="#sec-quotation" class="side-link" data-target="sec-quotation"><span class="side-badge">9</span>Quotation</a>
       <a href="#sec-closing" class="side-link" data-target="sec-closing"><span class="side-badge">10</span>Closing</a>
@@ -432,7 +433,7 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
     <div class="kpi-card"><div class="kpi-label">Duration</div><div class="kpi-value" id="s-dur">—</div></div>
   </div>
   <div class="card bb-card">
-    <div class="bb-lbl-row"><div class="bb-lbl">Budget Split by Campaign Type</div></div>
+    <div class="bb-lbl-row"><div class="bb-lbl">Budget Allocation by Campaign Type</div></div>
     <div class="bb-track" id="budget-bar-track"><div class="bb-empty"></div></div>
     <div class="bb-legend" id="budget-bar-legend"><span class="bb-empty-txt">Add ad-group budgets to see the split</span></div>
   </div>
@@ -506,12 +507,21 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
       <div class="logo-box">
         <div class="logo-prev">
           <img id="client-img" src="" alt="" style="display:none">
-          <div class="logo-ph" id="client-ph"><br>Client Logo</div>
+          <div class="logo-ph" id="client-ph"><br>Client Main Logo</div>
           <input type="file" accept="image/*" onchange="loadLogo(this,'client')">
         </div>
-        <span class="logo-lbl">Client Logo</span>
+        <span class="logo-lbl">Client Main Logo</span>
+      </div>
+      <div class="logo-box">
+        <div class="logo-prev">
+          <img id="client2-img" src="" alt="" style="display:none">
+          <div class="logo-ph" id="client2-ph"><br>Client 2nd Logo</div>
+          <input type="file" accept="image/*" onchange="loadLogo(this,'client2')">
+        </div>
+        <span class="logo-lbl">Client 2nd Logo</span>
       </div>
     </div>
+    <div class="kpi-hint" style="margin-top:10px;padding-bottom:0;">Client Main Logo appears on the Cover and Closing pages. Client 2nd Logo appears in the top-right corner of every other slide (leave it blank to reuse the Main Logo there instead).</div>
     </div>
   </div>
 
@@ -625,7 +635,7 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
         </div>
         <div class="fgrp">
           <label>Countries Booking Performance</label>
-          <div class="kpi-hint" style="margin-bottom:8px;">Grand Total row calculates automatically (Booking &amp; Revenue sum, ABV = Revenue ÷ Booking, ALOS &amp; BLT averaged).</div>
+          <div class="kpi-hint" style="margin-bottom:8px;">ABV auto-calculates per row (Revenue ÷ Booking). Grand Total row also calculates automatically (Booking &amp; Revenue sum, ABV = Revenue ÷ Booking, ALOS &amp; BLT averaged).</div>
           <div class="kpi-wrap">
             <table class="kpi-table">
               <thead><tr><th style="width:110px">Country</th><th>Booking</th><th>Revenue</th><th>ABV</th><th>ALOS</th><th>BLT</th><th style="width:30px"></th></tr></thead>
@@ -683,50 +693,9 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
       </label>
     </div>
     <div id="sdi-fields" style="display:none;">
-      <div class="fgrp" style="margin-bottom:14px;">
-        <label>Number of Images</label>
-        <select id="sdi-image-count" onchange="toggleSdiImage2()">
-          <option value="1">1 image (e.g. SEM Branded only)</option>
-          <option value="2">2 images (e.g. SEM Branded + SEM Generic)</option>
-        </select>
-      </div>
-      <div class="fg2" style="margin-bottom:14px;max-width:900px;">
-        <div class="fgrp">
-          <label>Image 1</label>
-          <div class="side-img-prev" id="sdi-image1-prev" style="aspect-ratio:3/2;height:auto;" onpointerdown="imgDragStart('sdi-image1',event)">
-            <img id="sdi-image1-img" src="" alt="" style="display:none">
-            <div class="zoom-bg-layer" id="sdi-image1-bg" style="display:none;"></div>
-            <div class="logo-ph" id="sdi-image1-ph" onclick="document.getElementById('sdi-image1-file').click()"><br>Upload keyword search data screenshot</div>
-            <div class="cover-actions" id="sdi-image1-actions" style="display:none">
-              <button type="button" class="cover-act-btn" onclick="document.getElementById('sdi-image1-file').click();event.stopPropagation()" title="Change image">⟳ Change</button>
-              <button type="button" class="cover-act-btn" onclick="removeSimpleImage('sdi-image1',event)" title="Remove image">× Remove</button>
-            </div>
-            <input type="file" id="sdi-image1-file" accept="image/*" style="display:none" onchange="loadLogo(this,'sdi-image1')">
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-            <span style="font-size:10.5px;color:var(--muted);">Zoom</span>
-            <input type="range" id="sdi-image1-zoom" min="100" max="300" value="100" style="flex:1" oninput="onZoomSliderChange('sdi-image1',this.value)">
-          </div>
-        </div>
-        <div class="fgrp" id="sdi-image2-wrap" style="display:none;">
-          <label>Image 2</label>
-          <div class="side-img-prev" id="sdi-image2-prev" style="aspect-ratio:3/2;height:auto;" onpointerdown="imgDragStart('sdi-image2',event)">
-            <img id="sdi-image2-img" src="" alt="" style="display:none">
-            <div class="zoom-bg-layer" id="sdi-image2-bg" style="display:none;"></div>
-            <div class="logo-ph" id="sdi-image2-ph" onclick="document.getElementById('sdi-image2-file').click()"><br>Upload second keyword search data screenshot</div>
-            <div class="cover-actions" id="sdi-image2-actions" style="display:none">
-              <button type="button" class="cover-act-btn" onclick="document.getElementById('sdi-image2-file').click();event.stopPropagation()" title="Change image">⟳ Change</button>
-              <button type="button" class="cover-act-btn" onclick="removeSimpleImage('sdi-image2',event)" title="Remove image">× Remove</button>
-            </div>
-            <input type="file" id="sdi-image2-file" accept="image/*" style="display:none" onchange="loadLogo(this,'sdi-image2')">
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-            <span style="font-size:10.5px;color:var(--muted);">Zoom</span>
-            <input type="range" id="sdi-image2-zoom" min="100" max="300" value="100" style="flex:1" oninput="onZoomSliderChange('sdi-image2',this.value)">
-          </div>
-        </div>
-      </div>
-      <div class="kpi-hint" id="sdi-image1-drag-hint" style="display:none;padding-bottom:0;margin-bottom:10px;">Drag the image to reposition it, use Zoom to crop in closer.</div>
+      <div class="kpi-hint" style="margin-bottom:10px;">Upload as many keyword search data screenshots as you need — click "+ Add Image" for more.</div>
+      <div id="sdi-images-container" style="max-width:900px;"></div>
+      <button type="button" class="add-btn" style="margin-top:6px;margin-bottom:16px;" onclick="addSdiImage()">+ Add Image</button>
       <div class="fgrp" style="margin-bottom:14px;">
         <label>Keyword Search Summary</label>
         <div class="rt-toolbar">
@@ -861,10 +830,70 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
     </div>
   </div>
 
-  <!-- ③ Media Plan — flat table -->
+  <!-- ③ KPI -->
+  <div class="card" id="sec-kpi">
+    <div class="card-hd" onclick="toggleCard(this)">
+      <div class="stt"><span class="stt-badge">6</span>KPI Performance</div>
+      <span class="chev">⌄</span>
+    </div>
+    <div class="card-body">
+    <div class="kpi-date-lbl" id="kpi-date-lbl">Period: —</div>
+    <div class="kpi-total-row">
+      <div class="fgrp"><label>Total KPI Budget</label><input type="text" inputmode="decimal" id="kpi-total-budget" placeholder="0.00" oninput="applyKpiBudget()" onblur="fmtInput('kpi-total-budget')" style="width:150px"></div>
+      <div class="kpi-hint">Set total → enter % per row → Ad Spent auto-fills</div>
+    </div>
+    <p class="kpi-hint" style="margin-bottom:10px;">Enter <strong>%</strong> (or Ad Spent directly), <strong>CPM</strong>, <strong>CTR</strong>, <strong>CVR</strong>, <strong>ABV</strong> — rest calculates automatically.</p>
+    <div class="bench-bar">
+      <div class="fgrp" style="min-width:160px;">
+        <label style="margin-bottom:2px;">Destination</label>
+        <select id="kpi-destination" style="height:36px;"></select>
+      </div>
+      <button class="add-btn" style="margin-top:0" onclick="applyBenchmarks()">Suggest CPM / CTR / CVR by Channel</button>
+      <button class="copy-date-btn" style="margin-top:0" onclick="openBenchmarkManager()">Manage Benchmark Database</button>
+    </div>
+    <div class="kpi-wrap">
+    <table class="kpi-table">
+        <thead><tr>
+          <th style="width:130px">Campaign</th><th style="width:130px">Channel</th><th style="width:55px">%</th>
+          <th style="width:100px">Ad Spent</th><th style="width:90px">Impressions</th><th style="width:70px">CPM</th>
+          <th style="width:70px">Clicks</th><th style="width:65px">CPC</th><th style="width:60px">CTR</th>
+          <th style="width:85px">Conversions</th><th style="width:90px">CPA</th><th style="width:60px">CVR</th>
+          <th style="width:90px">ABV</th><th style="width:100px">Revenue</th><th style="width:60px">ROAS</th>
+          <th style="width:30px"></th>
+        </tr></thead>
+        <tbody id="kpi-body"></tbody>
+        <tfoot id="kpi-foot"></tfoot>
+      </table>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+      <button class="add-btn" style="margin-top:0" onclick="addKpiRow()">+ Add KPI Row</button>
+      <button class="copy-date-btn" onclick="clearKpi()" style="color:#dc2626;border-color:#fecaca;">Clear all rows</button>
+      <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--text);font-weight:500;margin-left:auto;">
+        <input type="checkbox" id="kpi-show-subtotals" checked style="width:auto;height:auto;" onchange="kpiTotal()"> Show Campaign Subtotal rows
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--text);font-weight:500;">
+        <input type="checkbox" id="kpi-show-grandtotal" checked style="width:auto;height:auto;" onchange="kpiTotal()"> Show Grand Total row
+      </label>
+    </div>
+    <div class="fgrp" style="margin-top:16px;">
+      <label>Notes (optional) — describe how to read these Estimated KPIs</label>
+      <div class="rt-toolbar">
+        <button type="button" onmousedown="event.preventDefault()" onclick="richCmd('kpi-notes','bold')" title="Bold"><b>B</b></button>
+        <input type="color" onmousedown="event.preventDefault()" oninput="richColor('kpi-notes',this.value)" title="Text color" value="#161b2c">
+        <button type="button" onmousedown="event.preventDefault()" onclick="richClear('kpi-notes')" title="Clear this box">Clear</button>
+      </div>
+      <div id="kpi-notes" class="rich-editor" contenteditable="true" onfocus="document.execCommand('defaultParagraphSeparator',false,'br')" data-placeholder="e.g. Estimates are based on historical account performance for similar campaigns and may vary once live." style="min-height:70px"></div>
+    </div>
+    <div id="kpi-extra-tiers"></div>
+    <div class="kpi-hint" style="margin-top:14px;padding-bottom:0;">Need to show the client more than one budget scenario (e.g. Conservative / Recommended / Aggressive)? Add an Option — it adds a matching Media Plan + KPI Performance table pair as its own page(s) in the PDF.</div>
+    <button type="button" class="add-btn" style="margin-top:10px;" onclick="addBudgetTier()">+ Add Option</button>
+    </div>
+  </div>
+
+  <!-- ④ Media Plan — flat table -->
   <div class="card" id="sec-mp">
     <div class="card-hd" onclick="toggleCard(this)">
-      <div class="stt"><span class="stt-badge">6</span>Media Plan</div>
+      <div class="stt"><span class="stt-badge">7</span>Media Plan</div>
       <span class="chev">⌄</span>
     </div>
     <div class="card-body">
@@ -917,57 +946,8 @@ textarea{height:auto;padding:12px 13px;resize:vertical;min-height:56px;line-heig
       <label>Remark (optional)</label>
       <textarea id="mp-remark" placeholder="e.g. GEO performance is tracked based on user IP addresses, which may not always align with actual nationalities." style="min-height:70px"></textarea>
     </div>
-    </div>
-  </div>
-
-  <!-- ④ KPI -->
-  <div class="card" id="sec-kpi">
-    <div class="card-hd" onclick="toggleCard(this)">
-      <div class="stt"><span class="stt-badge">7</span>KPI Performance</div>
-      <span class="chev">⌄</span>
-    </div>
-    <div class="card-body">
-    <div class="kpi-date-lbl" id="kpi-date-lbl">Period: —</div>
-    <div class="kpi-total-row">
-      <div class="fgrp"><label>Total KPI Budget</label><input type="text" inputmode="decimal" id="kpi-total-budget" placeholder="0.00" oninput="applyKpiBudget()" onblur="fmtInput('kpi-total-budget')" style="width:150px"></div>
-      <div class="kpi-hint">Set total → enter % per row → Ad Spent auto-fills</div>
-    </div>
-    <p class="kpi-hint" style="margin-bottom:10px;">Enter <strong>%</strong> (or Ad Spent directly), <strong>CPM</strong>, <strong>CTR</strong>, <strong>CVR</strong>, <strong>ABV</strong> — rest calculates automatically.</p>
-    <div class="bench-bar">
-      <div class="fgrp" style="min-width:160px;">
-        <label style="margin-bottom:2px;">Destination</label>
-        <select id="kpi-destination" style="height:36px;"></select>
-      </div>
-      <button class="add-btn" style="margin-top:0" onclick="applyBenchmarks()">Suggest CPM / CTR / CVR by Channel</button>
-      <button class="copy-date-btn" style="margin-top:0" onclick="openBenchmarkManager()">Manage Benchmark Database</button>
-    </div>
-    <div class="kpi-wrap">
-    <table class="kpi-table">
-        <thead><tr>
-          <th style="width:130px">Campaign</th><th style="width:130px">Channel</th><th style="width:55px">%</th>
-          <th style="width:100px">Ad Spent</th><th style="width:90px">Impressions</th><th style="width:70px">CPM</th>
-          <th style="width:70px">Clicks</th><th style="width:65px">CPC</th><th style="width:60px">CTR</th>
-          <th style="width:85px">Conversions</th><th style="width:90px">CPA</th><th style="width:60px">CVR</th>
-          <th style="width:90px">ABV</th><th style="width:100px">Revenue</th><th style="width:60px">ROAS</th>
-          <th style="width:30px"></th>
-        </tr></thead>
-        <tbody id="kpi-body"></tbody>
-        <tfoot id="kpi-foot"></tfoot>
-      </table>
-    </div>
-    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
-      <button class="add-btn" style="margin-top:0" onclick="addKpiRow()">+ Add KPI Row</button>
-      <button class="copy-date-btn" onclick="clearKpi()" style="color:#dc2626;border-color:#fecaca;">Clear all rows</button>
-    </div>
-    <div class="fgrp" style="margin-top:16px;">
-      <label>Notes (optional) — describe how to read these Estimated KPIs</label>
-      <div class="rt-toolbar">
-        <button type="button" onmousedown="event.preventDefault()" onclick="richCmd('kpi-notes','bold')" title="Bold"><b>B</b></button>
-        <input type="color" onmousedown="event.preventDefault()" oninput="richColor('kpi-notes',this.value)" title="Text color" value="#161b2c">
-        <button type="button" onmousedown="event.preventDefault()" onclick="richClear('kpi-notes')" title="Clear this box">Clear</button>
-      </div>
-      <div id="kpi-notes" class="rich-editor" contenteditable="true" onfocus="document.execCommand('defaultParagraphSeparator',false,'br')" data-placeholder="e.g. Estimates are based on historical account performance for similar campaigns and may vary once live." style="min-height:70px"></div>
-    </div>
+    <div id="mp-extra-tiers"></div>
+    <button type="button" class="add-btn" style="margin-top:16px;" onclick="addBudgetTier()">+ Add Option</button>
     </div>
   </div>
 
@@ -1263,10 +1243,10 @@ let benchmarkDB={
 };
 
 /* ══ STATE ══ */
-let agencyDataUrl='', clientDataUrl='', coverDataUrl='';
+let agencyDataUrl='', clientDataUrl='', client2DataUrl='', coverDataUrl='';
 let detailsImageUrl='', geoInsightsImageUrl='', geoInsightsImage2Url='', geoInsightsImage3Url='', quotationImageUrl='';
 let geoImgSlotsShown=1;
-let sdiImage1Url='', sdiImage2Url='';
+let sdiImages=[];
 let sapSlides=[{images:[null,null,null,null],description:''}];
 let coverPosX=50, coverPosY=50, coverZoom=100;
 let geoCount=0, campCount=0, agCount=0, kpiCount=0, execCount=0;
@@ -1284,14 +1264,13 @@ function loadLogo(input,type){
     const url=e.target.result;
     if(type==='agency') agencyDataUrl=url;
     else if(type==='client') clientDataUrl=url;
+    else if(type==='client2') client2DataUrl=url;
     else if(type==='cover') coverDataUrl=url;
     else if(type==='details-image') detailsImageUrl=url;
     else if(type==='geo-insights-image') geoInsightsImageUrl=url;
     else if(type==='geo-insights-image2') geoInsightsImage2Url=url;
     else if(type==='geo-insights-image3') geoInsightsImage3Url=url;
     else if(type==='quotation-image') quotationImageUrl=url;
-    else if(type==='sdi-image1') sdiImage1Url=url;
-    else if(type==='sdi-image2') sdiImage2Url=url;
     document.getElementById(type+'-img').src=url;
     document.getElementById(type+'-ph').style.display='none';
     const genActions=document.getElementById(type+'-actions');
@@ -1309,7 +1288,7 @@ function loadLogo(input,type){
       if(hintEl) hintEl.style.display='block';
     }else{
       document.getElementById(type+'-img').style.display='block';
-      if(type!=='agency'&&type!=='client'&&!CONTAIN_MODE_TYPES.includes(type)){
+      if(type!=='agency'&&type!=='client'&&type!=='client2'&&!CONTAIN_MODE_TYPES.includes(type)){
         resetImgPos(type);
         const prevEl=document.getElementById(type+'-prev');
         if(prevEl) prevEl.style.cursor='grab';
@@ -1422,14 +1401,22 @@ function addExecRow(d={}){
   tr.id='exec-'+id;
   tr.innerHTML=`
     <td><input type="text" id="exec-country-${id}" value="${d.country||''}" placeholder="e.g. United States" style="font-size:12px;text-align:left"></td>
-    <td><input type="text" inputmode="decimal" id="exec-booking-${id}" value="${d.booking||''}" placeholder="0" oninput="recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
-    <td><input type="text" inputmode="decimal" id="exec-revenue-${id}" value="${d.revenue||''}" placeholder="0.00" oninput="recalcExecTotals()" onblur="fmtInput('exec-revenue-${id}');recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
-    <td><input type="text" inputmode="decimal" id="exec-abv-${id}" value="${d.abv||''}" placeholder="0.00" oninput="recalcExecTotals()" onblur="fmtInput('exec-abv-${id}');recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
+    <td><input type="text" inputmode="decimal" id="exec-booking-${id}" value="${d.booking||''}" placeholder="0" oninput="calcExecAbv(${id});recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
+    <td><input type="text" inputmode="decimal" id="exec-revenue-${id}" value="${d.revenue||''}" placeholder="0.00" oninput="calcExecAbv(${id});recalcExecTotals()" onblur="fmtInput('exec-revenue-${id}');recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
+    <td><input type="text" inputmode="decimal" id="exec-abv-${id}" value="${d.abv||''}" placeholder="0.00" readonly title="Auto-calculated: Revenue ÷ Booking" style="text-align:right;font-family:var(--mono);font-size:12px;background:var(--border-soft);color:var(--muted);cursor:not-allowed;"></td>
     <td><input type="text" inputmode="decimal" id="exec-alos-${id}" value="${d.alos||''}" placeholder="0" oninput="recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
     <td><input type="text" inputmode="decimal" id="exec-blt-${id}" value="${d.blt||''}" placeholder="0" oninput="recalcExecTotals()" style="text-align:right;font-family:var(--mono);font-size:12px"></td>
     <td style="text-align:center;padding-top:8px"><button class="del-btn" onclick="delRow('exec-${id}');recalcExecTotals()">×</button></td>`;
   document.getElementById('exec-body').appendChild(tr);
+  calcExecAbv(id);
   recalcExecTotals();
+}
+function calcExecAbv(id){
+  const num=v=>{const n=parseFloat((v||'').replace(/,/g,''));return isNaN(n)?0:n;};
+  const booking=num(document.getElementById('exec-booking-'+id)?.value);
+  const revenue=num(document.getElementById('exec-revenue-'+id)?.value);
+  const abvEl=document.getElementById('exec-abv-'+id);
+  if(abvEl) abvEl.value=booking>0?fmt2(revenue/booking):'';
 }
 function recalcExecTotals(){
   const rows=Array.from(document.querySelectorAll('#exec-body tr'));
@@ -1478,11 +1465,76 @@ function toggleSdiFields(){
   const on=document.getElementById('sdi-enabled')?.checked;
   const fields=document.getElementById('sdi-fields');
   if(fields) fields.style.display=on?'block':'none';
+  if(on) renderSdiImages();
 }
-function toggleSdiImage2(){
-  const count=document.getElementById('sdi-image-count')?.value;
-  const wrap=document.getElementById('sdi-image2-wrap');
-  if(wrap) wrap.style.display=(count==='2')?'block':'none';
+/* ══ SEARCH DEMAND — unlimited keyword-search screenshots (no Generic/Branded labeling) ══ */
+function renderSdiImages(){
+  const holder=document.getElementById('sdi-images-container');
+  if(!holder) return;
+  if(!sdiImages.length) sdiImages.push(null);
+  holder.innerHTML=sdiImages.map((url,i)=>{
+    const type='sdi-img-'+i;
+    return `<div style="margin-bottom:16px;${i>0?'padding-top:16px;border-top:1px solid var(--border);':''}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <label style="margin:0;">Image ${i+1}</label>
+        ${sdiImages.length>1?`<button type="button" onclick="removeSdiImage(${i})" style="border:none;background:transparent;color:#dc2626;font-size:11px;font-weight:700;cursor:pointer;">✕ Remove</button>`:''}
+      </div>
+      <div class="img-split">
+        <div class="img-upload-btn" onclick="sdiImageFileClick(${i})">
+          <div style="font-size:26px;">📊</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:6px;">Click to upload</div>
+        </div>
+        <div class="side-img-prev" id="${type}-prev" style="aspect-ratio:3/2;height:auto;" onpointerdown="imgDragStart('${type}',event)">
+          <img id="${type}-img" src="${url||''}" alt="" style="display:none">
+          <div class="zoom-bg-layer" id="${type}-bg" style="display:${url?'block':'none'};"></div>
+          <div class="logo-ph" id="${type}-ph" style="pointer-events:none;font-size:11px;display:${url?'none':'block'};"><br>Upload keyword search data screenshot</div>
+          <div class="cover-actions" id="${type}-actions" style="display:${url?'flex':'none'};">
+            <button type="button" class="cover-act-btn" onclick="sdiImageFileClick(${i});event.stopPropagation()" title="Change image">⟳ Change</button>
+            <button type="button" class="cover-act-btn" onclick="removeSdiImage(${i});event.stopPropagation()" title="Remove image">✕ Remove</button>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px;max-width:360px;">
+        <span style="font-size:10.5px;color:var(--muted);">Zoom</span>
+        <input type="range" id="${type}-zoom" min="100" max="300" value="${getImgZoom(type)}" style="flex:1" oninput="onZoomSliderChange('${type}',this.value)">
+        <button type="button" class="add-btn" style="margin-top:0;padding:6px 10px;white-space:nowrap;" onclick="fitToFrame('${type}')">⤢ Fit to Frame</button>
+      </div>
+      ${url?`<div class="kpi-hint" style="padding-bottom:0;margin-top:4px;">Drag the image to reposition it, use Zoom to crop in closer.</div>`:''}
+    </div>`;
+  }).join('');
+  sdiImages.forEach((url,i)=>{ if(url) renderZoomCrop('sdi-img-'+i); });
+}
+function sdiImageFileClick(i){
+  const inp=document.createElement('input');
+  inp.type='file'; inp.accept='image/*';
+  inp.onchange=()=>{
+    const file=inp.files[0]; if(!file) return;
+    const r=new FileReader();
+    r.onload=e=>{
+      sdiImages[i]=e.target.result;
+      imgZoom['sdi-img-'+i]=100;
+      imgPos['sdi-img-'+i]={x:50,y:50};
+      renderSdiImages();
+    };
+    r.readAsDataURL(file);
+  };
+  inp.click();
+}
+function addSdiImage(){
+  sdiImages.push(null);
+  renderSdiImages();
+}
+function removeSdiImage(i){
+  sdiImages.splice(i,1);
+  // Shift stored zoom/position state down so it stays attached to the correct
+  // image after the remaining ones are reindexed.
+  for(let k=i;k<sdiImages.length;k++){
+    imgPos['sdi-img-'+k]=imgPos['sdi-img-'+(k+1)];
+    imgZoom['sdi-img-'+k]=imgZoom['sdi-img-'+(k+1)];
+  }
+  delete imgPos['sdi-img-'+sdiImages.length];
+  delete imgZoom['sdi-img-'+sdiImages.length];
+  renderSdiImages();
 }
 function toggleSapFields(){
   const on=document.getElementById('sap-enabled')?.checked;
@@ -1527,6 +1579,14 @@ function handleQuotationPaste(e){
    sapSlides: [{images:[dataUrl|null,...], description:''}, ...]
    Each slide becomes its own PDF page; each slide can hold any number of images. */
 function escHtml(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+/* Default export filename: "[Proposal] <Campaign Title>" (e.g. "[Proposal] Naladhu Maldives (MNLD) Q3-Q4 2026") */
+function computeDefaultFileName(){
+  const title=(v('c-title')||'').trim();
+  return title?`[Proposal] ${title}`:'Proposal';
+}
+function sanitizeFileName(name){
+  return (name||'').replace(/[\\/:*?"<>|]+/g,'').trim()||computeDefaultFileName();
+}
 function renderSapSlides(){
   const holder=document.getElementById('sap-slides-container');
   if(!holder) return;
@@ -1629,8 +1689,6 @@ function removeSimpleImage(type,e){
   else if(type==='geo-insights-image2') geoInsightsImage2Url='';
   else if(type==='geo-insights-image3') geoInsightsImage3Url='';
   else if(type==='quotation-image') quotationImageUrl='';
-  else if(type==='sdi-image1') sdiImage1Url='';
-  else if(type==='sdi-image2') sdiImage2Url='';
   const img=document.getElementById(type+'-img');
   if(img){img.src='';img.style.display='none';img.style.objectPosition='';}
   const ph=document.getElementById(type+'-ph');
@@ -1695,11 +1753,10 @@ const imgZoom={};
 function getImgZoom(type){ if(imgZoom[type]==null) imgZoom[type]=100; return imgZoom[type]; }
 /* Types that get a Zoom slider + full manual crop (image is shown via a background
    layer so we can support arbitrary zoom%, not just CSS object-fit's fixed cover/contain). */
-const ZOOM_CROP_TYPES=['sdi-image1','sdi-image2','geo-insights-image','geo-insights-image2','geo-insights-image3','quotation-image'];
+const ZOOM_CROP_TYPES=['geo-insights-image','geo-insights-image2','geo-insights-image3','quotation-image'];
 function imgUrlByType(type){
+  if(type.startsWith('sdi-img-')) return sdiImages[parseInt(type.slice(8),10)]||'';
   switch(type){
-    case 'sdi-image1':return sdiImage1Url;
-    case 'sdi-image2':return sdiImage2Url;
     case 'geo-insights-image':return geoInsightsImageUrl;
     case 'geo-insights-image2':return geoInsightsImage2Url;
     case 'geo-insights-image3':return geoInsightsImage3Url;
@@ -1749,7 +1806,7 @@ function onZoomSliderChange(type,val){
   renderZoomCrop(type);
 }
 function applyImgPos(type){
-  if(ZOOM_CROP_TYPES.includes(type)){ renderZoomCrop(type); return; }
+  if(ZOOM_CROP_TYPES.includes(type)||type.startsWith('sdi-img-')){ renderZoomCrop(type); return; }
   const p=getImgPos(type);
   const img=document.getElementById(type+'-img');
   if(img) img.style.objectPosition=p.x+'% '+p.y+'%';
@@ -1909,35 +1966,199 @@ function pickCombo(id,val){
 }
 
 /* ══ CLEAR FUNCTIONS ══ */
-function clearMp(){
+function clearMp(tier=''){
   if(!confirm('Clear all Media Plan rows?'))return;
-  document.getElementById('mp-body').innerHTML='';
-  mpCount=0; recalc();
+  document.getElementById('mp-body'+tier).innerHTML='';
+  recalcAny(tier);
 }
-function clearKpi(){
+function clearKpi(tier=''){
   if(!confirm('Clear all KPI rows?'))return;
-  document.getElementById('kpi-body').innerHTML='';
-  document.getElementById('kpi-foot').innerHTML='';
-  const kb=document.getElementById('kpi-total-budget');if(kb)kb.value='';
-  kpiCount=0; recalc();
+  document.getElementById('kpi-body'+tier).innerHTML='';
+  document.getElementById('kpi-foot'+tier).innerHTML='';
+  const kb=document.getElementById('kpi-total-budget'+tier);if(kb)kb.value='';
+  recalcAny(tier);
 }
 
 /* ══ FLAT MEDIA PLAN ROWS ══ */
+/* ══ BUDGET TIERS — lets Media Plan + KPI Performance repeat as comparable scenarios ══
+   Tier 1 is the original single table (unsuffixed ids, unchanged behavior).
+   Tier 2+ get every id suffixed with e.g. "-2", "-3" and their own tier-aware
+   copies of the row-adding / totals functions below (each takes an optional
+   tier suffix, defaulting to '' so all existing Tier-1 call sites are untouched). */
+let budgetTierCounter=1;
+let budgetTiers=[]; // suffixes of the EXTRA tiers only, e.g. ['-2','-3']
+
+function addBudgetTier(){
+  budgetTierCounter++;
+  const tier='-'+budgetTierCounter;
+  budgetTiers.push(tier);
+  const mpContainer=document.getElementById('mp-extra-tiers');
+  const kpiContainer=document.getElementById('kpi-extra-tiers');
+  if(mpContainer) mpContainer.insertAdjacentHTML('beforeend', mpTierTemplate(tier,budgetTierCounter));
+  if(kpiContainer) kpiContainer.insertAdjacentHTML('beforeend', kpiTierTemplate(tier,budgetTierCounter));
+  refreshDestinationSelect(tier);
+}
+function removeBudgetTier(tier){
+  if(!confirm('Remove this Option? This cannot be undone.')) return;
+  document.getElementById('mp-tier-block'+tier)?.remove();
+  document.getElementById('kpi-tier-block'+tier)?.remove();
+  budgetTiers=budgetTiers.filter(t=>t!==tier);
+}
+function tierLabelText(tier){
+  return tier?(v('kpi-tier-label'+tier)||('Option '+tier.replace('-',''))):'';
+}
+/* Budget for a tier can live in three different places depending on how the person
+   filled things in: the Media Plan rows' Ad Spent, the "Total KPI Budget" field, or
+   the sum of the KPI rows' own Ad Spent — this picks whichever one is actually filled
+   in, in that priority order, so the Campaign Details summary is never just ฿0.00. */
+function tierBudgetTotal(tier=''){
+  const mpTotal=getMpRows(tier).reduce((s,id)=>s+vn('mp-at-'+id),0);
+  if(mpTotal>0) return mpTotal;
+  const kpiBudgetField=vn('kpi-total-budget'+tier);
+  if(kpiBudgetField>0) return kpiBudgetField;
+  return Array.from(document.querySelectorAll('#kpi-body'+tier+' tr')).reduce((s,tr)=>{
+    const id=tr.id.replace('kpi-','');
+    return s+vn('kv-spent-'+id);
+  },0);
+}
+function mpTierTemplate(tier,tierNum){
+  return `<div class="mp-tier-block" id="mp-tier-block${tier}" style="border-top:2px dashed var(--border);margin-top:22px;padding-top:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--ink);white-space:nowrap;">OPTION ${tierNum}</div>
+      <button type="button" onclick="removeBudgetTier('${tier}')" style="margin-left:auto;border:none;background:transparent;color:#dc2626;font-size:11.5px;font-weight:700;cursor:pointer;">✕ Remove Option</button>
+    </div>
+    <div class="kpi-total-row">
+      <div class="fgrp"><label>Total Campaign Budget</label><input type="text" inputmode="decimal" id="mp-total-budget${tier}" placeholder="0.00" oninput="applyMpBudget('${tier}')" onblur="fmtInput('mp-total-budget${tier}')" style="width:150px"></div>
+      <div class="kpi-hint">Not sure how to split it yet? Set a total, then just type <strong>%</strong> per row — the amount fills in for you.</div>
+    </div>
+    <div class="mp-wrap">
+      <table class="mp-table">
+        <thead>
+          <tr>
+            <th rowspan="2" class="left" style="width:100px">Campaign</th>
+            <th rowspan="2" style="width:80px">Objective</th>
+            <th rowspan="2" style="width:96px">Channel</th>
+            <th rowspan="2" class="left" style="width:195px">Campaign Name</th>
+            <th rowspan="2" class="left" style="width:165px">Ad Group</th>
+            <th colspan="5" class="bh grp-lbl">Budget</th>
+            <th rowspan="2" style="width:85px">Targeting</th>
+            <th rowspan="2" style="width:100px">Ad Format</th>
+            <th colspan="3" class="ph grp-lbl">Period</th>
+            <th rowspan="2" style="width:30px"></th>
+          </tr>
+          <tr>
+            <th class="bh" style="width:50px">%</th>
+            <th class="bh" style="width:82px">Grand Total</th>
+            <th class="bh" style="width:74px">All Times</th>
+            <th class="bh" style="width:68px">Monthly</th>
+            <th class="bh" style="width:60px">Daily</th>
+            <th class="ph" style="width:82px">Start</th>
+            <th class="ph" style="width:82px">End</th>
+            <th class="ph" style="width:42px">Days</th>
+          </tr>
+        </thead>
+        <tbody id="mp-body${tier}"></tbody>
+        <tfoot>
+          <tr class="mp-tfooter">
+            <td colspan="6" style="text-align:right;font-size:11.5px;letter-spacing:.5px">TOTAL</td>
+            <td id="mp-total-gt${tier}" class="num">—</td>
+            <td colspan="9"></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;align-items:center;flex-wrap:wrap;">
+      <button class="add-btn" style="margin-top:0" onclick="addMpRow({},'${tier}')">+ Add Row</button>
+      <button class="copy-date-btn" onclick="copyDates('${tier}')">Copy dates from row 1 to all</button>
+      <button class="copy-date-btn" onclick="clearMp('${tier}')" style="color:#dc2626;border-color:#fecaca;">Clear all rows</button>
+    </div>
+    <div class="fgrp" style="margin-top:16px;">
+      <label>Remark (optional)</label>
+      <textarea id="mp-remark${tier}" placeholder="e.g. GEO performance is tracked based on user IP addresses, which may not always align with actual nationalities." style="min-height:70px"></textarea>
+    </div>
+  </div>`;
+}
+function kpiTierTemplate(tier,tierNum){
+  return `<div class="kpi-tier-block" id="kpi-tier-block${tier}" style="border-top:2px dashed var(--border);margin-top:22px;padding-top:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+      <div style="font-size:12.5px;font-weight:800;color:var(--ink);white-space:nowrap;">OPTION ${tierNum}</div>
+      <input type="text" id="kpi-tier-label${tier}" placeholder="Label, e.g. Conservative / Recommended / Aggressive" style="flex:1;min-width:160px;max-width:280px;font-size:12px;padding:6px 9px;">
+      <button type="button" onclick="removeBudgetTier('${tier}')" style="margin-left:auto;border:none;background:transparent;color:#dc2626;font-size:11.5px;font-weight:700;cursor:pointer;">✕ Remove Option</button>
+    </div>
+    <div class="kpi-total-row">
+      <div class="fgrp"><label>Total KPI Budget</label><input type="text" inputmode="decimal" id="kpi-total-budget${tier}" placeholder="0.00" oninput="applyKpiBudget('${tier}')" onblur="fmtInput('kpi-total-budget${tier}')" style="width:150px"></div>
+      <div class="kpi-hint">Set total → enter % per row → Ad Spent auto-fills</div>
+    </div>
+    <div class="bench-bar">
+      <div class="fgrp" style="min-width:160px;">
+        <label style="margin-bottom:2px;">Destination</label>
+        <select id="kpi-destination${tier}" style="height:36px;"></select>
+      </div>
+      <button class="add-btn" style="margin-top:0" onclick="applyBenchmarks('${tier}')">Suggest CPM / CTR / CVR by Channel</button>
+    </div>
+    <div class="kpi-wrap">
+    <table class="kpi-table">
+        <thead><tr>
+          <th style="width:130px">Campaign</th><th style="width:130px">Channel</th><th style="width:55px">%</th>
+          <th style="width:100px">Ad Spent</th><th style="width:90px">Impressions</th><th style="width:70px">CPM</th>
+          <th style="width:70px">Clicks</th><th style="width:65px">CPC</th><th style="width:60px">CTR</th>
+          <th style="width:85px">Conversions</th><th style="width:90px">CPA</th><th style="width:60px">CVR</th>
+          <th style="width:90px">ABV</th><th style="width:100px">Revenue</th><th style="width:60px">ROAS</th>
+          <th style="width:30px"></th>
+        </tr></thead>
+        <tbody id="kpi-body${tier}"></tbody>
+        <tfoot id="kpi-foot${tier}"></tfoot>
+      </table>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+      <button class="add-btn" style="margin-top:0" onclick="addKpiRow({},'${tier}')">+ Add KPI Row</button>
+      <button class="copy-date-btn" onclick="clearKpi('${tier}')" style="color:#dc2626;border-color:#fecaca;">Clear all rows</button>
+      <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--text);font-weight:500;margin-left:auto;">
+        <input type="checkbox" id="kpi-show-subtotals${tier}" checked style="width:auto;height:auto;" onchange="kpiTotal('${tier}')"> Show Campaign Subtotal rows
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--text);font-weight:500;">
+        <input type="checkbox" id="kpi-show-grandtotal${tier}" checked style="width:auto;height:auto;" onchange="kpiTotal('${tier}')"> Show Grand Total row
+      </label>
+    </div>
+    <div class="fgrp" style="margin-top:16px;">
+      <label>Notes (optional) — describe how to read these Estimated KPIs</label>
+      <div class="rt-toolbar">
+        <button type="button" onmousedown="event.preventDefault()" onclick="richCmd('kpi-notes${tier}','bold')" title="Bold"><b>B</b></button>
+        <input type="color" onmousedown="event.preventDefault()" oninput="richColor('kpi-notes${tier}',this.value)" title="Text color" value="#161b2c">
+        <button type="button" onmousedown="event.preventDefault()" onclick="richClear('kpi-notes${tier}')" title="Clear this box">Clear</button>
+      </div>
+      <div id="kpi-notes${tier}" class="rich-editor" contenteditable="true" onfocus="document.execCommand('defaultParagraphSeparator',false,'br')" data-placeholder="e.g. Estimates are based on historical account performance for similar campaigns and may vary once live." style="min-height:70px"></div>
+    </div>
+  </div>`;
+}
+function recalcAny(tier){
+  if(!tier) recalc(); else recalcTier(tier);
+}
+function recalcTier(tier){
+  const rowsT=getMpRows(tier);
+  rowsT.forEach(id=>mpCalc(id));
+  updateGrandTotals(tier);
+  const cur=getCur();
+  const totalGt=rowsT.reduce((sum,id)=>sum+vn('mp-at-'+id),0);
+  setEl('mp-total-gt'+tier,cur+fmt2(totalGt));
+  kpiTotal(tier);
+}
+
 let mpCount=0;
 
-function addMpRow(d={}){
+function addMpRow(d={}, tier=''){
   mpCount++;
   const id=mpCount;
   const tr=document.createElement('tr');
   tr.id='mp-'+id;
   tr.innerHTML=`
     <td class="left">
-      <select id="mp-camp-${id}" style="min-width:90px;font-size:12px" onchange="recalc()">
+      <select id="mp-camp-${id}" style="min-width:90px;font-size:12px" onchange="recalcAny('${tier}')">
         ${CAMP_TYPES.map(t=>`<option${t===(d.camp||'Branding')?' selected':''}>${t}</option>`).join('')}
       </select>
     </td>
     <td>
-      <select id="mp-obj-${id}" style="min-width:80px;font-size:12px" onchange="recalc()">
+      <select id="mp-obj-${id}" style="min-width:80px;font-size:12px" onchange="recalcAny('${tier}')">
         ${OBJS.map(o=>`<option${o===(d.obj||'Traffic')?' selected':''}>${o}</option>`).join('')}
       </select>
     </td>
@@ -1948,9 +2169,9 @@ function addMpRow(d={}){
     </td>
     <td class="left"><textarea rows="2" placeholder="Campaign name" id="mp-cname-${id}" class="mp-cell-textarea" style="min-width:110px;font-size:11.5px">${d.cname||''}</textarea></td>
     <td class="left"><textarea rows="2" placeholder="Ad Group name" id="mp-ag-${id}" class="mp-cell-textarea" style="min-width:100px;font-size:11.5px">${d.ag||''}</textarea></td>
-    <td><input type="text" inputmode="decimal" placeholder="—" value="${d.pct?fmt2(d.pct):''}" id="mp-pct-${id}" oninput="applyMpBudget()" onblur="fmtInput('mp-pct-${id}')" style="min-width:44px;text-align:right;font-size:12px;font-family:var(--mono)"></td>
+    <td><input type="text" inputmode="decimal" placeholder="—" value="${d.pct?fmt2(d.pct):''}" id="mp-pct-${id}" oninput="applyMpBudget('${tier}')" onblur="fmtInput('mp-pct-${id}')" style="min-width:44px;text-align:right;font-size:12px;font-family:var(--mono)"></td>
     <td><span class="nout" id="mp-gt-${id}">—</span></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.at?fmt2(d.at):''}" id="mp-at-${id}" oninput="mpCalc(${id});recalc()" onblur="fmtInput('mp-at-${id}')" style="min-width:62px;text-align:right;font-size:12px;font-family:var(--mono)"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.at?fmt2(d.at):''}" id="mp-at-${id}" oninput="mpCalc(${id});recalcAny('${tier}')" onblur="fmtInput('mp-at-${id}')" style="min-width:62px;text-align:right;font-size:12px;font-family:var(--mono)"></td>
     <td><span class="nout" id="mp-mo-${id}">—</span></td>
     <td><span class="nout" id="mp-da-${id}">—</span></td>
     <td>
@@ -1965,19 +2186,13 @@ function addMpRow(d={}){
         ${FMTS.map(f=>`<option${f===(d.fmt||'Display Dynamic Ad')?' selected':''}>${f}</option>`).join('')}
       </select>
     </td>
-    <td style="position:relative;">
-      <input type="text" readonly id="mp-sd-disp-${id}" value="${d.sd?formatDatePeriod(d.sd):''}" placeholder="Start" style="font-size:12px;pointer-events:none;">
-      <input type="date" value="${d.sd||''}" id="mp-sd-${id}" onchange="mpCalc(${id});recalc();document.getElementById('mp-sd-disp-${id}').value=this.value?formatDatePeriod(this.value):'';" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
-    </td>
-    <td style="position:relative;">
-      <input type="text" readonly id="mp-ed-disp-${id}" value="${d.ed?formatDatePeriod(d.ed):''}" placeholder="End" style="font-size:12px;pointer-events:none;">
-      <input type="date" value="${d.ed||''}" id="mp-ed-${id}" onchange="mpCalc(${id});recalc();document.getElementById('mp-ed-disp-${id}').value=this.value?formatDatePeriod(this.value):'';" style="position:absolute;inset:0;opacity:0;cursor:pointer;">
-    </td>
+    <td><input type="date" value="${d.sd||''}" id="mp-sd-${id}" onchange="mpCalc(${id});recalcAny('${tier}')" style="font-size:12px"></td>
+    <td><input type="date" value="${d.ed||''}" id="mp-ed-${id}" onchange="mpCalc(${id});recalcAny('${tier}')" style="font-size:12px"></td>
     <td><span class="nout" id="mp-days-${id}">—</span></td>
-    <td><button class="del-btn" onclick="delRow('mp-${id}');recalc()">×</button></td>`;
-  document.getElementById('mp-body').appendChild(tr);
+    <td><button class="del-btn" onclick="delRow('mp-${id}');recalcAny('${tier}')">×</button></td>`;
+  document.getElementById('mp-body'+tier).appendChild(tr);
   mpCalc(id);
-  recalc();
+  recalcAny(tier);
 }
 
 function mpCalc(id){
@@ -1993,9 +2208,9 @@ function mpCalc(id){
   setEl('mp-da-'+id,at>0&&days>0?cur+fmt2(da):'—');
 }
 
-function applyMpBudget(){
-  const total=vn('mp-total-budget');
-  document.querySelectorAll('#mp-body tr').forEach(r=>{
+function applyMpBudget(tier=''){
+  const total=vn('mp-total-budget'+tier);
+  document.querySelectorAll('#mp-body'+tier+' tr').forEach(r=>{
     const id=r.id.replace('mp-','');
     const pct=vn('mp-pct-'+id);
     if(total>0&&pct>0){
@@ -2004,12 +2219,12 @@ function applyMpBudget(){
     }
     mpCalc(id);
   });
-  recalc();
+  recalcAny(tier);
 }
 
-function updateGrandTotals(){
+function updateGrandTotals(tier=''){
   const cur=getCur();
-  const rows=getMpRows();
+  const rows=getMpRows(tier);
   const objTotals={};
 
   // Sum All Times by Objective
@@ -2046,21 +2261,19 @@ function updateGrandTotals(){
   }
 }
 
-function copyDates(){
-  const rows=Array.from(document.querySelectorAll('#mp-body tr')).map(r=>r.id.replace('mp-',''));
+function copyDates(tier=''){
+  const rows=Array.from(document.querySelectorAll('#mp-body'+tier+' tr')).map(r=>r.id.replace('mp-',''));
   if(rows.length<2){alert('Need at least 2 rows.');return;}
   const sd=v('mp-sd-'+rows[0]), ed=v('mp-ed-'+rows[0]);
   rows.slice(1).forEach(id=>{
     const s=document.getElementById('mp-sd-'+id);if(s)s.value=sd;
-    const sDisp=document.getElementById('mp-sd-disp-'+id);if(sDisp)sDisp.value=sd?formatDatePeriod(sd):'';
     const e=document.getElementById('mp-ed-'+id);if(e)e.value=ed;
-    const eDisp=document.getElementById('mp-ed-disp-'+id);if(eDisp)eDisp.value=ed?formatDatePeriod(ed):'';
     mpCalc(id);
   });
-  recalc();
+  recalcAny(tier);
 }
 
-function getMpRows(){return Array.from(document.querySelectorAll('#mp-body tr')).map(r=>r.id.replace('mp-',''));}
+function getMpRows(tier=''){return Array.from(document.querySelectorAll('#mp-body'+tier+' tr')).map(r=>r.id.replace('mp-',''));}
 
 /* ══ BUDGET SPLIT BAR ══ */
 function updateBudgetBar(){
@@ -2094,9 +2307,9 @@ function updateBudgetBar(){
 }
 
 /* ══ KPI ══ */
-function applyKpiBudget(){
-  const total=vn('kpi-total-budget');
-  document.querySelectorAll('#kpi-body tr').forEach(r=>{
+function applyKpiBudget(tier=''){
+  const total=vn('kpi-total-budget'+tier);
+  document.querySelectorAll('#kpi-body'+tier+' tr').forEach(r=>{
     const id=r.id.replace('kpi-','');
     const pct=vn('kv-pct-'+id);
     if(total>0&&pct>0){
@@ -2105,16 +2318,16 @@ function applyKpiBudget(){
     }
     kpiCalc(id);
   });
-  kpiTotal();
+  kpiTotal(tier);
 }
 
-function addKpiRow(d={}){
+function addKpiRow(d={}, tier=''){
   kpiCount++;
   const id=kpiCount;
   const tr=document.createElement('tr');tr.id='kpi-'+id;
   tr.innerHTML=`
     <td class="left">
-      <select id="kv-campaign-${id}" style="min-width:86px;font-size:12px" onchange="kpiTotal();recalc()">
+      <select id="kv-campaign-${id}" style="min-width:86px;font-size:12px" onchange="kpiTotal('${tier}');recalcAny('${tier}')">
         <option${(d.campaign||'Branding')==='Branding'?' selected':''}>Branding</option>
         <option${(d.campaign||'Branding')==='Conversion'?' selected':''}>Conversion</option>
       </select>
@@ -2124,23 +2337,23 @@ function addKpiRow(d={}){
         ${CHS.map(c=>`<option${c===(d.name||'Display PT')?' selected':''}>${c}</option>`).join('')}
       </select>
     </td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.pct?fmt2(d.pct):''}" id="kv-pct-${id}" oninput="applyKpiBudget()" onblur="fmtInput('kv-pct-${id}')" style="min-width:44px;text-align:right;"></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.spent?fmt2(d.spent):''}" id="kv-spent-${id}" oninput="kpiCalc(${id});kpiTotal()" onblur="fmtInput('kv-spent-${id}')" style="min-width:68px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.pct?fmt2(d.pct):''}" id="kv-pct-${id}" oninput="applyKpiBudget('${tier}')" onblur="fmtInput('kv-pct-${id}')" style="min-width:44px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.spent?fmt2(d.spent):''}" id="kv-spent-${id}" oninput="kpiCalc(${id});kpiTotal('${tier}')" onblur="fmtInput('kv-spent-${id}')" style="min-width:68px;text-align:right;"></td>
     <td><span class="calc" id="kv-imp-${id}">—</span></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.cpm?fmt2(d.cpm):''}" id="kv-cpm-${id}" oninput="kpiCalc(${id});kpiTotal()" onblur="fmtInput('kv-cpm-${id}')" style="min-width:52px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.cpm?fmt2(d.cpm):''}" id="kv-cpm-${id}" oninput="kpiCalc(${id});kpiTotal('${tier}')" onblur="fmtInput('kv-cpm-${id}')" style="min-width:52px;text-align:right;"></td>
     <td><span class="calc" id="kv-clicks-${id}">—</span></td>
     <td><span class="calc" id="kv-cpc-${id}">—</span></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.ctr?fmt2(d.ctr):''}" id="kv-ctr-${id}" oninput="kpiCalc(${id});kpiTotal()" onblur="fmtInput('kv-ctr-${id}')" style="min-width:48px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.ctr?fmt2(d.ctr):''}" id="kv-ctr-${id}" oninput="kpiCalc(${id});kpiTotal('${tier}')" onblur="fmtInput('kv-ctr-${id}')" style="min-width:48px;text-align:right;"></td>
     <td><span class="calc" id="kv-conv-${id}">—</span></td>
     <td><span class="calc" id="kv-cpa-${id}">—</span></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.cvr?fmt2(d.cvr):''}" id="kv-cvr-${id}" oninput="kpiCalc(${id});kpiTotal()" onblur="fmtInput('kv-cvr-${id}')" style="min-width:48px;text-align:right;"></td>
-    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.abv?fmt2(d.abv):''}" id="kv-abv-${id}" oninput="kpiCalc(${id});kpiTotal()" onblur="fmtInput('kv-abv-${id}')" style="min-width:62px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.cvr?fmt2(d.cvr):''}" id="kv-cvr-${id}" oninput="kpiCalc(${id});kpiTotal('${tier}')" onblur="fmtInput('kv-cvr-${id}')" style="min-width:48px;text-align:right;"></td>
+    <td><input type="text" inputmode="decimal" placeholder="0.00" value="${d.abv?fmt2(d.abv):''}" id="kv-abv-${id}" oninput="kpiCalc(${id});kpiTotal('${tier}')" onblur="fmtInput('kv-abv-${id}')" style="min-width:62px;text-align:right;"></td>
     <td><span class="calc" id="kv-rev-${id}">—</span></td>
     <td><span class="calc" id="kv-roas-${id}">—</span></td>
-    <td><button class="del-btn" onclick="delRow('kpi-${id}');kpiTotal();recalc()">×</button></td>`;
-  document.getElementById('kpi-body').appendChild(tr);
+    <td><button class="del-btn" onclick="delRow('kpi-${id}');kpiTotal('${tier}');recalcAny('${tier}')">×</button></td>`;
+  document.getElementById('kpi-body'+tier).appendChild(tr);
   kpiCalc(id);
-  recalc();
+  recalcAny(tier);
 }
 
 /* Benchmark CPM is stored per-currency (cpmTHB/cpmUSD) so it can match whichever
@@ -2151,12 +2364,12 @@ function getBenchCpm(entry,curSymbol){
   if(entry.cpmTHB!=null || entry.cpmUSD!=null) return curSymbol==='$' ? (entry.cpmUSD||0) : (entry.cpmTHB||0);
   return entry.cpm||0;
 }
-function applyBenchmarks(){
-  const dest=document.getElementById('kpi-destination')?.value;
+function applyBenchmarks(tier=''){
+  const dest=document.getElementById('kpi-destination'+tier)?.value;
   const destData=benchmarkDB[dest]||{};
   const cur=getCur();
   let filled=0;
-  document.querySelectorAll('#kpi-body tr').forEach(r=>{
+  document.querySelectorAll('#kpi-body'+tier+' tr').forEach(r=>{
     const id=r.id.replace('kpi-','');
     const ch=document.getElementById('kv-name-'+id)?.value;
     const objective=document.getElementById('kv-campaign-'+id)?.value; // Branding / Conversion
@@ -2173,18 +2386,21 @@ function applyBenchmarks(){
     if(cvrEl&&!cvrEl.value){cvrEl.value=fmt2(b.cvr);filled++;}
     kpiCalc(id);
   });
-  kpiTotal();
+  kpiTotal(tier);
   if(!filled) alert('No empty CPM/CTR/CVR cells to fill for that destination — everything already has a value, or no channels in this table match that destination\'s benchmark list yet.');
 }
 
 /* ══ BENCHMARK DATABASE MANAGER ══ */
-function refreshDestinationSelect(){
-  const sel=document.getElementById('kpi-destination');
-  if(!sel) return;
-  const prevVal=sel.value;
-  const dests=Object.keys(benchmarkDB);
-  sel.innerHTML=dests.map(d=>`<option value="${d}">${d}</option>`).join('');
-  if(dests.includes(prevVal)) sel.value=prevVal;
+function refreshDestinationSelect(tier){
+  const tiersToRefresh=tier!==undefined?[tier]:['',...budgetTiers];
+  tiersToRefresh.forEach(t=>{
+    const sel=document.getElementById('kpi-destination'+t);
+    if(!sel) return;
+    const prevVal=sel.value;
+    const dests=Object.keys(benchmarkDB);
+    sel.innerHTML=dests.map(d=>`<option value="${d}">${d}</option>`).join('');
+    if(dests.includes(prevVal)) sel.value=prevVal;
+  });
 }
 function openBenchmarkManager(){
   const destSel=document.getElementById('bench-dest-select');
@@ -2502,9 +2718,10 @@ function kpiCalc(id){
   if(el){el.dataset.imp=imp;el.dataset.clicks=clicks;el.dataset.conv=conv;el.dataset.rev=rev;el.dataset.spent=spent;}
 }
 
-function kpiTotal(){
-  const rows=Array.from(document.querySelectorAll('#kpi-body tr'));
-  const footEl=document.getElementById('kpi-foot');
+function kpiTotal(tier=''){
+  const rows=Array.from(document.querySelectorAll('#kpi-body'+tier+' tr'));
+  const footEl=document.getElementById('kpi-foot'+tier);
+  if(!footEl) return;
   if(!rows.length){footEl.innerHTML='';return;}
   // Group contiguous rows by Campaign (Branding/Conversion) and show one subtotal
   // row per group instead of a single grand TOTAL row.
@@ -2516,7 +2733,8 @@ function kpiTotal(){
     if(campaign!==lastCamp){ current={campaign,rows:[]}; groups.push(current); lastCamp=campaign; }
     current.rows.push(r);
   });
-  footEl.innerHTML=groups.map(g=>{
+  const showSubtotals=document.getElementById('kpi-show-subtotals'+tier)?.checked!==false;
+  footEl.innerHTML=showSubtotals?groups.map(g=>{
     let tSp=0,tImp=0,tCl=0,tCo=0,tRev=0,tAbv=0,abvN=0,tPct=0;
     g.rows.forEach(r=>{
       tSp+=+r.dataset.spent||0;tImp+=+r.dataset.imp||0;
@@ -2538,7 +2756,32 @@ function kpiTotal(){
       <td>${fmt2(aAbv)}</td><td>${fmt2(tRev)}</td>
       <td>${aRoas>0?fmt2(aRoas):'—'}</td><td></td>
     </tr>`;
-  }).join('');
+  }).join(''):'';
+
+  const showGrandTotal=document.getElementById('kpi-show-grandtotal'+tier)?.checked!==false;
+  if(showGrandTotal){
+    let gSp=0,gImp=0,gCl=0,gCo=0,gRev=0,gAbv=0,gAbvN=0,gPct=0;
+    rows.forEach(r=>{
+      gSp+=+r.dataset.spent||0;gImp+=+r.dataset.imp||0;
+      gCl+=+r.dataset.clicks||0;gCo+=+r.dataset.conv||0;gRev+=+r.dataset.rev||0;
+      const id=r.id.replace('kpi-','');
+      const abv=vn('kv-abv-'+id);if(abv>0){gAbv+=abv;gAbvN++;}
+      gPct+=vn('kv-pct-'+id);
+    });
+    const gC=gImp>0?(gSp/gImp)*1000:0,gP=gCl>0?gSp/gCl:0,gCtr=gImp>0?(gCl/gImp)*100:0;
+    const gCpa=gCo>0?gSp/gCo:0,gCvr=gCl>0?(gCo/gCl)*100:0;
+    const gAbvAvg=gAbvN>0?gAbv/gAbvN:0,gRoas=gSp>0?gRev/gSp:0;
+    footEl.innerHTML+=`<tr class="total-row grand-total-row">
+      <td class="left" colspan="2" style="text-align:left">Grand Total</td><td>${gPct>0?fmt2(gPct)+'%':'—'}</td>
+      <td>${fmt2(gSp)}</td><td>${fmtInt(gImp)}</td>
+      <td>${fmt2(gC)}</td><td>${fmtInt(gCl)}</td><td>${fmt2(gP)}</td>
+      <td>${gCtr>0?fmt2(gCtr)+'%':'—'}</td>
+      <td>${fmtInt(gCo)}</td><td>${fmt2(gCpa)}</td>
+      <td>${gCvr>0?fmt2(gCvr)+'%':'—'}</td>
+      <td>${fmt2(gAbvAvg)}</td><td>${fmt2(gRev)}</td>
+      <td>${gRoas>0?fmt2(gRoas):'—'}</td><td></td>
+    </tr>`;
+  }
 }
 
 /* ══ RECALC ══ */
@@ -2562,6 +2805,7 @@ function recalc(){
   const lbl=document.getElementById('kpi-date-lbl');
   if(lbl)lbl.innerHTML=`<strong>KPI Performance:</strong> ${sdF} – ${edF}`;
   kpiTotal();
+  budgetTiers.forEach(t=>recalcTier(t));
 }
 
 /* ══ BUILD PDF ══ */
@@ -2605,7 +2849,17 @@ function buildPDF(baked){
     const codesBrief=sel.length?sel.map(s=>s.c).join(' '):'';
     return{countries,codes,codesBrief,seg:v('gseg-'+id)||'—',pct:vn('gbud-'+id)};
   });
-  const geoForBrief=geoRows.filter(g=>g.codesBrief).map(g=>g.codesBrief).join(', ')||'—';
+  const geoForBrief=(()=>{
+    const seen=new Set();
+    const uniqueCodes=[];
+    geoRows.forEach(g=>{
+      if(!g.codesBrief)return;
+      g.codesBrief.split(' ').forEach(code=>{
+        if(code && !seen.has(code)){ seen.add(code); uniqueCodes.push(code); }
+      });
+    });
+    return uniqueCodes.length?uniqueCodes.join(' '):'—';
+  })();
   const geoCards=geoRows.map(g=>`<div class="pdf-geo-card">
       <div class="pdf-geo-card-seg">${g.seg}</div>
       <div class="pdf-geo-card-sub"><b>Countries:</b> ${g.countries}</div>
@@ -2617,10 +2871,13 @@ function buildPDF(baked){
   let grandTotal=0;
   const mpData=rows.map(id=>{
     const at=vn('mp-at-'+id); grandTotal+=at;
+    const camp=document.getElementById('mp-camp-'+id)?.value||'—';
+    const ch=document.getElementById('mp-ch-'+id)?.value||'—';
     return{
-      camp:document.getElementById('mp-camp-'+id)?.value||'—',
+      camp,
       obj:document.getElementById('mp-obj-'+id)?.value||'—',
-      ch:document.getElementById('mp-ch-'+id)?.value||'—',
+      ch,
+      grp:camp+'|'+ch,
       cname:(v('mp-cname-'+id)||'—').replace(/\n/g,'<br>'), ag:(v('mp-ag-'+id)||'—').replace(/\n/g,'<br>'),
       gt:0, at,
       mo:document.getElementById('mp-mo-'+id)?.textContent||'—',
@@ -2631,17 +2888,34 @@ function buildPDF(baked){
     };
   });
 
-  function computeSpans(arr,key){
+  function computeSpans(arr,key,boundaryKey){
     const sp=[];let i=0;
-    while(i<arr.length){let j=i+1;while(j<arr.length&&arr[j][key]===arr[i][key])j++;for(let k=i;k<j;k++)sp.push(k===i?j-i:0);i=j;}
+    while(i<arr.length){
+      let j=i+1;
+      while(j<arr.length&&arr[j][key]===arr[i][key]&&(!boundaryKey||arr[j][boundaryKey]===arr[i][boundaryKey]))j++;
+      for(let k=i;k<j;k++)sp.push(k===i?j-i:0);
+      i=j;
+    }
     return sp;
   }
   // Each column merges independently when consecutive values are identical
+  // (this also covers "empty" since blank cells share the same "—" placeholder value).
+  // Columns below the Channel level are also bounded by the camp+channel group ("grp")
+  // so two unrelated ad groups never get visually merged just because, say, they both
+  // happen to be blank or share the same start date.
   const campSp  = computeSpans(mpData,'camp');
   const objSp   = computeSpans(mpData,'obj');
   const chSp    = computeSpans(mpData,'ch');
   const gtSp    = objSp; // Grand Total merges by Objective group
-  const cnameSp = computeSpans(mpData,'cname');
+  const cnameSp = computeSpans(mpData,'cname','camp');
+  const agSp    = computeSpans(mpData,'ag','grp');
+  // All Times / Monthly / Daily are budget-breakdown figures, not grouping data —
+  // never merge these even when two rows happen to share the same number.
+  const tgtSp   = computeSpans(mpData,'tgt','grp');
+  const fmtSp   = computeSpans(mpData,'fmt','grp');
+  const sdSp    = computeSpans(mpData,'sd','grp');
+  const edSp    = computeSpans(mpData,'ed','grp');
+  const daysSp  = computeSpans(mpData,'days','grp');
   const hasCampName=mpData.some(d=>d.cname!=='—'&&d.cname!=='');
 
   // Budget sum per campaign group (for % label under campaign name)
@@ -2674,15 +2948,24 @@ function buildPDF(baked){
     const chCell    = chSp[i]>0    ? `<td class="left pdf-tight-cell" rowspan="${chSp[i]}">${d.ch}</td>`    : '';
     const gtCell    = gtSp[i]>0 ? `<td class="pdf-num-cell" rowspan="${gtSp[i]}">${objTotals[d.obj]>0?cur+fmt2(objTotals[d.obj]):'—'}</td>` : '';
     const cnameCell = hasCampName ? (cnameSp[i]>0 ? `<td class="left" rowspan="${cnameSp[i]}">${d.cname}</td>` : '') : '';
+    const agCell    = agSp[i]>0   ? `<td class="left" rowspan="${agSp[i]}">${d.ag}</td>` : '';
+    const atCell    = `<td class="pdf-num-cell">${d.at>0?cur+fmt2(d.at):'—'}</td>`;
+    const moCell    = `<td class="pdf-num-cell">${d.mo}</td>`;
+    const daCell    = `<td class="pdf-num-cell">${d.da}</td>`;
+    const tgtCell   = tgtSp[i]>0  ? `<td class="pdf-mp-small" rowspan="${tgtSp[i]}">${d.tgt}</td>` : '';
+    const fmtCell   = fmtSp[i]>0  ? `<td class="pdf-mp-small" rowspan="${fmtSp[i]}">${d.fmt}</td>` : '';
+    const sdCell    = sdSp[i]>0   ? `<td class="pdf-tight-cell" rowspan="${sdSp[i]}">${d.sd}</td>` : '';
+    const edCell    = edSp[i]>0   ? `<td class="pdf-tight-cell" rowspan="${edSp[i]}">${d.ed}</td>` : '';
+    const daysCell  = daysSp[i]>0 ? `<td class="pdf-tight-cell" rowspan="${daysSp[i]}">${d.days}</td>` : '';
     return`<tr class="${shadeCls}">${campCell}${chCell}${cnameCell}
-      <td class="left">${d.ag}</td>
+      ${agCell}
       ${gtCell}
-      <td class="pdf-num-cell">${d.at>0?cur+fmt2(d.at):'—'}</td>
-      <td class="pdf-num-cell">${d.mo}</td><td class="pdf-num-cell">${d.da}</td>
-      <td class="pdf-mp-small">${d.tgt}</td>
-      <td class="pdf-mp-small">${d.fmt}</td>
-      <td class="pdf-tight-cell">${d.sd}</td><td class="pdf-tight-cell">${d.ed}</td>
-      <td class="pdf-tight-cell">${d.days}</td>
+      ${atCell}
+      ${moCell}${daCell}
+      ${tgtCell}
+      ${fmtCell}
+      ${sdCell}${edCell}
+      ${daysCell}
     </tr>`;
   }).join('');
 
@@ -2742,6 +3025,7 @@ function buildPDF(baked){
     kii=kjj;
   }
   let kpiShadeGroupIdx=0,kpiLastCamp=null;
+  const kpiShowSubtotals=document.getElementById('kpi-show-subtotals')?.checked!==false;
   const kpiTrs=kpiData.map((d,i)=>{
     if(d.campaign!==kpiLastCamp){kpiShadeGroupIdx++;kpiLastCamp=d.campaign;}
     const kpiShadeCls=kpiShadeGroupIdx%2===0?'mp-shade':'';
@@ -2769,7 +3053,7 @@ function buildPDF(baked){
       <td>${d.roas>0?fmt2(d.roas):'—'}</td>
     </tr>`;
     const gs=kpiGroupStats[i];
-    const subtotalHtml=gs?`<tr class="total-row">
+    const subtotalHtml=(kpiShowSubtotals&&gs)?`<tr class="total-row">
       <td class="left" colspan="2" style="text-align:left">Total ${gs.campaign}</td><td>${gs.tPct>0?fmt2(gs.tPct)+'%':'—'}</td>
       <td>${fmt2(gs.tSp)}</td><td>${fmtInt(gs.tImp)}</td>
       <td>${fmt2(gs.aC)}</td><td>${fmtInt(gs.tCl)}</td><td>${fmt2(gs.aP)}</td>
@@ -2782,6 +3066,30 @@ function buildPDF(baked){
     return rowHtml+subtotalHtml;
   }).join('');
 
+  const kpiShowGrandTotal=document.getElementById('kpi-show-grandtotal')?.checked!==false;
+  const kpiGrandTotalHtml=(kpiShowGrandTotal&&kpiData.length)?(()=>{
+    const gSp=kpiData.reduce((s,d)=>s+d.spent,0);
+    const gImp=kpiData.reduce((s,d)=>s+d.imp,0);
+    const gCl=kpiData.reduce((s,d)=>s+d.clicks,0);
+    const gCo=kpiData.reduce((s,d)=>s+d.conv,0);
+    const gRev=kpiData.reduce((s,d)=>s+d.rev,0);
+    const gAbvVals=kpiData.map(d=>d.abv).filter(x=>x>0);
+    const gAbv=gAbvVals.length?gAbvVals.reduce((s,x)=>s+x,0)/gAbvVals.length:0;
+    const gPct=kpiData.reduce((s,d)=>s+(parseFloat((d.pct||'0').toString().replace(/,/g,''))||0),0);
+    const gC=gImp>0?(gSp/gImp)*1000:0,gP=gCl>0?gSp/gCl:0,gCtr=gImp>0?(gCl/gImp)*100:0;
+    const gCpa=gCo>0?gSp/gCo:0,gCvr=gCl>0?(gCo/gCl)*100:0,gRoas=gSp>0?gRev/gSp:0;
+    return `<tr class="total-row grand-total-row">
+      <td class="left" colspan="2" style="text-align:left">Grand Total</td><td>${gPct>0?fmt2(gPct)+'%':'—'}</td>
+      <td>${fmt2(gSp)}</td><td>${fmtInt(gImp)}</td>
+      <td>${fmt2(gC)}</td><td>${fmtInt(gCl)}</td><td>${fmt2(gP)}</td>
+      <td>${gCtr>0?fmt2(gCtr)+'%':'—'}</td>
+      <td>${fmtInt(gCo)}</td><td>${fmt2(gCpa)}</td>
+      <td>${gCvr>0?fmt2(gCvr)+'%':'—'}</td>
+      <td>${fmt2(gAbv)}</td><td>${fmt2(gRev)}</td>
+      <td>${gRoas>0?fmt2(gRoas):'—'}</td><td></td>
+    </tr>`;
+  })():'';
+
   const kpiFootClean=(document.getElementById('kpi-foot')?.innerHTML||'').replace(/<td><\/td>(<\/tr>)/g,'$1').replace(/<button[^>]*>.*?<\/button>/g,'');
   const sdF=sd?formatDate(sd):'—',edF=ed?formatDate(ed):'—';
 
@@ -2790,7 +3098,7 @@ function buildPDF(baked){
   mpData.forEach(d=>{campTypeTotals[d.camp]=(campTypeTotals[d.camp]||0)+d.at;});
   const campSegs=CAMP_TYPES.map(t=>({label:t,value:campTypeTotals[t]||0,color:CAMP_COLORS[t]})).filter(s=>s.value>0);
   const campDonutBlock=campSegs.length?`<div class="pdf-donut-card">
-      <div class="pdf-donut-ttl">Budget Split by Campaign Type</div>
+      <div class="pdf-donut-ttl">Budget Allocation by Campaign Type</div>
       <div class="pdf-donut-row">
         ${svgDonut(campSegs,128,18)}
         <div class="pdf-donut-legend">
@@ -2804,7 +3112,7 @@ function buildPDF(baked){
   mpData.forEach(d=>{chTotals[d.ch]=(chTotals[d.ch]||0)+d.at;});
   const chSegs=Object.keys(chTotals).map(ch=>({label:ch,value:chTotals[ch],color:CHANNEL_COLORS[ch]||'#7b8798'})).filter(s=>s.value>0).sort((a,b)=>b.value-a.value);
   const chDonutBlock=chSegs.length?`<div class="pdf-donut-card">
-      <div class="pdf-donut-ttl">Budget Split by Channel</div>
+      <div class="pdf-donut-ttl">Budget Allocation by Channel</div>
       <div class="pdf-donut-row">
         ${svgDonut(chSegs,128,18)}
         <div class="pdf-donut-legend">
@@ -2831,7 +3139,7 @@ function buildPDF(baked){
   }).filter(s=>s.value>0);
   const geoGrand=geoSegs.reduce((s,x)=>s+x.value,0);
   const geoDonutBlock=geoSegs.length?`<div class="pdf-donut-card">
-      <div class="pdf-donut-ttl">Budget Split by Geography</div>
+      <div class="pdf-donut-ttl">Budget Allocation by Geography</div>
       <div class="pdf-donut-row">
         ${svgDonut(geoSegs,128,18)}
         <div class="pdf-donut-legend">
@@ -2839,11 +3147,12 @@ function buildPDF(baked){
         </div>
       </div>
     </div>`:`<div class="pdf-donut-card">
-      <div class="pdf-donut-ttl">Budget Split by Geography</div>
+      <div class="pdf-donut-ttl">Budget Allocation by Geography</div>
       <div class="kpi-hint" style="padding:6px 0 0;">Add a Budget % per region, or name Media Plan ad groups after the region (e.g. "Display PT EU"), to see the split here.</div>
     </div>`;
 
-  const miniLogos=(agencyDataUrl||clientDataUrl)?`<div class="pdf-topbar-logos">${logoChip(agencyDataUrl,'page')}${(agencyDataUrl&&clientDataUrl)?'<span class="pdf-logo-x">×</span>':''}${logoChip(clientDataUrl,'page')}</div>`:'';
+  const clientForPages=client2DataUrl||clientDataUrl; // Client 2nd Logo on inner slides, falling back to the Main Logo if none was set
+  const miniLogos=(agencyDataUrl||clientForPages)?`<div class="pdf-topbar-logos">${logoChip(agencyDataUrl,'page')}${(agencyDataUrl&&clientForPages)?'<span class="pdf-logo-x">×</span>':''}${logoChip(clientForPages,'page')}</div>`:'';
 
   const pageHd=(label)=>`<div class="pdf-topbar">
       ${miniLogos}
@@ -2893,6 +3202,17 @@ function buildPDF(baked){
     </div>
 
     <!-- PAGE 2 — DETAILS -->
+    ${(()=>{ let tierBudgetBriefHtml; const tier1Total=tierBudgetTotal('');
+      const abbrevLabel=tier=>tier?(v('kpi-tier-label'+tier)||('Opt '+tier.replace('-',''))):'Opt 1';
+      const tierBudgets=[{label:'Opt 1',total:tier1Total}].concat(budgetTiers.map(tier=>({
+        label:abbrevLabel(tier),
+        total:tierBudgetTotal(tier)
+      })));
+      tierBudgetBriefHtml = tierBudgets.length>1
+        ? tierBudgets.map(t=>`${escHtml(t.label)}: ${cur}${fmt2(t.total)}`).join('<br>')
+        : `${cur}${fmt2(tier1Total)}`;
+      window.__tierBudgetBriefHtml=tierBudgetBriefHtml;
+      return ''; })()}
     <div class="pdf-page pdf-page-std">
       ${pageHd('Campaign Details')}
       <div class="pdf-details-top">
@@ -2902,7 +3222,7 @@ function buildPDF(baked){
             <span class="bk">Brand / Client</span><span class="bv">${brand}</span>
             <span class="bk">Period</span><span class="bv">${sdShort} – ${edShort} (${durTxt})</span>
             <span class="bk">Objective</span><span class="bv">${objDetailHtml}</span>
-            <span class="bk">Budget</span><span class="bv">${cur}${fmt2(grandTotal)}</span>
+            <span class="bk">Budget</span><span class="bv">${window.__tierBudgetBriefHtml}</span>
             <span class="bk">Geography</span><span class="bv">${geoForBrief}</span>
             <span class="bk">Media Channel</span><span class="bv">${getMchText()||'—'}</span>
           </div>
@@ -2967,9 +3287,8 @@ function buildPDF(baked){
     <!-- PAGE 2b — SEARCH DEMAND INSIGHTS (optional) -->
     ${document.getElementById('sdi-enabled')?.checked?`<div class="pdf-page pdf-page-std">
       ${pageHd('Search Demand Insights')}
-      <div class="pdf-sdi-images ${(sdiImage1Url&&sdiImage2Url)?'pdf-sdi-two':'pdf-sdi-one'}">
-        ${sdiImage1Url?`<div class="pdf-sdi-img"><img src="${baked['sdi-image1']||sdiImage1Url}"></div>`:''}
-        ${sdiImage2Url?`<div class="pdf-sdi-img"><img src="${baked['sdi-image2']||sdiImage2Url}"></div>`:''}
+      <div class="pdf-sdi-images ${sdiImages.filter(Boolean).length===1?'pdf-sdi-one':'pdf-sdi-multi'}">
+        ${sdiImages.map((url,i)=>url?`<div class="pdf-sdi-img"><img src="${baked['sdi-img-'+i]||url}"></div>`:'').join('')}
       </div>
       ${getRichText('sdi-summary')?`<div class="pdf-sec" style="margin-top:18px;">
         <div class="pdf-donut-ttl" style="margin-bottom:8px;">Keyword Search Summary</div>
@@ -3001,7 +3320,299 @@ function buildPDF(baked){
     </div>
     `:''}
 
-    <!-- PAGE 4 — MEDIA PLAN -->
+    /* ══ EXTRA BUDGET TIERS (2+) — self-contained copies of the tier-1 KPI/MP page ══
+       builders above, parameterized by tier suffix. Kept as separate functions
+       (rather than reusing the tier-1 variables) so tier-1 rendering is completely
+       unaffected no matter what happens with additional tiers. */
+    ${(()=>{
+      window.__buildKpiTierPage=(tier,tierLabel)=>{
+        const kpiDataT=Array.from(document.querySelectorAll('#kpi-body'+tier+' tr')).map(r=>{
+          const id=r.id.replace('kpi-','');
+          const campaign=document.getElementById('kv-campaign-'+id)?.value||'—';
+          const name=document.getElementById('kv-name-'+id)?.value||'';
+          const spent=vn('kv-spent-'+id);
+          const cpm=vn('kv-cpm-'+id);
+          if(!name&&!spent&&!cpm)return null;
+          const pct=v('kv-pct-'+id);
+          const ctr=vn('kv-ctr-'+id);
+          const cvr=vn('kv-cvr-'+id);
+          const abv=vn('kv-abv-'+id);
+          const imp=cpm>0?(spent/cpm)*1000:0;
+          const clicks=imp*(ctr/100);
+          const cpc=clicks>0?spent/clicks:0;
+          const conv=clicks*(cvr/100);
+          const cpa=conv>0?spent/conv:0;
+          const rev=conv*abv;
+          const roas=spent>0?rev/spent:0;
+          return {campaign,name,pct,spent,cpm,ctr,cvr,abv,imp,clicks,cpc,conv,cpa,rev,roas};
+        }).filter(Boolean);
+        if(!kpiDataT.length) return '';
+
+        const kpiCampaignSpansT=computeSpans(kpiDataT,'campaign');
+        const kpiGrandSpentT=kpiDataT.reduce((s,d)=>s+d.spent,0);
+        const kpiCampGroupTotalT={};
+        const kpiGroupStatsT={};
+        let kiiT=0;
+        while(kiiT<kpiDataT.length){
+          const campVal=kpiDataT[kiiT].campaign;
+          let kjjT=kiiT+1;
+          while(kjjT<kpiDataT.length&&kpiDataT[kjjT].campaign===campVal)kjjT++;
+          const groupRows=kpiDataT.slice(kiiT,kjjT);
+          const sum=groupRows.reduce((s,d)=>s+d.spent,0);
+          kpiCampGroupTotalT[kiiT]=sum;
+          const tSp=sum;
+          const tImp=groupRows.reduce((s,d)=>s+d.imp,0);
+          const tCl=groupRows.reduce((s,d)=>s+d.clicks,0);
+          const tCo=groupRows.reduce((s,d)=>s+d.conv,0);
+          const tRev=groupRows.reduce((s,d)=>s+d.rev,0);
+          const abvVals=groupRows.map(d=>d.abv).filter(x=>x>0);
+          const tAbv=abvVals.length?abvVals.reduce((s,x)=>s+x,0)/abvVals.length:0;
+          const tPct=groupRows.reduce((s,d)=>s+(parseFloat((d.pct||'0').toString().replace(/,/g,''))||0),0);
+          kpiGroupStatsT[kjjT-1]={
+            campaign:campVal,tSp,tPct,
+            tImp, aC:tImp>0?(tSp/tImp)*1000:0,
+            tCl, aP:tCl>0?tSp/tCl:0, aCtr:tImp>0?(tCl/tImp)*100:0,
+            tCo, aCpa:tCo>0?tSp/tCo:0, aCvr:tCl>0?(tCo/tCl)*100:0,
+            tAbv, tRev, aRoas:tSp>0?tRev/tSp:0
+          };
+          kiiT=kjjT;
+        }
+        let kpiShadeGroupIdxT=0,kpiLastCampT=null;
+        const kpiShowSubtotalsT=document.getElementById('kpi-show-subtotals'+tier)?.checked!==false;
+        const kpiTrsT=kpiDataT.map((d,i)=>{
+          if(d.campaign!==kpiLastCampT){kpiShadeGroupIdxT++;kpiLastCampT=d.campaign;}
+          const kpiShadeCls=kpiShadeGroupIdxT%2===0?'mp-shade':'';
+          const campGroupSpent=kpiCampGroupTotalT.hasOwnProperty(i)?kpiCampGroupTotalT[i]:null;
+          const campGroupPct=(campGroupSpent!=null&&kpiGrandSpentT>0)?fmt2((campGroupSpent/kpiGrandSpentT)*100)+'%':'';
+          const campCell=kpiCampaignSpansT[i]>0?`<td class="left camp-merge-cell" rowspan="${kpiCampaignSpansT[i]}">
+            <div>${d.campaign}</div>
+            ${campGroupPct?`<div style="font-size:7.5px;color:#7b8798;margin-top:2px">${campGroupPct}</div>`:''}
+          </td>`:'';
+          const rowHtml=`<tr class="${kpiShadeCls}">
+            ${campCell}
+            <td class="left">${d.name||'—'}</td>
+            <td>${d.pct?fmt2(parseFloat(d.pct.replace(/,/g,'')))+'%':'—'}</td>
+            <td>${d.spent>0?fmt2(d.spent):'—'}</td>
+            <td>${d.imp>0?fmtInt(d.imp):'—'}</td>
+            <td>${d.cpm>0?fmt2(d.cpm):'—'}</td>
+            <td>${d.clicks>0?fmtInt(d.clicks):'—'}</td>
+            <td>${d.cpc>0?fmt2(d.cpc):'—'}</td>
+            <td>${d.ctr>0?fmt2(d.ctr)+'%':'—'}</td>
+            <td>${d.conv>0?fmtInt(d.conv):'—'}</td>
+            <td>${d.cpa>0?fmt2(d.cpa):'—'}</td>
+            <td>${d.cvr>0?fmt2(d.cvr)+'%':'—'}</td>
+            <td>${d.abv>0?fmt2(d.abv):'—'}</td>
+            <td>${d.rev>0?fmt2(d.rev):'—'}</td>
+            <td>${d.roas>0?fmt2(d.roas):'—'}</td>
+          </tr>`;
+          const gs=kpiGroupStatsT[i];
+          const subtotalHtml=(kpiShowSubtotalsT&&gs)?`<tr class="total-row">
+            <td class="left" colspan="2" style="text-align:left">Total ${gs.campaign}</td><td>${gs.tPct>0?fmt2(gs.tPct)+'%':'—'}</td>
+            <td>${fmt2(gs.tSp)}</td><td>${fmtInt(gs.tImp)}</td>
+            <td>${fmt2(gs.aC)}</td><td>${fmtInt(gs.tCl)}</td><td>${fmt2(gs.aP)}</td>
+            <td>${gs.aCtr>0?fmt2(gs.aCtr)+'%':'—'}</td>
+            <td>${fmtInt(gs.tCo)}</td><td>${fmt2(gs.aCpa)}</td>
+            <td>${gs.aCvr>0?fmt2(gs.aCvr)+'%':'—'}</td>
+            <td>${fmt2(gs.tAbv)}</td><td>${fmt2(gs.tRev)}</td>
+            <td>${gs.aRoas>0?fmt2(gs.aRoas):'—'}</td><td></td>
+          </tr>`:'';
+          return rowHtml+subtotalHtml;
+        }).join('');
+
+        const kpiShowGrandTotalT=document.getElementById('kpi-show-grandtotal'+tier)?.checked!==false;
+        const kpiGrandTotalHtmlT=(kpiShowGrandTotalT&&kpiDataT.length)?(()=>{
+          const gSp=kpiDataT.reduce((s,d)=>s+d.spent,0);
+          const gImp=kpiDataT.reduce((s,d)=>s+d.imp,0);
+          const gCl=kpiDataT.reduce((s,d)=>s+d.clicks,0);
+          const gCo=kpiDataT.reduce((s,d)=>s+d.conv,0);
+          const gRev=kpiDataT.reduce((s,d)=>s+d.rev,0);
+          const gAbvVals=kpiDataT.map(d=>d.abv).filter(x=>x>0);
+          const gAbv=gAbvVals.length?gAbvVals.reduce((s,x)=>s+x,0)/gAbvVals.length:0;
+          const gPct=kpiDataT.reduce((s,d)=>s+(parseFloat((d.pct||'0').toString().replace(/,/g,''))||0),0);
+          const gC=gImp>0?(gSp/gImp)*1000:0,gP=gCl>0?gSp/gCl:0,gCtr=gImp>0?(gCl/gImp)*100:0;
+          const gCpa=gCo>0?gSp/gCo:0,gCvr=gCl>0?(gCo/gCl)*100:0,gRoas=gSp>0?gRev/gSp:0;
+          return `<tr class="total-row grand-total-row">
+            <td class="left" colspan="2" style="text-align:left">Grand Total</td><td>${gPct>0?fmt2(gPct)+'%':'—'}</td>
+            <td>${fmt2(gSp)}</td><td>${fmtInt(gImp)}</td>
+            <td>${fmt2(gC)}</td><td>${fmtInt(gCl)}</td><td>${fmt2(gP)}</td>
+            <td>${gCtr>0?fmt2(gCtr)+'%':'—'}</td>
+            <td>${fmtInt(gCo)}</td><td>${fmt2(gCpa)}</td>
+            <td>${gCvr>0?fmt2(gCvr)+'%':'—'}</td>
+            <td>${fmt2(gAbv)}</td><td>${fmt2(gRev)}</td>
+            <td>${gRoas>0?fmt2(gRoas):'—'}</td><td></td>
+          </tr>`;
+        })():'';
+
+        const label=tierLabel?`KPI Performance — ${tierLabel}`:'KPI Performance';
+        return `<div class="pdf-page pdf-page-std">
+          ${pageHd(label)}
+          <div class="pdf-kpi-date">Period: ${sdShort} – ${edShort} (${durTxt})</div>
+          <table class="pdf-kpi-tbl" style="width:100%!important;min-width:100%!important;">
+            <colgroup>
+              <col style="width:6%"><col style="width:8%"><col style="width:5%"><col style="width:8%"><col style="width:9%">
+              <col style="width:5%"><col style="width:7%"><col style="width:6%"><col style="width:4%"><col style="width:9%">
+              <col style="width:6%"><col style="width:5%"><col style="width:7%"><col style="width:11%"><col style="width:4%">
+            </colgroup>
+            <thead><tr>
+              <th class="left">Campaign</th><th class="left">Channel</th><th>%</th><th>Ad Spent</th><th>Impressions</th><th>CPM</th>
+              <th>Clicks</th><th>CPC</th><th>CTR</th><th>Conversions</th>
+              <th>CPA</th><th>CVR</th><th>ABV</th><th>Revenue</th><th>ROAS</th>
+            </tr></thead>
+            <tbody>${kpiTrsT}${kpiGrandTotalHtmlT}</tbody>
+          </table>
+          ${getRichText('kpi-notes'+tier)?`<div class="pdf-kpi-notes" style="margin-top:16px;margin-bottom:0;">${getRichText('kpi-notes'+tier)}</div>`:''}
+          ${pageWatermark}
+        </div>`;
+      };
+
+      window.__buildMpTierPage=(tier,tierLabel)=>{
+        const rowsT=getMpRows(tier);
+        if(!rowsT.length) return '';
+        let grandTotalT=0;
+        const mpDataT=rowsT.map(id=>{
+          const at=vn('mp-at-'+id); grandTotalT+=at;
+          const camp=document.getElementById('mp-camp-'+id)?.value||'—';
+          const ch=document.getElementById('mp-ch-'+id)?.value||'—';
+          return{
+            camp, obj:document.getElementById('mp-obj-'+id)?.value||'—', ch, grp:camp+'|'+ch,
+            cname:(v('mp-cname-'+id)||'—').replace(/\n/g,'<br>'), ag:(v('mp-ag-'+id)||'—').replace(/\n/g,'<br>'),
+            gt:0, at,
+            mo:document.getElementById('mp-mo-'+id)?.textContent||'—',
+            da:document.getElementById('mp-da-'+id)?.textContent||'—',
+            tgt:v('mp-tgt-'+id)||'—', fmt:document.getElementById('mp-fmt-'+id)?.value||'—',
+            sd:v('mp-sd-'+id)?formatDatePeriod(v('mp-sd-'+id)):'—', ed:v('mp-ed-'+id)?formatDatePeriod(v('mp-ed-'+id)):'—',
+            days:document.getElementById('mp-days-'+id)?.textContent||'—'
+          };
+        });
+        const campSpT  = computeSpans(mpDataT,'camp');
+        const objSpT   = computeSpans(mpDataT,'obj');
+        const chSpT    = computeSpans(mpDataT,'ch');
+        const gtSpT    = objSpT;
+        const cnameSpT = computeSpans(mpDataT,'cname','camp');
+        const agSpT    = computeSpans(mpDataT,'ag','grp');
+        const tgtSpT   = computeSpans(mpDataT,'tgt','grp');
+        const fmtSpT   = computeSpans(mpDataT,'fmt','grp');
+        const sdSpT    = computeSpans(mpDataT,'sd','grp');
+        const edSpT    = computeSpans(mpDataT,'ed','grp');
+        const daysSpT  = computeSpans(mpDataT,'days','grp');
+        const hasCampNameT=mpDataT.some(d=>d.cname!=='—'&&d.cname!=='');
+
+        const campTotalMapT={};
+        let ciiT=0;
+        while(ciiT<mpDataT.length){
+          const campVal=mpDataT[ciiT].camp;
+          let cjjT=ciiT+1;
+          while(cjjT<mpDataT.length&&mpDataT[cjjT].camp===campVal)cjjT++;
+          const sum=mpDataT.slice(ciiT,cjjT).reduce((s,d)=>s+d.at,0);
+          campTotalMapT[ciiT]=sum;
+          ciiT=cjjT;
+        }
+        const objTotalsT={};
+        mpDataT.forEach(d=>{objTotalsT[d.obj]=(objTotalsT[d.obj]||0)+d.at;});
+
+        let campGroupIdxT=0,lastCampT=null;
+        const mpHtmlT=mpDataT.map((d,i)=>{
+          if(d.camp!==lastCampT){campGroupIdxT++;lastCampT=d.camp;}
+          const shadeCls=campGroupIdxT%2===0?'mp-shade':'';
+          const campTotalGt=campTotalMapT.hasOwnProperty(i)?campTotalMapT[i]:null;
+          const campPct=(campTotalGt!=null&&grandTotalT>0)?fmt2((campTotalGt/grandTotalT)*100)+'%':'';
+          const campCell=campSpT[i]>0?`<td class="left camp-merge-cell" rowspan="${campSpT[i]}">
+            <div>${d.camp}</div>
+            ${campPct?`<div style="font-size:7.5px;color:#7b8798;margin-top:2px">${campPct}</div>`:''}
+          </td>`:'';
+          const chCell    = chSpT[i]>0    ? `<td class="left pdf-tight-cell" rowspan="${chSpT[i]}">${d.ch}</td>`    : '';
+          const gtCell    = gtSpT[i]>0 ? `<td class="pdf-num-cell" rowspan="${gtSpT[i]}">${objTotalsT[d.obj]>0?cur+fmt2(objTotalsT[d.obj]):'—'}</td>` : '';
+          const cnameCell = hasCampNameT ? (cnameSpT[i]>0 ? `<td class="left" rowspan="${cnameSpT[i]}">${d.cname}</td>` : '') : '';
+          const agCell    = agSpT[i]>0   ? `<td class="left" rowspan="${agSpT[i]}">${d.ag}</td>` : '';
+          const atCell    = `<td class="pdf-num-cell">${d.at>0?cur+fmt2(d.at):'—'}</td>`;
+          const moCell    = `<td class="pdf-num-cell">${d.mo}</td>`;
+          const daCell    = `<td class="pdf-num-cell">${d.da}</td>`;
+          const tgtCell   = tgtSpT[i]>0  ? `<td class="pdf-mp-small" rowspan="${tgtSpT[i]}">${d.tgt}</td>` : '';
+          const fmtCell   = fmtSpT[i]>0  ? `<td class="pdf-mp-small" rowspan="${fmtSpT[i]}">${d.fmt}</td>` : '';
+          const sdCell    = sdSpT[i]>0   ? `<td class="pdf-tight-cell" rowspan="${sdSpT[i]}">${d.sd}</td>` : '';
+          const edCell    = edSpT[i]>0   ? `<td class="pdf-tight-cell" rowspan="${edSpT[i]}">${d.ed}</td>` : '';
+          const daysCell  = daysSpT[i]>0 ? `<td class="pdf-tight-cell" rowspan="${daysSpT[i]}">${d.days}</td>` : '';
+          return`<tr class="${shadeCls}">${campCell}${chCell}${cnameCell}
+            ${agCell}
+            ${gtCell}
+            ${atCell}
+            ${moCell}${daCell}
+            ${tgtCell}
+            ${fmtCell}
+            ${sdCell}${edCell}
+            ${daysCell}
+          </tr>`;
+        }).join('');
+
+        const mpHeadExtraT=hasCampNameT?`<th class="left">Campaign</th>`:'';
+        const totalColspanT=hasCampNameT?4:3;
+        const mpColCountT=(hasCampNameT?4:3)+4+2+3;
+        const label=tierLabel?`Media Plan — ${tierLabel}`:'Media Plan';
+
+        return `<div class="pdf-page pdf-page-std">
+          ${pageHd(label)}
+          <div class="pdf-kpi-date">Period: ${sdShort} – ${edShort} (${durTxt})</div>
+          <table class="pdf-mp-tbl">
+            <colgroup>
+              ${hasCampNameT?`
+              <col style="width:7%"><col style="width:8%">
+              <col style="width:10%"><col style="width:9%">
+              <col style="width:9%"><col style="width:8%"><col style="width:9%"><col style="width:5%">
+              <col style="width:9%"><col style="width:8%">
+              <col style="width:7%"><col style="width:7%"><col style="width:4%">`:`
+              <col style="width:7%"><col style="width:11%">
+              <col style="width:13%">
+              <col style="width:9%"><col style="width:8%"><col style="width:9%"><col style="width:6%">
+              <col style="width:10%"><col style="width:9%">
+              <col style="width:7%"><col style="width:7%"><col style="width:4%">`}
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="left">Campaign</th>
+                <th class="left">Channel</th>
+                ${mpHeadExtraT}
+                <th class="left">Ad Group</th>
+                <th class="bh">Grand Total</th>
+                <th class="bh">All Times</th><th class="bh">Monthly</th><th class="bh">Daily</th>
+                <th>Targeting</th><th>Ad Format</th>
+                <th class="ph">Start</th><th class="ph">End</th><th class="ph">Days</th>
+              </tr>
+            </thead>
+            <tbody>${mpHtmlT}</tbody>
+            <tfoot><tr class="total-row">
+              <td colspan="${totalColspanT}" style="text-align:right;letter-spacing:.5px">TOTAL</td>
+              <td colspan="${mpColCountT-totalColspanT}" class="pdf-num-cell" style="font-size:8px;text-align:center;">${cur}${fmt2(grandTotalT)}</td>
+            </tr></tfoot>
+          </table>
+          ${v('mp-remark'+tier)?`<div class="pdf-kpi-notes" style="margin-top:14px;">${v('mp-remark'+tier).replace(/\n/g,'<br>')}</div>`:''}
+          ${pageWatermark}
+        </div>`;
+      };
+      return '';
+    })()}
+
+    <!-- PAGE 4 — KPI PERFORMANCE -->
+    ${kpiTrs?`<div class="pdf-page pdf-page-std">
+      ${pageHd('KPI Performance')}
+      <div class="pdf-kpi-date">Period: ${sdShort} – ${edShort} (${durTxt})</div>
+      <table class="pdf-kpi-tbl" style="width:100%!important;min-width:100%!important;">
+        <colgroup>
+          <col style="width:6%"><col style="width:8%"><col style="width:5%"><col style="width:8%"><col style="width:9%">
+          <col style="width:5%"><col style="width:7%"><col style="width:6%"><col style="width:4%"><col style="width:9%">
+          <col style="width:6%"><col style="width:5%"><col style="width:7%"><col style="width:11%"><col style="width:4%">
+        </colgroup>
+        <thead><tr>
+          <th class="left">Campaign</th><th class="left">Channel</th><th>%</th><th>Ad Spent</th><th>Impressions</th><th>CPM</th>
+          <th>Clicks</th><th>CPC</th><th>CTR</th><th>Conversions</th>
+          <th>CPA</th><th>CVR</th><th>ABV</th><th>Revenue</th><th>ROAS</th>
+        </tr></thead>
+        <tbody>${kpiTrs}${kpiGrandTotalHtml}</tbody>
+      </table>
+      ${getRichText('kpi-notes')?`<div class="pdf-kpi-notes" style="margin-top:16px;margin-bottom:0;">${getRichText('kpi-notes')}</div>`:''}
+      ${pageWatermark}
+    </div>`:''}
+
+    <!-- PAGE 5 — MEDIA PLAN -->
     ${mpHtml?`<div class="pdf-page pdf-page-std">
       ${pageHd('Media Plan')}
       <div class="pdf-kpi-date">Period: ${sdShort} – ${edShort} (${durTxt})</div>
@@ -3041,26 +3652,12 @@ function buildPDF(baked){
       ${pageWatermark}
     </div>`:''}
 
-    <!-- PAGE 5 — KPI PERFORMANCE -->
-    ${kpiTrs?`<div class="pdf-page pdf-page-std">
-      ${pageHd('KPI Performance')}
-      <div class="pdf-kpi-date">Period: ${sdShort} – ${edShort} (${durTxt})</div>
-      <table class="pdf-kpi-tbl" style="width:100%!important;min-width:100%!important;">
-        <colgroup>
-          <col style="width:6%"><col style="width:8%"><col style="width:5%"><col style="width:8%"><col style="width:9%">
-          <col style="width:5%"><col style="width:7%"><col style="width:6%"><col style="width:4%"><col style="width:9%">
-          <col style="width:6%"><col style="width:5%"><col style="width:7%"><col style="width:11%"><col style="width:4%">
-        </colgroup>
-        <thead><tr>
-          <th class="left">Campaign</th><th class="left">Channel</th><th>%</th><th>Ad Spent</th><th>Impressions</th><th>CPM</th>
-          <th>Clicks</th><th>CPC</th><th>CTR</th><th>Conversions</th>
-          <th>CPA</th><th>CVR</th><th>ABV</th><th>Revenue</th><th>ROAS</th>
-        </tr></thead>
-        <tbody>${kpiTrs}</tbody>
-      </table>
-      ${getRichText('kpi-notes')?`<div class="pdf-kpi-notes" style="margin-top:16px;margin-bottom:0;">${getRichText('kpi-notes')}</div>`:''}
-      ${pageWatermark}
-    </div>`:''}
+    <!-- EXTRA BUDGET TIERS (2+) — one KPI + Media Plan page pair per tier -->
+    ${budgetTiers.map(tier=>{
+      const tierLabel=tierLabelText(tier);
+      return (window.__buildKpiTierPage?window.__buildKpiTierPage(tier,tierLabel):'')
+           + (window.__buildMpTierPage?window.__buildMpTierPage(tier,tierLabel):'');
+    }).join('')}
 
     <!-- PAGE 5b — SAMPLE AD PLACEMENT (optional, one page per slide) -->
     ${document.getElementById('sap-enabled')?.checked?sapSlides.map((slide,si)=>`<div class="pdf-page pdf-page-std">
@@ -3118,6 +3715,7 @@ async function doPrint(){
   w.document.open();
   w.document.write(`<!DOCTYPE html><html><head>
     <meta charset="UTF-8">
+    <title>${escHtml(computeDefaultFileName())}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
       :root{--navy:#07153a;--blue:#0058ff;--muted:#738095;--muted-soft:#8a96aa;--text:#111827;--border:#e5eaf3;--border-soft:#eef2f7;--green:#16a34a;--green-soft:#ecfdf3;--red:#e11d48;--red-soft:#fff1f2;--amber:#d97706;--amber-soft:#fffbeb;--indigo:#7a4cff;--blue-soft:#eef4ff;--mono:'Inter',sans-serif;}
@@ -3163,6 +3761,7 @@ async function doPrint(){
       .pdf-geo-tbl tr:nth-child(even) td{background:#f8f9fb;}
       .pdf-kpi-tbl tr.mp-shade td{background:#f8f9fb;}
       .total-row td{background:var(--navy)!important;color:#fff!important;font-weight:700;}
+      .grand-total-row td{background:#000!important;border-top:2px solid #fff;}
       .pdf-kpi-date{font-size:12px;font-weight:700;margin-bottom:10px;color:var(--navy);}
       .pdf-kpi-notes{font-size:10.5px;color:#344054;line-height:1.7;margin-bottom:12px;}
       .pdf-kpi-tbl th,.pdf-kpi-tbl td{padding:9px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -3180,7 +3779,7 @@ async function doPrint(){
       .pdf-insights-text{flex:1;font-size:11px;color:#344054;line-height:1.7;min-width:0;}
       .pdf-sdi-images{display:grid;gap:12px;}
       .pdf-sdi-images.pdf-sdi-one{grid-template-columns:1fr;}
-      .pdf-sdi-images.pdf-sdi-two{grid-template-columns:1fr 1fr;}
+      .pdf-sdi-images.pdf-sdi-two,.pdf-sdi-images.pdf-sdi-multi{grid-template-columns:1fr 1fr;}
       .pdf-sdi-img{border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#f8f9fb;}
       .pdf-sdi-img img{width:100%;height:230px;display:block;}
       .pdf-sdi-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:10.5px;color:var(--muted);}
@@ -3319,7 +3918,7 @@ function openPdfPreview(pages){
   const scaleSlider=document.getElementById('pdf-preview-scale'); if(scaleSlider) scaleSlider.value=100;
   const scaleLbl=document.getElementById('pdf-preview-scale-lbl'); if(scaleLbl) scaleLbl.textContent='100%';
   const nameInput=document.getElementById('pdf-preview-filename');
-  if(nameInput) nameInput.value=`${(v('c-title')||'MediaPlan').replace(/[^a-zA-Z0-9]/g,'_')}_${new Date().toISOString().slice(0,10)}`;
+  if(nameInput) nameInput.value=computeDefaultFileName();
   renderPdfPreviewThumbs();
   const modal=document.getElementById('pdf-preview-modal');
   if(modal) modal.style.display='flex';
@@ -3372,8 +3971,8 @@ async function savePdfFromPreview(btn){
       else pdf.addPage([wMm,hMm],orient);
       pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,wMm,hMm);
     });
-    const rawName=(document.getElementById('pdf-preview-filename')?.value||'').trim().replace(/[^a-zA-Z0-9 _-]/g,'').trim();
-    const fname=`${(rawName||v('c-title')||'MediaPlan').replace(/\s+/g,'_')}.pdf`;
+    const rawName=(document.getElementById('pdf-preview-filename')?.value||'').trim();
+    const fname=`${sanitizeFileName(rawName)}.pdf`;
     pdf.save(fname);
     closePdfPreview();
   });
@@ -3517,7 +4116,7 @@ function exportExcel(){
   XLSX.utils.book_append_sheet(wb,ws3,'KPI Performance');
 
   /* ── Download ── */
-  const fname=`${(title||'MediaPlan').replace(/[^a-zA-Z0-9]/g,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`;
+  const fname=`${sanitizeFileName(title||'Media Plan')} ${new Date().toISOString().slice(0,10)}.xlsx`;
   XLSX.writeFile(wb,fname);
 }
 
@@ -3530,8 +4129,8 @@ function collectGeoRows(){
     return{seg:v('gseg-'+id),countries:sel.map(s=>s.n),bud:v('gbud-'+id)};
   });
 }
-function collectMpRows(){
-  return getMpRows().map(id=>({
+function collectMpRows(tier=''){
+  return getMpRows(tier).map(id=>({
     camp:document.getElementById('mp-camp-'+id)?.value,
     obj:document.getElementById('mp-obj-'+id)?.value,
     ch:document.getElementById('mp-ch-'+id)?.value,
@@ -3542,8 +4141,8 @@ function collectMpRows(){
     sd:v('mp-sd-'+id),ed:v('mp-ed-'+id)
   }));
 }
-function collectKpiRows(){
-  return Array.from(document.querySelectorAll('#kpi-body tr')).map(tr=>{
+function collectKpiRows(tier=''){
+  return Array.from(document.querySelectorAll('#kpi-body'+tier+' tr')).map(tr=>{
     const id=tr.id.replace('kpi-','');
     return{
       campaign:document.getElementById('kv-campaign-'+id)?.value,
@@ -3553,12 +4152,53 @@ function collectKpiRows(){
     };
   });
 }
+/* Collects every EXTRA Budget Tier (2+) into a plain array for saving; tier 1 keeps
+   being saved through the existing top-level mpRows/kpiRows/fields exactly as before. */
+function collectExtraBudgetTiers(){
+  return budgetTiers.map(tier=>({
+    tier,
+    label:v('kpi-tier-label'+tier),
+    mpTotalBudget:v('mp-total-budget'+tier),
+    mpRemark:v('mp-remark'+tier),
+    kpiTotalBudget:v('kpi-total-budget'+tier),
+    kpiDestination:document.getElementById('kpi-destination'+tier)?.value||'',
+    kpiShowSubtotals:document.getElementById('kpi-show-subtotals'+tier)?.checked!==false,
+    kpiShowGrandTotal:document.getElementById('kpi-show-grandtotal'+tier)?.checked!==false,
+    kpiNotes:document.getElementById('kpi-notes'+tier)?.innerHTML||'',
+    mpRows:collectMpRows(tier),
+    kpiRows:collectKpiRows(tier)
+  }));
+}
+/* Rebuilds every EXTRA Budget Tier from saved data (used by restoreProject). */
+function restoreExtraBudgetTiers(savedTiers){
+  (savedTiers||[]).forEach(t=>{
+    const tierNum=parseInt((t.tier||'').replace('-',''),10)||(budgetTierCounter+1);
+    budgetTierCounter=Math.max(budgetTierCounter,tierNum);
+    budgetTiers.push(t.tier);
+    const mpContainer=document.getElementById('mp-extra-tiers');
+    const kpiContainer=document.getElementById('kpi-extra-tiers');
+    if(mpContainer) mpContainer.insertAdjacentHTML('beforeend', mpTierTemplate(t.tier,tierNum));
+    if(kpiContainer) kpiContainer.insertAdjacentHTML('beforeend', kpiTierTemplate(t.tier,tierNum));
+    const setV=(id,val)=>{const el=document.getElementById(id);if(el&&val!=null)el.value=val;};
+    setV('kpi-tier-label'+t.tier,t.label);
+    setV('mp-total-budget'+t.tier,t.mpTotalBudget);
+    setV('mp-remark'+t.tier,t.mpRemark);
+    setV('kpi-total-budget'+t.tier,t.kpiTotalBudget);
+    refreshDestinationSelect(t.tier);
+    if(t.kpiDestination) setV('kpi-destination'+t.tier,t.kpiDestination);
+    const subEl=document.getElementById('kpi-show-subtotals'+t.tier); if(subEl) subEl.checked=t.kpiShowSubtotals!==false;
+    const gtEl=document.getElementById('kpi-show-grandtotal'+t.tier); if(gtEl) gtEl.checked=t.kpiShowGrandTotal!==false;
+    const notesEl=document.getElementById('kpi-notes'+t.tier); if(notesEl) notesEl.innerHTML=t.kpiNotes||'';
+    (t.mpRows||[]).forEach(row=>addMpRow(row,t.tier));
+    (t.kpiRows||[]).forEach(row=>addKpiRow(row,t.tier));
+  });
+}
 const SIMPLE_FIELD_IDS=['c-title','c-brand','c-obj','c-obj-custom','c-mch','c-agency-name','c-footer-note','cover-title-override','c-start','c-end','c-cur',
   'cover-theme-color','cover-theme-color-hex','closing-color','closing-color-hex','closing-headline','closing-email','closing-bottom-text',
   'mp-total-budget','kpi-total-budget','mp-remark',
   'exec-date-start','exec-date-end','exec-objective','exec-channels',
   'exec-m-adspent','exec-m-conversions','exec-m-revenue','exec-m-cpa','exec-m-cvr','exec-m-roas','exec-m-clicks','exec-m-ctr','exec-m-cpc',
-  'sdi-image-count','sdi-source','sdi-geos','sdi-period',
+  'sdi-source','sdi-geos','sdi-period',
   'quotation-name','quotation-number','quotation-link'];
 
 function saveProject(){
@@ -3583,10 +4223,10 @@ function saveProject(){
       'exec-geo':document.getElementById('exec-geo')?.innerHTML||''
     },
     images:{
-      agency:agencyDataUrl,client:clientDataUrl,cover:coverDataUrl,
+      agency:agencyDataUrl,client:clientDataUrl,client2:client2DataUrl,cover:coverDataUrl,
       detailsImage:detailsImageUrl,geoInsightsImage:geoInsightsImageUrl,
       geoInsightsImage2:geoInsightsImage2Url,geoInsightsImage3:geoInsightsImage3Url,quotationImage:quotationImageUrl,
-      sdiImage1:sdiImage1Url,sdiImage2:sdiImage2Url,
+      sdiImages:sdiImages,
       sapSlides:sapSlides
     },
     coverPos:{x:coverPosX,y:coverPosY,zoom:coverZoom},
@@ -3598,6 +4238,7 @@ function saveProject(){
     mpRows:collectMpRows(),
     kpiRows:collectKpiRows(),
     execRows:collectExecRows(),
+    extraBudgetTiers:collectExtraBudgetTiers(),
     benchmarkDB:benchmarkDB,
     channelNameMap:channelNameMap,
     kpiDestination:document.getElementById('kpi-destination')?.value||''
@@ -3606,7 +4247,7 @@ function saveProject(){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download=`${(v('c-title')||'MediaPlan').replace(/[^a-zA-Z0-9]/g,'_')}_project.json`;
+  a.download=`${sanitizeFileName(v('c-title')||'Media Plan')} project.json`;
   document.body.appendChild(a);a.click();a.remove();
   URL.revokeObjectURL(url);
 }
@@ -3637,11 +4278,15 @@ function restoreProject(project){
   geoCount=0;mpCount=0;kpiCount=0;execCount=0;
   document.getElementById('exec-body').innerHTML='';
   document.getElementById('exec-foot').innerHTML='';
+  document.getElementById('mp-extra-tiers').innerHTML='';
+  document.getElementById('kpi-extra-tiers').innerHTML='';
+  budgetTiers=[];
+  budgetTierCounter=1;
 
   Object.entries(project.fields||{}).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.value=val;});
 
   Object.entries(project.checks||{}).forEach(([id,val])=>{const el=document.getElementById(id);if(el)el.checked=!!val;});
-  toggleSdiFields();toggleSapFields();toggleSdiImage2();toggleExecFields();toggleQuotationFields();
+  toggleSdiFields();toggleSapFields();toggleExecFields();toggleQuotationFields();
 
   Object.entries(project.richText||{}).forEach(([id,html])=>{const el=document.getElementById(id);if(el)el.innerHTML=html;});
 
@@ -3667,25 +4312,29 @@ function restoreProject(project){
   const img=project.images||{};
   if(img.agency)agencyDataUrl=img.agency;
   if(img.client)clientDataUrl=img.client;
+  if(img.client2)client2DataUrl=img.client2;
   if(img.cover)coverDataUrl=img.cover;
   if(img.detailsImage)detailsImageUrl=img.detailsImage;
   if(img.geoInsightsImage)geoInsightsImageUrl=img.geoInsightsImage;
   if(img.geoInsightsImage2)geoInsightsImage2Url=img.geoInsightsImage2;
   if(img.geoInsightsImage3)geoInsightsImage3Url=img.geoInsightsImage3;
   if(img.quotationImage)quotationImageUrl=img.quotationImage;
-  if(img.sdiImage1)sdiImage1Url=img.sdiImage1;
-  if(img.sdiImage2)sdiImage2Url=img.sdiImage2;
+  if(img.sdiImages && Array.isArray(img.sdiImages) && img.sdiImages.length){
+    sdiImages=img.sdiImages;
+  }else if(img.sdiImage1||img.sdiImage2){
+    sdiImages=img.sdiImage2?[img.sdiImage1||null,img.sdiImage2]:[img.sdiImage1||null];
+  }
+  renderSdiImages();
   if(img.sapSlides && Array.isArray(img.sapSlides) && img.sapSlides.length){
     sapSlides=img.sapSlides;
   }else if(img.sapImage1||img.sapImage2||img.sapImage3||img.sapImage4){
     sapSlides=[{images:[img.sapImage1||null,img.sapImage2||null,img.sapImage3||null,img.sapImage4||null],description:project.fields?.['sap-caption']||''}];
   }
   renderSapSlides();
-  const idMap={agency:'agency',client:'client',cover:'cover',detailsImage:'details-image',geoInsightsImage:'geo-insights-image',
-    geoInsightsImage2:'geo-insights-image2',geoInsightsImage3:'geo-insights-image3',quotationImage:'quotation-image',
-    sdiImage1:'sdi-image1',sdiImage2:'sdi-image2'};
+  const idMap={agency:'agency',client:'client',client2:'client2',cover:'cover',detailsImage:'details-image',geoInsightsImage:'geo-insights-image',
+    geoInsightsImage2:'geo-insights-image2',geoInsightsImage3:'geo-insights-image3',quotationImage:'quotation-image'};
   Object.entries(img).forEach(([k,url])=>{
-    if(!url||k==='sapSlides')return;
+    if(!url||k==='sapSlides'||k==='sdiImages')return;
     const domId=idMap[k];
     if(!domId)return;
     const im=document.getElementById(domId+'-img'),ph=document.getElementById(domId+'-ph'),act=document.getElementById(domId+'-actions');
@@ -3723,6 +4372,7 @@ function restoreProject(project){
   (project.mpRows||[]).forEach(row=>addMpRow(row));
   (project.kpiRows||[]).forEach(row=>addKpiRow(row));
   (project.execRows||[]).forEach(row=>addExecRow(row));
+  restoreExtraBudgetTiers(project.extraBudgetTiers);
 
   updateClosingPreview();
   recalc();
@@ -3736,11 +4386,11 @@ function resetAll(){
   selectedObjs.clear();
   selectedMch.clear();
   document.querySelectorAll('.obj-chip').forEach(b=>b.classList.remove('active'));
-  agencyDataUrl='';clientDataUrl='';coverDataUrl='';detailsImageUrl='';geoInsightsImageUrl='';geoInsightsImage2Url='';geoInsightsImage3Url='';quotationImageUrl='';
-  sdiImage1Url='';sdiImage2Url='';
+  agencyDataUrl='';clientDataUrl='';client2DataUrl='';coverDataUrl='';detailsImageUrl='';geoInsightsImageUrl='';geoInsightsImage2Url='';geoInsightsImage3Url='';quotationImageUrl='';
+  sdiImages=[];
   sapSlides=[{images:[null,null,null,null],description:''}];
   coverPosX=50;coverPosY=50;coverZoom=100;
-  ['agency','client','cover','details-image','geo-insights-image','geo-insights-image2','geo-insights-image3','sdi-image1','sdi-image2','quotation-image'].forEach(t=>{const img=document.getElementById(t+'-img'),ph=document.getElementById(t+'-ph'),act=document.getElementById(t+'-actions');if(img){img.src='';img.style.display='none';} if(ph)ph.style.display='block'; if(act)act.style.display='none';});
+  ['agency','client','client2','cover','details-image','geo-insights-image','geo-insights-image2','geo-insights-image3','quotation-image'].forEach(t=>{const img=document.getElementById(t+'-img'),ph=document.getElementById(t+'-ph'),act=document.getElementById(t+'-actions');if(img){img.src='';img.style.display='none';} if(ph)ph.style.display='block'; if(act)act.style.display='none';});
   geoImgSlotsShown=1;
   const geoSlot2=document.getElementById('geo-img-slot-2'), geoSlot3=document.getElementById('geo-img-slot-3'), geoAddBtn=document.getElementById('geo-add-img-btn');
   if(geoSlot2) geoSlot2.style.display='none';
@@ -3749,8 +4399,7 @@ function resetAll(){
   const git=document.getElementById('geo-insights-text'); if(git)git.innerHTML='';
   const sdiChk=document.getElementById('sdi-enabled'); if(sdiChk)sdiChk.checked=false;
   toggleSdiFields();
-  const sdiCount=document.getElementById('sdi-image-count'); if(sdiCount)sdiCount.value='1';
-  toggleSdiImage2();
+  renderSdiImages();
   ['sdi-summary','sdi-geos','sdi-period'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   const sdiSrc=document.getElementById('sdi-source'); if(sdiSrc)sdiSrc.value='Google Keyword Planner';
   const sapChk=document.getElementById('sap-enabled'); if(sapChk)sapChk.checked=false;
@@ -3791,6 +4440,10 @@ function resetAll(){
   toggleQuotationFields();
   ['quotation-name','quotation-number','quotation-link'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   geoCount=0;mpCount=0;kpiCount=0;
+  document.getElementById('mp-extra-tiers').innerHTML='';
+  document.getElementById('kpi-extra-tiers').innerHTML='';
+  budgetTiers=[];
+  budgetTierCounter=1;
   initGeo();
   recalc();
 }
@@ -3899,8 +4552,9 @@ async function prepareBakedImages(){
   b['geo-insights-image']=await bakeImage(geoInsightsImageUrl,1560,680,'zoomcrop',pos('geo-insights-image').x,pos('geo-insights-image').y,getImgZoom('geo-insights-image'));
   b['geo-insights-image2']=await bakeImage(geoInsightsImage2Url,1560,680,'zoomcrop',pos('geo-insights-image2').x,pos('geo-insights-image2').y,getImgZoom('geo-insights-image2'));
   b['geo-insights-image3']=await bakeImage(geoInsightsImage3Url,1560,680,'zoomcrop',pos('geo-insights-image3').x,pos('geo-insights-image3').y,getImgZoom('geo-insights-image3'));
-  b['sdi-image1']=await bakeImage(sdiImage1Url,760,520,'zoomcrop',pos('sdi-image1').x,pos('sdi-image1').y,getImgZoom('sdi-image1'));
-  b['sdi-image2']=await bakeImage(sdiImage2Url,760,520,'zoomcrop',pos('sdi-image2').x,pos('sdi-image2').y,getImgZoom('sdi-image2'));
+  for(let si=0;si<sdiImages.length;si++){
+    if(sdiImages[si]) b['sdi-img-'+si]=await bakeImage(sdiImages[si],760,520,'zoomcrop',pos('sdi-img-'+si).x,pos('sdi-img-'+si).y,getImgZoom('sdi-img-'+si));
+  }
   b['quotation-image']=await bakeImage(quotationImageUrl,1600,1000,'zoomcrop',pos('quotation-image').x,pos('quotation-image').y,getImgZoom('quotation-image'));
   for(let si=0;si<sapSlides.length;si++){
     const imgs=sapSlides[si].images;
