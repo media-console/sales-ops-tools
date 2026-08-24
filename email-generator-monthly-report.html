@@ -1,0 +1,1562 @@
+<div id="app"></div>
+
+<style>
+  :root {
+    --bg: #F3F4F6;
+    --paper: #FFFFFF;
+    --accent-brand: #1D6FE0;
+    --accent-brand-dim: #5B92D9;
+    --header-dark: #1F2A44;
+    --total-bg: #DDE3F6;
+    --border: #E5E7EB;
+    --border-strong: #111827;
+    --text: #1A1F27;
+    --text-muted: #6B7280;
+    --danger: #DC2626;
+    --font-body: 'Inter', sans-serif;
+    --font-display: 'Georgia', 'Times New Roman', serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  * { box-sizing: border-box; }
+
+  #app {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 24px 20px 80px;
+  }
+
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  /* ---------- Tab bar ---------- */
+  .tab-bar { display: flex; gap: 6px; margin-bottom: 14px; }
+  .tab-btn {
+    background: #fff; border: 1px solid var(--border); border-radius: 8px 8px 0 0;
+    padding: 10px 18px; font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+    cursor: pointer; font-family: var(--font-body); border-bottom: 3px solid transparent;
+  }
+  .tab-btn.active { color: var(--accent-brand); border-bottom-color: var(--accent-brand); background: #fff; }
+  .tab-btn:hover { color: var(--accent-brand); }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+  .toolbar-brand {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-brand);
+    font-weight: 600;
+    margin-right: auto;
+  }
+  select.report-select {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-size: 13px;
+    color: var(--text);
+    min-width: 200px;
+    max-width: 260px;
+  }
+  .tb-btn {
+    background: #FFFFFF;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    white-space: nowrap;
+  }
+  .tb-btn:hover { background: #F9FAFB; }
+  .tb-btn.primary { background: var(--accent-brand); color: #fff; border-color: var(--accent-brand); }
+  .tb-btn.primary:hover { filter: brightness(1.1); }
+  .tb-btn.danger-btn { color: var(--danger); border-color: #FCA5A5; }
+  .tb-btn.danger-btn:hover { background: #FEF2F2; }
+
+  .confirm-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 7px;
+    padding: 6px 10px; font-size: 12.5px; color: #991B1B;
+  }
+  .toast-msg {
+    background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534;
+    border-radius: 7px; padding: 6px 10px; font-size: 12.5px; font-weight: 500;
+  }
+  .toast-msg.error { background: #FEF2F2; border-color: #FCA5A5; color: #991B1B; }
+
+  .email-preview-wrap {
+    background: #FFFFFF; border: 2px solid var(--accent-brand); border-radius: 10px;
+    margin-bottom: 20px; overflow: hidden;
+  }
+  .email-preview-instructions {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    background: #EEF2F7; padding: 10px 14px; font-size: 12.5px; color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .email-preview-frame {
+    padding: 20px; max-height: 520px; overflow-y: auto; background: #F9FAFB;
+  }
+  #email-preview-content {
+    background: #FFFFFF; padding: 24px; border: 1px solid var(--border); border-radius: 6px;
+    user-select: text;
+  }
+
+  /* ---------- Letter paper ---------- */
+  .paper {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(16,24,40,0.06);
+    padding: 48px 56px;
+  }
+
+  .line-input, select.line-input {
+    border: none;
+    border-bottom: 1px dashed #C7CDD6;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text);
+    padding: 1px 3px;
+    outline: none;
+    min-width: 80px;
+  }
+  .line-input:focus, select.line-input:focus { border-bottom-color: var(--accent-brand); }
+  .line-input[readonly] { color: var(--text-muted); cursor: default; }
+  .line-input.wide { min-width: 220px; }
+  .line-input.xwide { min-width: 320px; }
+  .line-input.date-input { min-width: 150px; font-family: var(--font-body); color: var(--text); }
+  .line-input.date-input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.6; }
+  .line-input.date-input:hover::-webkit-calendar-picker-indicator { opacity: 1; }
+  select.currency-select { min-width: 70px; margin-right: 6px; cursor: pointer; }
+
+  p.salutation { font-size: 14px; margin: 0 0 10px; line-height: 1.7; }
+
+  .hotel-heading-row { text-align: center; margin: 22px 0 14px; }
+  input.hotel-heading {
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    border-bottom: 1px dashed #C7CDD6;
+    background: transparent;
+    color: var(--text);
+    width: 100%;
+    padding: 4px 2px;
+    outline: none;
+  }
+  input.hotel-heading:focus { border-bottom-color: var(--accent-brand); }
+  input.hotel-heading::placeholder { color: #B9C0CB; font-weight: 600; }
+
+  hr.divider { border: none; border-top: 2px solid var(--border-strong); margin: 8px 0 22px; }
+
+  .detail-grid { display: grid; grid-template-columns: 190px 1fr; row-gap: 7px; column-gap: 10px; margin-bottom: 16px; font-size: 14px; }
+  .detail-label { font-weight: 700; color: var(--text); }
+  .link-field-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  a.dashboard-link { color: #1D4ED8; text-decoration: underline; font-size: 14px; }
+
+  p.italic-note { font-style: italic; font-size: 13px; color: var(--text-muted); margin: 0 0 24px; }
+
+  h2.section-title { font-size: 15px; font-weight: 700; margin: 26px 0 10px; }
+
+  /* ---------- Tables ---------- */
+  .table-block { margin-bottom: 22px; border: 1px solid var(--border); border-radius: 8px; padding: 14px; background: #FAFBFC; }
+  .table-block-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  input.table-title-input {
+    font-size: 14px; font-weight: 700; border: none; border-bottom: 1px dashed #C7CDD6;
+    background: transparent; padding: 2px 3px; outline: none; flex: 1; min-width: 180px;
+  }
+  input.table-title-input:focus { border-bottom-color: var(--accent-brand); }
+  .tpl-badge {
+    font-size: 11px; font-weight: 600; color: var(--accent-brand); background: #EAF3FD;
+    border-radius: 5px; padding: 4px 8px;
+  }
+  .icon-btn {
+    background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--text-muted);
+    cursor: pointer; font-size: 12px; padding: 5px 8px; font-family: var(--font-body);
+  }
+  .icon-btn:hover { color: var(--danger); border-color: #FCA5A5; background: #FEF2F2; }
+
+  .table-scroll { overflow-x: auto; }
+  table.perf { border-collapse: collapse; width: 100%; }
+  table.perf.fixed-cols { table-layout: fixed; }
+  table.perf th {
+    background: var(--row-header-color, var(--header-dark)); color: var(--row-header-text, #fff); font-size: 12px; letter-spacing: 0.01em;
+    padding: 12px 10px; text-align: center; white-space: nowrap; font-weight: 600;
+  }
+  table.perf.fixed-cols th {
+    white-space: normal; word-break: break-word; line-height: 1.3; padding: 10px 6px; font-size: 12px;
+  }
+  table.perf td { padding: 8px 10px; border: 1px solid var(--border); text-align: center; vertical-align: middle; }
+  table.perf tr.total-row td { background: var(--row-total-color, var(--total-bg)); font-weight: 700; }
+  table.perf input.cell-input {
+    width: 100%; min-width: 60px; border: none; background: transparent; text-align: center;
+    font-size: 13.5px; padding: 8px 4px; outline: none; font-family: var(--font-body); color: var(--text);
+  }
+  table.perf input.cell-input:focus { background: #EEF2F7; border-radius: 3px; }
+  td.row-actions { border: none; padding: 4px 6px; white-space: nowrap; }
+  .row-btn {
+    background: none; border: none; cursor: pointer; font-size: 12px; color: var(--text-muted); padding: 2px 4px;
+  }
+  .row-btn:hover { color: var(--danger); }
+  .row-btn.total-toggle.active { color: #B8860B; font-weight: 700; }
+
+  .add-row-btn, .add-table-btn {
+    background: #fff; border: 1px dashed var(--border); border-radius: 6px; color: var(--accent-brand);
+    font-size: 12.5px; font-weight: 600; padding: 7px 12px; cursor: pointer; font-family: var(--font-body);
+  }
+  .add-row-btn:hover, .add-table-btn:hover { background: #EEF2F7; }
+  .add-table-btn { display: block; margin: 0 auto 24px; }
+
+  .template-picker {
+    border: 1px dashed var(--border); border-radius: 8px; padding: 16px; margin-bottom: 24px; background: #FAFBFC; text-align: center;
+  }
+  .template-picker-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .template-grid { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 12px; }
+  .template-option {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; background: #fff;
+    border: 1px solid var(--border); border-radius: 7px; padding: 10px 14px; cursor: pointer; font-family: var(--font-body);
+  }
+  .template-option:hover { border-color: var(--accent-brand); }
+  .tpl-swatch { width: 34px; height: 14px; border-radius: 3px; }
+  .tpl-name { font-size: 12px; font-weight: 600; color: var(--text); }
+
+  /* ---------- Summary / bullets ---------- */
+  .summary-heading { font-size: 15px; font-weight: 700; margin: 26px 0 8px; }
+  ul.bullet-list { margin: 0 0 6px; padding-left: 20px; }
+  ul.bullet-list li { font-size: 14px; margin-bottom: 5px; line-height: 1.6; }
+
+  .bullet-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .bullet-row .line-input { flex: 1; }
+  .bullet-row .row-btn { flex-shrink: 0; }
+
+  .dest-summary-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+  .dest-substep-label { font-style: italic; font-weight: 400; font-size: 14px; margin: 16px 0 6px; }
+  .dest-summary-row b { min-width: 90px; flex-shrink: 0; font-size: 14px; }
+  .dest-summary-row .line-input { flex: 1; }
+
+  .note-box {
+    background: #FEF9E7; border: 1px solid #F5E6A8; border-radius: 6px; padding: 10px 12px;
+    font-size: 12.5px; color: #6B5A00; margin: 22px 0 14px;
+  }
+  p.closing { font-size: 14px; margin-top: 8px; }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+
+  /* ---------- Print ---------- */
+  @media print {
+    body * { visibility: hidden; }
+    #app, #app * { visibility: visible; }
+    #app { background: #fff; padding: 0; }
+    .toolbar, .tab-bar, .icon-btn, .add-row-btn, .add-table-btn, .row-btn, td.row-actions, .email-preview-wrap { display: none !important; }
+    .paper { box-shadow: none; border: none; padding: 0; }
+    .line-input, input.hotel-heading, input.table-title-input, table.perf input.cell-input {
+      border: none !important; background: transparent !important;
+    }
+    .line-input.date-input::-webkit-calendar-picker-indicator { display: none !important; }
+    .table-block { border: none; padding: 0; background: #fff; }
+    table.perf { min-width: 0; width: 100%; }
+  }
+
+  @media (max-width: 700px) {
+    .paper { padding: 28px 20px; }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+(function () {
+  const app = document.getElementById('app');
+
+  const STORAGE_KEYS = {
+    direct: 'monthly_reports_direct',
+    minor: 'monthly_reports_minor',
+    corporate: 'monthly_reports_corporate'
+  };
+  const TAB_LABELS = {
+    direct: 'Direct Template',
+    minor: 'Minor Properties Template',
+    corporate: 'Minor Corporate Template'
+  };
+  const TAB_TEMPLATE_KEYS = {
+    direct: ['branding', 'conversion'],
+    minor: ['standard'],
+    corporate: ['destination']
+  };
+  const CURRENCIES = ['USD', 'THB', 'EUR', 'GBP', 'SGD', 'AUD', 'CNY', 'JPY'];
+  const DEST_LABELS = [
+    { key: 'thailand', label: 'Thailand' },
+    { key: 'china', label: 'China' },
+    { key: 'maldives', label: 'Maldives' },
+    { key: 'vietnam', label: 'Vietnam' },
+    { key: 'srilanka', label: 'Sri Lanka' },
+    { key: 'restOfAsia', label: 'Rest of Asia' }
+  ];
+  function nextStepFieldFor(destKey) {
+    return 'nextSteps_' + destKey;
+  }
+
+  // unified brand color — all tables share this, no per-table color picker
+  const FIXED_HEADER_COLOR = '#1F2A44';
+  const FIXED_TOTAL_COLOR = '#DDE3F6';
+  const FIXED_ACCENT_COLOR = '#EAF3FD';
+  const FIXED_STRIPE_COLOR = '#F8FAFC';
+
+  const DEFAULT_COLUMNS = [
+    { key: 'month', label: 'Month' },
+    { key: 'adSpent', label: 'Ad Spent' },
+    { key: 'impressions', label: 'Impressions' },
+    { key: 'cpm', label: 'CPM' },
+    { key: 'clicks', label: 'Clicks' },
+    { key: 'cpc', label: 'CPC' },
+    { key: 'ctr', label: 'CTR' },
+    { key: 'conversions', label: 'Conversions' },
+    { key: 'cpa', label: 'CPA' },
+    { key: 'cvr', label: 'CVR' },
+    { key: 'abv', label: 'ABV' },
+    { key: 'revenue', label: 'Revenue' },
+    { key: 'roas', label: 'ROAS' }
+  ];
+
+  const TEMPLATES = {
+    standard: {
+      label: 'Standard Performance',
+      title: 'New Channel Table',
+      headerColor: FIXED_HEADER_COLOR,
+      totalColor: FIXED_TOTAL_COLOR,
+      columns: DEFAULT_COLUMNS,
+      rows: (cols) => [rowWith(cols, { month: 'June' }), rowWith(cols, { month: 'July' }), totalRowWith(cols, { month: 'Total' })]
+    },
+    destination: {
+      label: 'Destination Properties',
+      title: 'Destination Properties',
+      headerColor: FIXED_HEADER_COLOR,
+      totalColor: '#BFDBFE',
+      rowAccentColor: '',
+      noStripe: true,
+      columns: [
+        { key: 'month', label: 'Month', merge: true },
+        { key: 'destination', label: 'Destination / Properties' },
+        { key: 'spending', label: 'Spending' },
+        { key: 'bookings', label: 'Bookings' },
+        { key: 'revenue', label: 'Revenue' },
+        { key: 'roas', label: 'ROAS' }
+      ],
+      rows: (cols) => [
+        rowWith(cols, { month: 'June', destination: 'Thailand PT' }),
+        rowWith(cols, { destination: 'China PT' }),
+        rowWith(cols, { destination: 'Maldives PT' }),
+        rowWith(cols, { destination: 'Sri Lanka PT' }),
+        rowWith(cols, { destination: 'Vietnam PT' }),
+        rowWith(cols, { destination: 'The Rest of ASIA PT' }),
+        rowWith(cols, { destination: 'Minor RT' }),
+        totalRowWith(cols, { destination: 'Total' })
+      ]
+    },
+    branding: {
+      label: 'Branding Metrics',
+      title: 'Branding',
+      headerColor: FIXED_HEADER_COLOR,
+      totalColor: FIXED_TOTAL_COLOR,
+      fixedWidths: true,
+      columns: [
+        { key: 'month', label: 'Month', width: 90 },
+        { key: 'spending', label: 'Spending', width: 90 },
+        { key: 'impressions', label: 'Impressions', width: 90 },
+        { key: 'cpm', label: 'CPM', width: 90 },
+        { key: 'clicks', label: 'Clicks', width: 90 },
+        { key: 'cpc', label: 'CPC', width: 90 },
+        { key: 'ctr', label: 'CTR', width: 90 },
+        { key: 'newUsers', label: 'New Users', width: 90 },
+        { key: 'returningUsers', label: 'Returning Users', width: 100 },
+        { key: 'sessions', label: 'Sessions', width: 100 },
+        { key: 'engagedSessions', label: 'Engaged Sessions', width: 100 },
+        { key: 'engagementRate', label: 'Engagement Rate', width: 100 },
+        { key: 'avgEngagementTime', label: 'Avg. Engagement Time / Session (Sec)', width: 200 }
+      ],
+      rows: (cols) => [
+        ...['January', 'February', 'March', 'April', 'May', 'June', 'July'].map(m => rowWith(cols, { month: m })),
+        totalRowWith(cols, { month: 'Total' })
+      ]
+    },
+    conversion: {
+      label: 'Conversion Metrics',
+      title: 'Conversion (Actual Booking & Revenue based on Attribution Report)',
+      headerColor: FIXED_HEADER_COLOR,
+      totalColor: FIXED_TOTAL_COLOR,
+      fixedWidths: true,
+      columns: [
+        { key: 'month', label: 'Month', width: 90 },
+        { key: 'spending', label: 'Spending', width: 90 },
+        { key: 'impressions', label: 'Impressions', width: 90 },
+        { key: 'cpm', label: 'CPM', width: 90 },
+        { key: 'clicks', label: 'Clicks', width: 90 },
+        { key: 'cpc', label: 'CPC', width: 90 },
+        { key: 'ctr', label: 'CTR', width: 90 },
+        { key: 'bookings', label: 'Bookings', width: 90 },
+        { key: 'cpa', label: 'CPA', width: 100 },
+        { key: 'cvr', label: 'CVR', width: 100 },
+        { key: 'abv', label: 'ABV', width: 100 },
+        { key: 'revenue', label: 'Revenue', width: 100 },
+        { key: 'roomNights', label: 'Room Nights', width: 100 },
+        { key: 'roas', label: 'ROAS', width: 100 }
+      ],
+      rows: (cols) => [
+        ...['January', 'February', 'March', 'April', 'May', 'June', 'July'].map(m => rowWith(cols, { month: m })),
+        totalRowWith(cols, { month: 'Total' })
+      ]
+    }
+  };
+
+  let reportsByTab = { direct: [], minor: [], corporate: [] };
+  let currentIdByTab = { direct: null, minor: null, corporate: null };
+  let undoStackByTab = { direct: [], minor: [], corporate: [] };
+  let activeTab = 'direct';
+  let loaded = false;
+  let pendingDeleteReport = false;
+  let saveTimer = null;
+  let toastMsg = null;
+  let toastTimer = null;
+  let showEmailPreview = false;
+  let showTemplatePicker = false;
+
+  function uid(prefix) {
+    return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function tableColumns(t) {
+    return t.columns || DEFAULT_COLUMNS;
+  }
+
+  function blankRow(cols) {
+    const columns = cols || DEFAULT_COLUMNS;
+    const cells = {};
+    columns.forEach(c => cells[c.key] = '');
+    return { id: uid('row'), isTotal: false, cells };
+  }
+
+  function rowWith(cols, values) {
+    const row = blankRow(cols);
+    Object.assign(row.cells, values);
+    return row;
+  }
+
+  function totalRowWith(cols, values) {
+    const row = blankRow(cols);
+    row.isTotal = true;
+    Object.assign(row.cells, values);
+    return row;
+  }
+
+  function blankTable(title, templateKey) {
+    const tpl = TEMPLATES[templateKey] || TEMPLATES.standard;
+    return {
+      id: uid('tbl'),
+      title: title || tpl.title,
+      template: templateKey || 'standard',
+      columns: tpl.columns,
+      headerColor: tpl.headerColor,
+      totalColor: tpl.totalColor,
+      rowAccentColor: tpl.rowAccentColor || '',
+      fixedWidths: !!tpl.fixedWidths,
+      noStripe: !!tpl.noStripe,
+      rows: tpl.rows(tpl.columns)
+    };
+  }
+
+  function defaultTablesForTab(tabKey) {
+    if (tabKey === 'direct') return [blankTable('Branding', 'branding'), blankTable('Conversion (Actual Booking & Revenue based on Attribution Report)', 'conversion')];
+    if (tabKey === 'minor') return [blankTable('Overall Performance', 'standard'), blankTable('Channel 1: Display PT', 'standard')];
+    if (tabKey === 'corporate') return [blankTable('Destination Properties', 'destination')];
+    return [blankTable(null, 'standard')];
+  }
+
+  function newReport(tabKey) {
+    const base = {
+      id: uid('rep'),
+      tabType: tabKey,
+      dearName: '',
+      attributionFor: '',
+      asOfDate: '',
+      hotelNameBig: '',
+      campaign: '',
+      campaignPeriod: '',
+      campaignEnd: '',
+      periodDays: '',
+      budgetAmount: '',
+      budgetCurrency: 'USD',
+      reportDate: '',
+      dashboardLinkText: '',
+      dashboardLinkUrl: '',
+      tables: defaultTablesForTab(tabKey),
+      summaryMonth: '',
+      monthRevenue: '',
+      allTimeRevenue: '',
+      keyHighlights: [''],
+      nextSteps: [''],
+      othersTitle: 'Others',
+      others: ['']
+    };
+    if (tabKey === 'corporate') {
+      base.perfSummaryMonth = '';
+      base.perfSummaryBullets = [''];
+      base.destSummaries = { thailand: '', china: '', maldives: '', vietnam: '', srilanka: '', restOfAsia: '' };
+      base.overallKeyHighlights = [''];
+      DEST_LABELS.forEach(d => { base[nextStepFieldFor(d.key)] = ['']; });
+      base.brandSummaryNote = '';
+      base.brandBullets = [''];
+    }
+    return base;
+  }
+
+  function currentReports() { return reportsByTab[activeTab]; }
+  function getReport() { return currentReports().find(r => r.id === currentIdByTab[activeTab]) || null; }
+
+  function getPath(obj, path) {
+    const parts = path.split('.');
+    let cur = obj;
+    for (const p of parts) {
+      if (cur == null) return '';
+      cur = cur[/^\d+$/.test(p) ? parseInt(p, 10) : p];
+    }
+    return cur == null ? '' : cur;
+  }
+
+  function setPath(obj, path, value) {
+    const parts = path.split('.');
+    let cur = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const p = parts[i];
+      cur = cur[/^\d+$/.test(p) ? parseInt(p, 10) : p];
+    }
+    const last = parts[parts.length - 1];
+    cur[/^\d+$/.test(last) ? parseInt(last, 10) : last] = value;
+  }
+
+  async function loadData() {
+    for (const key of Object.keys(STORAGE_KEYS)) {
+      try {
+        const result = await window.storage.get(STORAGE_KEYS[key], true);
+        reportsByTab[key] = result ? JSON.parse(result.value) : [];
+      } catch (e) {
+        reportsByTab[key] = [];
+      }
+      if (!reportsByTab[key] || reportsByTab[key].length === 0) {
+        reportsByTab[key] = [newReport(key)];
+      }
+      currentIdByTab[key] = reportsByTab[key][0].id;
+    }
+    loaded = true;
+    render();
+  }
+
+  function scheduleSave() {
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveData, 500);
+  }
+
+  async function saveData() {
+    try {
+      await window.storage.set(STORAGE_KEYS[activeTab], JSON.stringify(reportsByTab[activeTab]), true);
+    } catch (e) {
+      // best-effort; ignore
+    }
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str == null ? '' : str;
+    return div.innerHTML;
+  }
+
+  const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  function formatDisplayDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T00:00:00');
+    if (isNaN(d.getTime())) return iso;
+    return `${d.getDate()} ${MONTH_ABBR[d.getMonth()]} ${d.getFullYear()}`;
+  }
+
+  function computePeriodDays(startIso, endIso) {
+    if (!startIso || !endIso) return '';
+    const start = new Date(startIso + 'T00:00:00');
+    const end = new Date(endIso + 'T00:00:00');
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return '';
+    const MS_PER_DAY = 24 * 60 * 60 * 1000;
+    const diffDays = Math.round((end.getTime() - start.getTime()) / MS_PER_DAY) + 1;
+    if (diffDays <= 0) return '';
+    return diffDays + (diffDays === 1 ? ' day' : ' days');
+  }
+
+  function contrastColor(hex) {
+    if (!hex) return '#ffffff';
+    const h = hex.replace('#', '');
+    if (h.length !== 6) return '#ffffff';
+    const r = parseInt(h.slice(0, 2), 16), g = parseInt(h.slice(2, 4), 16), b = parseInt(h.slice(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.6 ? '#1a1f27' : '#ffffff';
+  }
+
+  function reportLabel(r) {
+    const name = r.hotelNameBig && r.hotelNameBig.trim() ? r.hotelNameBig.trim() : 'Untitled report';
+    const date = r.reportDate && r.reportDate.trim() ? ' — ' + formatDisplayDate(r.reportDate) : '';
+    return name + date;
+  }
+
+  /* ---------- Undo ---------- */
+  function pushUndoSnapshot() {
+    const snap = JSON.stringify({ reports: reportsByTab[activeTab], currentId: currentIdByTab[activeTab] });
+    const stack = undoStackByTab[activeTab];
+    stack.push(snap);
+    if (stack.length > 50) stack.shift();
+    // any explicit structural checkpoint should force the next keystroke-based edit
+    // (see maybeCheckpointInput) to start a fresh undo step rather than merging into
+    // whatever text field was being typed in before this action ran.
+    lastUndoInputKey = null;
+  }
+
+  let lastUndoInputKey = null;
+  let lastUndoInputTime = 0;
+  const UNDO_DEBOUNCE_MS = 700;
+
+  // Called from every plain text/number/select field BEFORE the new value is applied.
+  // Groups rapid keystrokes into the same field into a single undo step, but starts a
+  // fresh step once the user moves to a different field or pauses for a while — independent
+  // of any DOM focus/blur timing, so it isn't affected by re-renders happening elsewhere.
+  function maybeCheckpointInput(uniqueKey) {
+    const now = Date.now();
+    if (uniqueKey !== lastUndoInputKey || now - lastUndoInputTime > UNDO_DEBOUNCE_MS) {
+      pushUndoSnapshot();
+      lastUndoInputKey = uniqueKey; // pushUndoSnapshot() resets this to null, so set it after
+    }
+    lastUndoInputTime = now;
+  }
+
+  function performUndo() {
+    const stack = undoStackByTab[activeTab];
+    if (!stack || stack.length === 0) {
+      showToast('Nothing to undo', true);
+      return;
+    }
+    const snap = stack.pop();
+    const data = JSON.parse(snap);
+    reportsByTab[activeTab] = data.reports;
+    currentIdByTab[activeTab] = data.currentId;
+    lastUndoInputKey = null;
+    scheduleSave();
+    render();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const key = (e.key || '').toLowerCase();
+    const modifierPressed = e.metaKey || e.ctrlKey;
+    if (modifierPressed && key === 'z' && !e.shiftKey) {
+      e.preventDefault();
+      performUndo();
+    }
+  });
+
+  /* ---------- Tab switching ---------- */
+  function actionSwitchTab(tabKey) {
+    if (tabKey === activeTab) return;
+    activeTab = tabKey;
+    pendingDeleteReport = false;
+    showTemplatePicker = false;
+    showEmailPreview = false;
+    render();
+  }
+
+  /* ---------- Actions that change structure (trigger full render) ---------- */
+  function actionNewReport() {
+    pushUndoSnapshot();
+    const r = newReport(activeTab);
+    reportsByTab[activeTab].unshift(r);
+    currentIdByTab[activeTab] = r.id;
+    pendingDeleteReport = false;
+    // Fully clear the DOM before re-rendering so no stale field values or browser
+    // autofill/restore can linger from the previous report without a manual page refresh.
+    app.innerHTML = '';
+    scheduleSave();
+    render();
+    try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch (e) { window.scrollTo(0, 0); }
+  }
+
+  function actionSelectReport(id) {
+    currentIdByTab[activeTab] = id;
+    pendingDeleteReport = false;
+    render();
+  }
+
+  function actionRequestDelete() {
+    pendingDeleteReport = true;
+    render();
+  }
+  function actionCancelDelete() {
+    pendingDeleteReport = false;
+    render();
+  }
+  function actionConfirmDelete() {
+    pushUndoSnapshot();
+    reportsByTab[activeTab] = reportsByTab[activeTab].filter(r => r.id !== currentIdByTab[activeTab]);
+    if (reportsByTab[activeTab].length === 0) reportsByTab[activeTab].push(newReport(activeTab));
+    currentIdByTab[activeTab] = reportsByTab[activeTab][0].id;
+    pendingDeleteReport = false;
+    scheduleSave();
+    render();
+  }
+
+  function actionOpenTemplatePicker() {
+    showTemplatePicker = true;
+    render();
+  }
+  function actionCloseTemplatePicker() {
+    showTemplatePicker = false;
+    render();
+  }
+  function actionAddTable(templateKey) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    cur.tables.push(blankTable(null, templateKey));
+    showTemplatePicker = false;
+    scheduleSave();
+    render();
+  }
+  function actionRemoveTable(tableId) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    cur.tables = cur.tables.filter(t => t.id !== tableId);
+    scheduleSave();
+    render();
+  }
+  function actionAddRow(tableId) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    const t = cur.tables.find(t => t.id === tableId);
+    const newRow = blankRow(tableColumns(t));
+    const firstTotalIdx = t.rows.findIndex(r => r.isTotal);
+    if (firstTotalIdx === -1) t.rows.push(newRow);
+    else t.rows.splice(firstTotalIdx, 0, newRow);
+    scheduleSave();
+    render();
+  }
+  function actionRemoveRow(tableId, rowId) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    const t = cur.tables.find(t => t.id === tableId);
+    t.rows = t.rows.filter(r => r.id !== rowId);
+    scheduleSave();
+    render();
+  }
+  function actionToggleTotal(tableId, rowId) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    const t = cur.tables.find(t => t.id === tableId);
+    const row = t.rows.find(r => r.id === rowId);
+    row.isTotal = !row.isTotal;
+    scheduleSave();
+    render();
+  }
+
+  function actionAddBullet(field) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    if (cur[field].length >= 6) return;
+    cur[field].push('');
+    scheduleSave();
+    render();
+  }
+  function actionRemoveBullet(field, idx) {
+    pushUndoSnapshot();
+    const cur = getReport();
+    cur[field].splice(idx, 1);
+    scheduleSave();
+    render();
+  }
+
+  function showToast(text, isError) {
+    toastMsg = { text, isError: !!isError };
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toastMsg = null; render(); }, 3200);
+    render();
+  }
+
+  /* ---------- JSON export / import ---------- */
+  function actionExportJson() {
+    const cur = getReport();
+    if (!cur) return;
+    const data = JSON.stringify(cur, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (cur.hotelNameBig || 'report').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '-' + activeTab + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Exported JSON file.');
+  }
+
+  function actionTriggerUpload() {
+    const inp = document.getElementById('json-upload-input');
+    if (inp) inp.click();
+  }
+
+  function actionHandleUploadFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        const items = Array.isArray(parsed) ? parsed : [parsed];
+        pushUndoSnapshot();
+        items.forEach(item => {
+          item.id = uid('rep');
+          item.tabType = activeTab;
+          if (item.tables) {
+            item.tables.forEach(t => {
+              t.id = uid('tbl');
+              if (t.rows) t.rows.forEach(row => row.id = uid('row'));
+            });
+          }
+          reportsByTab[activeTab].unshift(item);
+        });
+        currentIdByTab[activeTab] = reportsByTab[activeTab][0].id;
+        scheduleSave();
+        showToast('Imported ' + items.length + ' report(s).');
+        render();
+      } catch (err) {
+        showToast('Invalid JSON file.', true);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  /* ---------- Email-safe export (Gmail / Outlook) ---------- */
+  function eesc(str) { return escapeHtml(str).replace(/\n/g, '<br>'); }
+
+  function bulletList(arr, FF) {
+    const items = (arr || []).filter(v => v && v.trim() !== '');
+    if (items.length === 0) return '';
+    return `<ul style="${FF}font-size:14px;color:#1a1f27;margin:0 0 6px;padding-left:20px;">${items.map(v => `<li style="margin-bottom:5px;line-height:1.6;">${eesc(v)}</li>`).join('')}</ul>`;
+  }
+
+  function buildEmailHtml(r) {
+    const FF = "font-family:Arial,Helvetica,sans-serif;";
+    const summaryMonthLabel = r.summaryMonth && r.summaryMonth.trim() ? r.summaryMonth.trim() : '';
+    const budgetDisplay = (r.budgetAmount && r.budgetAmount.trim()) ? `${eesc(r.budgetCurrency || '')} ${eesc(r.budgetAmount)}`.trim() : '';
+
+    // Text/greeting area width — independent of table widths, which keep their own sizing.
+    const contentWidth = 1300;
+
+    const detailRow = (label, valueHtml) => `
+      <tr>
+        <td width="230" style="${FF}font-size:14px;font-weight:bold;color:#1a1f27;padding:3px 10px 3px 0;vertical-align:top;white-space:nowrap;width:230px;">${eesc(label)}</td>
+        <td style="${FF}font-size:14px;color:#1a1f27;padding:3px 0;text-align:left;">${valueHtml}</td>
+      </tr>`;
+
+    const detailsTable = `
+      <table role="presentation" width="${contentWidth}" cellpadding="0" cellspacing="0" border="0" style="width:${contentWidth}px;border-collapse:collapse;table-layout:fixed;">
+        ${detailRow('Campaign:', eesc(r.campaign))}
+        ${detailRow('Campaign Period:', eesc(formatDisplayDate(r.campaignPeriod)))}
+        ${detailRow('Campaign End:', eesc(formatDisplayDate(r.campaignEnd)))}
+        ${detailRow('Period (days):', eesc(r.periodDays))}
+        ${detailRow('Budget:', budgetDisplay)}
+        ${detailRow('Report Date:', eesc(formatDisplayDate(r.reportDate)))}
+        ${detailRow('Monthly Report and Dashboard:', r.dashboardLinkUrl
+          ? `<a href="${escapeHtml(r.dashboardLinkUrl)}" style="color:#1D4ED8;text-decoration:underline;">${eesc(r.dashboardLinkText || 'Open link')}</a>`
+          : eesc(r.dashboardLinkText))}
+      </table>`;
+
+    const perfTable = (t) => {
+      const cols = t.columns || DEFAULT_COLUMNS;
+      const rows = t.rows.filter(row => cols.some(c => (row.cells[c.key] || '').trim() !== ''));
+      if (rows.length === 0) return '';
+      const headerBg = t.headerColor || FIXED_HEADER_COLOR;
+      const headerText = contrastColor(headerBg);
+      const totalBg = t.totalColor || FIXED_TOTAL_COLOR;
+      const tableStyle = t.fixedWidths
+        ? 'border-collapse:collapse;width:100%;margin-bottom:18px;table-layout:fixed;'
+        : `border-collapse:collapse;width:${cols.length * 90}px;margin-bottom:18px;`;
+
+      const mergeSpans = {};
+      cols.forEach(c => {
+        if (!c.merge) return;
+        const spans = {};
+        let i = 0;
+        while (i < rows.length) {
+          if (rows[i].isTotal) { spans[i] = { span: 1, show: true }; i++; continue; }
+          let j = i;
+          while (j < rows.length && !rows[j].isTotal) j++;
+          spans[i] = { span: j - i, show: true };
+          for (let k = i + 1; k < j; k++) spans[k] = { span: 1, show: false };
+          i = j;
+        }
+        mergeSpans[c.key] = spans;
+      });
+
+      return `
+        <table role="presentation" cellpadding="12" cellspacing="0" border="1" bordercolor="#E5E7EB" style="${tableStyle}${FF}">
+          <tr>
+            ${cols.map(c => `<td style="${c.width ? `width:${c.width}px;` : ''}background:${headerBg};color:${headerText};font-size:${c.width ? '12px' : '12.5px'};font-weight:bold;text-align:center;${c.width ? 'white-space:normal;word-break:break-word;line-height:1.3;' : 'white-space:nowrap;'}padding:${c.width ? '10px 6px' : '12px 16px'};">${eesc(c.label)}</td>`).join('')}
+          </tr>
+          ${rows.map((row, rIdx) => {
+            let rowBg = '';
+            if (row.isTotal) rowBg = totalBg;
+            else if (t.rowAccentColor) rowBg = t.rowAccentColor;
+            else if (!t.noStripe && rIdx % 2 === 1) rowBg = FIXED_STRIPE_COLOR;
+            return `
+            <tr${rowBg ? ` style="background:${rowBg};"` : ''}>
+              ${cols.map(c => {
+                const cellStyle = `${c.width ? `width:${c.width}px;` : ''}font-size:13.5px;text-align:center;vertical-align:middle;white-space:nowrap;padding:10px 14px;${row.isTotal ? 'font-weight:bold;' : ''}color:#1a1f27;`;
+                if (c.merge) {
+                  const span = mergeSpans[c.key][rIdx];
+                  if (!span.show) return '';
+                  return `<td${span.span > 1 ? ` rowspan="${span.span}" valign="middle"` : ''} style="${cellStyle}">${eesc(row.cells[c.key])}</td>`;
+                }
+                return `<td style="${cellStyle}">${eesc(row.cells[c.key])}</td>`;
+              }).join('')}
+            </tr>`;
+          }).join('')}
+        </table>`;
+    };
+
+    const tablesHtml = r.tables.map(t => `
+      <p style="${FF}font-size:14px;font-weight:bold;color:#1a1f27;margin:0 0 8px;">${eesc(t.title)}</p>
+      ${perfTable(t)}
+    `).join('');
+
+    const summaryBullets = `
+      <ul style="${FF}font-size:14px;color:#1a1f27;margin:0 0 6px;padding-left:20px;">
+        ${r.monthRevenue ? `<li style="margin-bottom:5px;line-height:1.6;">${eesc(summaryMonthLabel)} Reported Revenue: ${eesc(r.monthRevenue)}</li>` : ''}
+        ${r.allTimeRevenue ? `<li style="margin-bottom:5px;line-height:1.6;">All Time Reported Revenue: ${eesc(r.allTimeRevenue)}</li>` : ''}
+      </ul>`;
+
+    let bodyHtml;
+    if (r.tabType === 'corporate') {
+      const destItems = DEST_LABELS.filter(d => r.destSummaries && r.destSummaries[d.key] && r.destSummaries[d.key].trim());
+      const hasPerfSummary = (r.perfSummaryBullets || []).some(b => b.trim());
+      const hasOverallHighlights = (r.overallKeyHighlights || []).some(b => b.trim());
+      const nextStepDests = DEST_LABELS.filter(d => (r[nextStepFieldFor(d.key)] || []).some(b => b.trim()));
+      const hasBrand = (r.brandSummaryNote && r.brandSummaryNote.trim()) || (r.brandBullets || []).some(b => b.trim());
+
+      bodyHtml = `
+        ${hasPerfSummary ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:8px 0 8px 0;">${eesc(r.perfSummaryMonth)} Performance Summary :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.perfSummaryBullets, FF)}</td></tr>` : ''}
+        ${destItems.length > 0 ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Destination Performance Summary :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">
+          <ul style="${FF}font-size:14px;color:#1a1f27;margin:0 0 6px;padding-left:20px;">
+            ${destItems.map(d => `<li style="margin-bottom:5px;line-height:1.6;"><b>${eesc(d.label)}</b> ${eesc(r.destSummaries[d.key])}</li>`).join('')}
+          </ul>
+        </td></tr>` : ''}
+        ${hasOverallHighlights ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Overall Key Highlights :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.overallKeyHighlights, FF)}</td></tr>` : ''}
+        ${nextStepDests.length > 0 ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Next Step :</td></tr>
+        ${nextStepDests.map(d => `
+          <tr><td style="font-style:italic;font-weight:normal;padding:10px 0 2px 0;">${eesc(d.label)}</td></tr>
+          <tr><td style="padding:0 0 6px 0;">${bulletList(r[nextStepFieldFor(d.key)], FF)}</td></tr>
+        `).join('')}` : ''}
+        ${hasBrand ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Brand Performance Summary : ${eesc(r.brandSummaryNote)}</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.brandBullets, FF)}</td></tr>` : ''}
+      `;
+    } else {
+      const hasSummary = (r.monthRevenue && r.monthRevenue.trim()) || (r.allTimeRevenue && r.allTimeRevenue.trim());
+      const hasKeyHighlights = (r.keyHighlights || []).some(v => v.trim());
+      const hasNextSteps = (r.nextSteps || []).some(v => v.trim());
+      const hasOthers = (r.others || []).some(o => o.trim());
+      bodyHtml = `
+        ${hasSummary ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:8px 0 8px 0;">Summary of ${eesc(summaryMonthLabel)} what happened?</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${summaryBullets}</td></tr>` : ''}
+        ${hasKeyHighlights ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Key Highlights :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.keyHighlights, FF)}</td></tr>` : ''}
+        ${hasNextSteps ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">Next Step :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.nextSteps, FF)}</td></tr>` : ''}
+        ${hasOthers ? `
+        <tr><td style="font-size:15px;font-weight:bold;padding:18px 0 8px 0;">${eesc(r.othersTitle && r.othersTitle.trim() ? r.othersTitle.trim() : 'Others')} :</td></tr>
+        <tr><td style="padding:0 0 6px 0;">${bulletList(r.others, FF)}</td></tr>` : ''}
+      `;
+    }
+
+    return `
+<table role="presentation" width="${contentWidth}" cellpadding="0" cellspacing="0" border="0" style="width:${contentWidth}px;${FF}font-size:14px;color:#1a1f27;">
+  <tr><td style="padding:0 0 10px 0;">Dear Khun ${eesc(r.dearName)},</td></tr>
+  <tr><td style="padding:0 0 10px 0;">I hope you are doing well.</td></tr>
+  <tr><td style="padding:0 0 18px 0;">Please find below details for ${eesc(r.attributionFor)} attribution report as of ${eesc(formatDisplayDate(r.asOfDate))}.</td></tr>
+  <tr><td style="text-align:center;padding:0 0 14px 0;"><span style="font-size:28px;font-weight:bold;${FF}">${eesc(r.hotelNameBig)}</span></td></tr>
+  <tr><td style="border-top:2px solid #111827;font-size:1px;line-height:1px;padding:0 0 14px 0;">&nbsp;</td></tr>
+  <tr><td style="padding:0 0 8px 0;">${detailsTable}</td></tr>
+  <tr><td style="font-style:italic;color:#6b7280;font-size:13px;padding:14px 0 22px 0;">Full version of Monthly Report and Dashboard will be in the attached link.</td></tr>
+  <tr><td>${tablesHtml}</td></tr>
+  ${bodyHtml}
+  <tr><td style="padding:18px 0 14px 0;">
+    <table role="presentation" width="${contentWidth}" cellpadding="10" cellspacing="0" border="0" style="background:#FEF9E7;border:1px solid #F5E6A8;border-collapse:collapse;width:${contentWidth}px;">
+      <tr><td style="font-size:12.5px;color:#6B5A00;${FF}">*Note on Data Attribution: Please note that attribution data may continue to update within a 7&ndash;30 day attribution window following the initial report date. As the platform continues processing attribution signals and user journey reconciliation, additional bookings and revenue may be attributed back to the original reporting period in subsequent exports.</td></tr>
+    </table>
+  </td></tr>
+  <tr><td style="padding:4px 0 0 0;">If you have any questions, please let me know.</td></tr>
+</table>`;
+  }
+
+  function actionTogglePreview() {
+    showEmailPreview = !showEmailPreview;
+    render();
+    if (showEmailPreview) {
+      setTimeout(() => {
+        const el = document.getElementById('email-preview-content');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    }
+  }
+
+  function actionSelectPreview() {
+    const el = document.getElementById('email-preview-content');
+    if (!el) return;
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+
+    let copied = false;
+    try {
+      copied = document.execCommand('copy');
+    } catch (e) {
+      copied = false;
+    }
+
+    if (copied) {
+      showToast('Copied! Paste directly into Gmail or Outlook.');
+      return;
+    }
+
+    if (navigator.clipboard && window.ClipboardItem) {
+      try {
+        const html = el.innerHTML;
+        const text = el.textContent || '';
+        navigator.clipboard.write([new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([text], { type: 'text/plain' })
+        })]).then(() => {
+          showToast('Copied! Paste directly into Gmail or Outlook.');
+        }).catch(() => {
+          showToast(`Selected — press ${isMac ? 'Cmd' : 'Ctrl'}+C now to copy, then paste into Gmail or Outlook.`);
+        });
+        return;
+      } catch (e) {
+        // fall through to manual instruction
+      }
+    }
+    showToast(`Selected — press ${isMac ? 'Cmd' : 'Ctrl'}+C now to copy, then paste into Gmail or Outlook.`);
+  }
+
+  /* ---------- Render ---------- */
+  function render() {
+    if (!loaded) {
+      app.innerHTML = `<div class="wrap"><div class="empty-state">Loading…</div></div>`;
+      return;
+    }
+    const cur = getReport();
+
+    const tabBarHtml = `
+      <div class="tab-bar">
+        ${Object.keys(TAB_LABELS).map(key => `
+          <button class="tab-btn ${activeTab === key ? 'active' : ''}" data-action="switch-tab" data-tab="${key}">${escapeHtml(TAB_LABELS[key])}</button>
+        `).join('')}
+      </div>
+    `;
+
+    const toolbarHtml = `
+      <div class="toolbar">
+        <div class="toolbar-brand">PMC Report Generator</div>
+        <select autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="report-select" id="report-select">
+          ${currentReports().map(r => `<option value="${r.id}" ${r.id === currentIdByTab[activeTab] ? 'selected' : ''}>${escapeHtml(reportLabel(r))}</option>`).join('')}
+        </select>
+        <button class="tb-btn primary" id="btn-new">+ New Report</button>
+        ${pendingDeleteReport ? `
+          <div class="confirm-bar">
+            Delete this report?
+            <button class="tb-btn danger-btn" id="btn-confirm-delete">Yes, delete</button>
+            <button class="tb-btn" id="btn-cancel-delete">Cancel</button>
+          </div>
+        ` : `<button class="tb-btn danger-btn" id="btn-delete">Delete</button>`}
+        <button class="tb-btn" id="btn-export-json">Export JSON</button>
+        <button class="tb-btn" id="btn-upload-json">Upload JSON</button>
+        <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" type="file" id="json-upload-input" accept="application/json,.json" style="display:none;" />
+        ${toastMsg ? `<div class="toast-msg${toastMsg.isError ? ' error' : ''}">${escapeHtml(toastMsg.text)}</div>` : ''}
+        <button class="tb-btn primary" id="btn-toggle-preview">${showEmailPreview ? 'Hide Email Preview' : 'Copy for Email'}</button>
+      </div>
+    `;
+
+    const previewHtml = showEmailPreview ? `
+      <div class="email-preview-wrap">
+        <div class="email-preview-instructions">
+          <b>Step 1:</b> click <b>Select &amp; Copy</b> below (it copies automatically).
+          <b>Step 2:</b> if it didn't say "Copied", press <b>Ctrl+C</b> (or <b>Cmd+C</b> on Mac) instead — the content is already selected.
+          <b>Step 3:</b> paste into a new Gmail or Outlook message.
+          <button class="tb-btn primary" id="btn-select-preview" style="margin-left:auto;">Select &amp; Copy</button>
+        </div>
+        <div class="email-preview-frame">
+          <div id="email-preview-content">${buildEmailHtml(cur)}</div>
+        </div>
+      </div>
+    ` : '';
+
+    const tablesHtml = cur.tables.map(t => renderTable(t)).join('');
+
+    const bodyHtml = activeTab === 'corporate' ? renderCorporateBody(cur) : renderStandardBody(cur);
+
+    app.innerHTML = `
+      <div class="wrap">
+        ${tabBarHtml}
+        ${toolbarHtml}
+        ${previewHtml}
+        <div class="paper">
+          <p class="salutation">
+            Dear Khun <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="dearName" placeholder="recipient name" value="${escapeHtml(cur.dearName)}" />,
+          </p>
+          <p class="salutation">I hope you are doing well.</p>
+          <p class="salutation">
+            Please find below details for
+            <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="attributionFor" placeholder="e.g. Anantara Veli Maldives Resort" value="${escapeHtml(cur.attributionFor)}" />
+            attribution report as of
+            <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" type="date" class="line-input date-input" data-path="asOfDate" value="${escapeHtml(cur.asOfDate)}" />.
+          </p>
+
+          <div class="hotel-heading-row">
+            <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="hotel-heading" data-path="hotelNameBig" placeholder="Hotel Name (Code)" value="${escapeHtml(cur.hotelNameBig)}" />
+          </div>
+          <hr class="divider" />
+
+          <div class="detail-grid">
+            <div class="detail-label">Campaign:</div>
+            <div><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input xwide" data-path="campaign" value="${escapeHtml(cur.campaign)}" /></div>
+
+            <div class="detail-label">Campaign Period:</div>
+            <div><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" type="date" class="line-input date-input" data-path="campaignPeriod" value="${escapeHtml(cur.campaignPeriod)}" /></div>
+
+            <div class="detail-label">Campaign End:</div>
+            <div><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" type="date" class="line-input date-input" data-path="campaignEnd" value="${escapeHtml(cur.campaignEnd)}" /></div>
+
+            <div class="detail-label">Period (days):</div>
+            <div><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-path="periodDays" value="${escapeHtml(cur.periodDays)}" readonly title="Auto-calculated from Campaign Period and Campaign End" /></div>
+
+            <div class="detail-label">Budget:</div>
+            <div>
+              <select autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input currency-select" data-path="budgetCurrency">
+                ${CURRENCIES.map(c => `<option value="${c}" ${(cur.budgetCurrency || 'USD') === c ? 'selected' : ''}>${c}</option>`).join('')}
+              </select>
+              <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-path="budgetAmount" value="${escapeHtml(cur.budgetAmount)}" />
+            </div>
+
+            <div class="detail-label">Report Date:</div>
+            <div><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" type="date" class="line-input date-input" data-path="reportDate" value="${escapeHtml(cur.reportDate)}" /></div>
+
+            <div class="detail-label">Monthly Report and Dashboard:</div>
+            <div class="link-field-row">
+              <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-path="dashboardLinkText" placeholder="Link text" value="${escapeHtml(cur.dashboardLinkText)}" />
+              <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input xwide" data-path="dashboardLinkUrl" placeholder="https://..." value="${escapeHtml(cur.dashboardLinkUrl)}" />
+              ${cur.dashboardLinkUrl ? `<a class="dashboard-link" href="${escapeHtml(cur.dashboardLinkUrl)}" target="_blank" rel="noopener">${escapeHtml(cur.dashboardLinkText || 'Open link')} \u2197</a>` : ''}
+            </div>
+          </div>
+
+          <p class="italic-note">Full version of Monthly Report and Dashboard will be in the attached link.</p>
+
+          ${tablesHtml}
+          ${showTemplatePicker ? `
+            <div class="template-picker">
+              <div class="template-picker-title">Choose a table template</div>
+              <div class="template-grid">
+                ${TAB_TEMPLATE_KEYS[activeTab].map(key => `
+                  <button class="template-option" data-action="add-table" data-template="${key}">
+                    <span class="tpl-swatch" style="background:${TEMPLATES[key].headerColor};"></span>
+                    <span class="tpl-name">${escapeHtml(TEMPLATES[key].label)}</span>
+                  </button>
+                `).join('')}
+              </div>
+              <button class="tb-btn" id="btn-cancel-template">Cancel</button>
+            </div>
+          ` : `
+            <button class="add-table-btn" id="btn-add-table">+ Add Channel Table</button>
+          `}
+
+          ${bodyHtml}
+
+          <div class="note-box">
+            *Note on Data Attribution: Please note that attribution data may continue to update within a 7–30 day attribution window following the initial report date. As the platform continues processing attribution signals and user journey reconciliation, additional bookings and revenue may be attributed back to the original reporting period in subsequent exports.
+          </div>
+
+          <p class="closing">If you have any questions, please let me know.</p>
+        </div>
+      </div>
+    `;
+
+    bindEvents();
+  }
+
+  function renderStandardBody(cur) {
+    const summaryMonthLabel = cur.summaryMonth && cur.summaryMonth.trim() ? cur.summaryMonth.trim() : '\u2014';
+    return `
+      <h2 class="summary-heading">
+        Summary of <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-path="summaryMonth" placeholder="July 2026" value="${escapeHtml(cur.summaryMonth)}" /> what happened?
+      </h2>
+      <ul class="bullet-list">
+        <li>${escapeHtml(summaryMonthLabel)} Reported Revenue: <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="monthRevenue" placeholder="USD 49,220.95 with ROAS 30.39" value="${escapeHtml(cur.monthRevenue)}" /></li>
+        <li>All Time Reported Revenue: <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="allTimeRevenue" placeholder="USD 81,358.95 with ROAS 33.00" value="${escapeHtml(cur.allTimeRevenue)}" /></li>
+      </ul>
+
+      <h2 class="summary-heading">Key Highlights :</h2>
+      ${renderBulletEditor(cur.keyHighlights, 'keyHighlights')}
+
+      <h2 class="summary-heading">Next Step :</h2>
+      ${renderBulletEditor(cur.nextSteps, 'nextSteps')}
+
+      <h2 class="summary-heading"><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" style="font-weight:700;font-size:15px;" data-path="othersTitle" placeholder="Others" value="${escapeHtml(cur.othersTitle)}" /> :</h2>
+      ${renderBulletEditor(cur.others, 'others')}
+    `;
+  }
+
+  function renderCorporateBody(cur) {
+    return `
+      <h2 class="summary-heading">
+        <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-path="perfSummaryMonth" placeholder="June" value="${escapeHtml(cur.perfSummaryMonth)}" /> Performance Summary :
+      </h2>
+      ${renderBulletEditor(cur.perfSummaryBullets, 'perfSummaryBullets')}
+
+      <h2 class="summary-heading">Destination Performance Summary :</h2>
+      <div class="dest-summary-list">
+        ${DEST_LABELS.map(d => `
+          <div class="dest-summary-row">
+            <b>${escapeHtml(d.label)}</b>
+            <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="destSummaries.${d.key}" placeholder="Describe ${escapeHtml(d.label)} performance..." value="${escapeHtml((cur.destSummaries || {})[d.key])}" />
+          </div>
+        `).join('')}
+      </div>
+
+      <h2 class="summary-heading">Overall Key Highlights :</h2>
+      ${renderBulletEditor(cur.overallKeyHighlights, 'overallKeyHighlights')}
+
+      <h2 class="summary-heading">Next Step :</h2>
+      ${DEST_LABELS.map(d => `
+        <p class="dest-substep-label">${escapeHtml(d.label)}</p>
+        ${renderBulletEditor(cur[nextStepFieldFor(d.key)], nextStepFieldFor(d.key))}
+      `).join('')}
+
+      <h2 class="summary-heading">Additional Details :</h2>
+
+      <h2 class="summary-heading">Brand Performance Summary : <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input wide" data-path="brandSummaryNote" value="${escapeHtml(cur.brandSummaryNote)}" /></h2>
+      ${renderBulletEditor(cur.brandBullets, 'brandBullets')}
+    `;
+  }
+
+  function renderTable(t) {
+    const cols = tableColumns(t);
+    const headerBg = t.headerColor || FIXED_HEADER_COLOR;
+    const headerText = contrastColor(headerBg);
+    const totalBg = t.totalColor || FIXED_TOTAL_COLOR;
+    const tplLabel = (TEMPLATES[t.template] || TEMPLATES.standard).label;
+
+    const mergeSpans = {};
+    cols.forEach(c => {
+      if (!c.merge) return;
+      const spans = {};
+      let i = 0;
+      while (i < t.rows.length) {
+        if (t.rows[i].isTotal) { spans[i] = { span: 1, show: true }; i++; continue; }
+        let j = i;
+        while (j < t.rows.length && !t.rows[j].isTotal) j++;
+        spans[i] = { span: j - i, show: true };
+        for (let k = i + 1; k < j; k++) spans[k] = { span: 1, show: false };
+        i = j;
+      }
+      mergeSpans[c.key] = spans;
+    });
+
+    const rowsHtml = t.rows.map((row, rIdx) => {
+      let rowBg = '';
+      if (row.isTotal) rowBg = totalBg;
+      else if (t.rowAccentColor) rowBg = t.rowAccentColor;
+      else if (!t.noStripe && rIdx % 2 === 1) rowBg = FIXED_STRIPE_COLOR;
+      return `
+      <tr class="${row.isTotal ? 'total-row' : ''}" ${rowBg ? `style="background:${rowBg};"` : ''}>
+        ${cols.map(c => {
+          const widthStyle = c.width ? ` style="width:${c.width}px;"` : '';
+          if (c.merge) {
+            const span = mergeSpans[c.key][rIdx];
+            if (!span.show) return '';
+            return `<td${widthStyle}${span.span > 1 ? ` rowspan="${span.span}"` : ''}><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="cell-input" data-table="${t.id}" data-row="${row.id}" data-cell="${c.key}" value="${escapeHtml(row.cells[c.key])}" /></td>`;
+          }
+          return `<td${widthStyle}><input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="cell-input" data-table="${t.id}" data-row="${row.id}" data-cell="${c.key}" value="${escapeHtml(row.cells[c.key])}" /></td>`;
+        }).join('')}
+        <td class="row-actions">
+          <button class="row-btn total-toggle ${row.isTotal ? 'active' : ''}" data-action="toggle-total" data-table="${t.id}" data-row="${row.id}" title="Mark as TOTAL row">TOTAL</button>
+          <button class="row-btn" data-action="remove-row" data-table="${t.id}" data-row="${row.id}" title="Remove row">\u2715</button>
+        </td>
+      </tr>
+    `;
+    }).join('');
+
+    return `
+      <div class="table-block">
+        <div class="table-block-head">
+          <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="table-title-input" data-table-title="${t.id}" value="${escapeHtml(t.title)}" />
+          <span class="tpl-badge">${escapeHtml(tplLabel)}</span>
+          <button class="icon-btn" data-action="remove-table" data-table="${t.id}" title="Remove this table">Remove table</button>
+        </div>
+
+        <div class="table-scroll">
+          <table class="perf ${t.fixedWidths ? 'fixed-cols' : ''}" style="min-width:${t.fixedWidths ? cols.reduce((s, c) => s + (c.width || 100), 0) : cols.length * 90}px;">
+            <thead>
+              <tr style="--row-header-color:${headerBg};--row-header-text:${headerText};">
+                ${cols.map(c => `<th ${c.width ? `style="width:${c.width}px;"` : ''}>${c.label}</th>`).join('')}
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="add-row-btn" data-action="add-row" data-table="${t.id}">+ Add Row</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderBulletEditor(arr, field) {
+    const rows = (arr || []).map((val, idx) => `
+      <div class="bullet-row">
+        <span style="color:var(--text-muted);font-size:13px;">\u2022</span>
+        <input autocomplete="off" data-lpignore="true" data-1p-ignore="true" class="line-input" data-bullet="${field}" data-idx="${idx}" value="${escapeHtml(val)}" placeholder="Type a point..." />
+        <button class="row-btn" data-action="remove-bullet" data-field="${field}" data-idx="${idx}" title="Remove">\u2715</button>
+      </div>
+    `).join('');
+    const addDisabled = (arr || []).length >= 6;
+    return `
+      ${rows}
+      <button class="add-row-btn" data-action="add-bullet" data-field="${field}" ${addDisabled ? 'disabled style="opacity:0.4;cursor:not-allowed;"' : ''}>+ Add point ${addDisabled ? '(max 6)' : ''}</button>
+    `;
+  }
+
+  function bindEvents() {
+    const cur = getReport();
+
+    // Defensive re-sync: force every plain field's live .value property to match the actual
+    // data model, in case any browser autofill/restore heuristic altered what got parsed from
+    // the value="" attribute. This guarantees the visible field always matches app state.
+    app.querySelectorAll('input[data-path]').forEach(inp => {
+      inp.value = getPath(cur, inp.getAttribute('data-path'));
+    });
+    app.querySelectorAll('select[data-path]').forEach(sel2 => {
+      sel2.value = getPath(cur, sel2.getAttribute('data-path'));
+    });
+    const hotelInp = app.querySelector('input.hotel-heading');
+    if (hotelInp) hotelInp.value = cur.hotelNameBig;
+    app.querySelectorAll('input[data-table-title]').forEach(inp => {
+      const t = cur.tables.find(t => t.id === inp.getAttribute('data-table-title'));
+      if (t) inp.value = t.title;
+    });
+    app.querySelectorAll('input.cell-input').forEach(inp => {
+      const t = cur.tables.find(t => t.id === inp.getAttribute('data-table'));
+      const row = t && t.rows.find(r => r.id === inp.getAttribute('data-row'));
+      if (row) inp.value = row.cells[inp.getAttribute('data-cell')];
+    });
+    app.querySelectorAll('input[data-bullet]').forEach(inp => {
+      const field = inp.getAttribute('data-bullet');
+      const idx = parseInt(inp.getAttribute('data-idx'), 10);
+      if (cur[field] && cur[field][idx] !== undefined) inp.value = cur[field][idx];
+    });
+
+    // Tab bar
+    app.querySelectorAll('[data-action="switch-tab"]').forEach(btn => {
+      btn.addEventListener('click', () => actionSwitchTab(btn.getAttribute('data-tab')));
+    });
+
+    // Toolbar
+    const sel = document.getElementById('report-select');
+    if (sel) {
+      sel.value = currentIdByTab[activeTab]; // force correct selection regardless of any autofill/restore quirks
+      sel.addEventListener('change', (e) => actionSelectReport(e.target.value));
+    }
+    const btnNew = document.getElementById('btn-new');
+    if (btnNew) btnNew.addEventListener('click', actionNewReport);
+    const btnDel = document.getElementById('btn-delete');
+    if (btnDel) btnDel.addEventListener('click', actionRequestDelete);
+    const btnConfirmDel = document.getElementById('btn-confirm-delete');
+    if (btnConfirmDel) btnConfirmDel.addEventListener('click', actionConfirmDelete);
+    const btnCancelDel = document.getElementById('btn-cancel-delete');
+    if (btnCancelDel) btnCancelDel.addEventListener('click', actionCancelDelete);
+    const btnTogglePreview = document.getElementById('btn-toggle-preview');
+    if (btnTogglePreview) btnTogglePreview.addEventListener('click', actionTogglePreview);
+    const btnSelectPreview = document.getElementById('btn-select-preview');
+    if (btnSelectPreview) btnSelectPreview.addEventListener('click', actionSelectPreview);
+    const btnAddTable = document.getElementById('btn-add-table');
+    if (btnAddTable) btnAddTable.addEventListener('click', actionOpenTemplatePicker);
+    const btnCancelTemplate = document.getElementById('btn-cancel-template');
+    if (btnCancelTemplate) btnCancelTemplate.addEventListener('click', actionCloseTemplatePicker);
+    const btnExportJson = document.getElementById('btn-export-json');
+    if (btnExportJson) btnExportJson.addEventListener('click', actionExportJson);
+    const btnUploadJson = document.getElementById('btn-upload-json');
+    if (btnUploadJson) btnUploadJson.addEventListener('click', actionTriggerUpload);
+    const uploadInput = document.getElementById('json-upload-input');
+    if (uploadInput) uploadInput.addEventListener('change', (e) => actionHandleUploadFile(e.target.files[0]));
+
+    // Simple field inputs (data-path) — includes <select autocomplete="off" data-lpignore="true" data-1p-ignore="true"> for currency
+    app.querySelectorAll('input[data-path], select[data-path]').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        const path = inp.getAttribute('data-path');
+        maybeCheckpointInput('path:' + path);
+        setPath(cur, path, e.target.value);
+        scheduleSave();
+        if (path === 'dashboardLinkUrl' || path === 'dashboardLinkText') {
+          updateDashboardLinkPreview(cur);
+        }
+        if (path === 'hotelNameBig') {
+          cur.attributionFor = e.target.value;
+          cur.campaign = e.target.value;
+          const attrInp = app.querySelector('input[data-path="attributionFor"]');
+          const campInp = app.querySelector('input[data-path="campaign"]');
+          if (attrInp) attrInp.value = e.target.value;
+          if (campInp) campInp.value = e.target.value;
+        }
+        if (path === 'campaignPeriod' || path === 'campaignEnd') {
+          cur.periodDays = computePeriodDays(cur.campaignPeriod, cur.campaignEnd);
+          const periodInp = app.querySelector('input[data-path="periodDays"]');
+          if (periodInp) periodInp.value = cur.periodDays;
+        }
+      });
+    });
+
+    // Table title
+    app.querySelectorAll('input[data-table-title]').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        const tableId = inp.getAttribute('data-table-title');
+        maybeCheckpointInput('table-title:' + tableId);
+        const t = cur.tables.find(t => t.id === tableId);
+        t.title = e.target.value;
+        scheduleSave();
+      });
+    });
+
+    // Cell inputs
+    app.querySelectorAll('input.cell-input').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        const tableId = inp.getAttribute('data-table');
+        const rowId = inp.getAttribute('data-row');
+        const cellKey = inp.getAttribute('data-cell');
+        maybeCheckpointInput('cell:' + tableId + ':' + rowId + ':' + cellKey);
+        const t = cur.tables.find(t => t.id === tableId);
+        const row = t.rows.find(r => r.id === rowId);
+        row.cells[cellKey] = e.target.value;
+        scheduleSave();
+      });
+
+      inp.addEventListener('paste', (e) => {
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        if (!text || (!text.includes('\t') && !text.includes('\n'))) {
+          return;
+        }
+        e.preventDefault();
+
+        const t = cur.tables.find(t => t.id === inp.getAttribute('data-table'));
+        const cols = tableColumns(t);
+        const startRowIdx = t.rows.findIndex(r => r.id === inp.getAttribute('data-row'));
+        const startColIdx = cols.findIndex(c => c.key === inp.getAttribute('data-cell'));
+        if (startRowIdx === -1 || startColIdx === -1) return;
+
+        pushUndoSnapshot();
+        const pastedRows = text.replace(/\r/g, '').split('\n').filter((line, idx, arr) => !(idx === arr.length - 1 && line === ''));
+        pastedRows.forEach((line, rOffset) => {
+          const values = line.split('\t');
+          while (t.rows.length <= startRowIdx + rOffset) {
+            t.rows.push(blankRow(cols));
+          }
+          const targetRow = t.rows[startRowIdx + rOffset];
+          values.forEach((val, cOffset) => {
+            const col = cols[startColIdx + cOffset];
+            if (col) targetRow.cells[col.key] = val.trim();
+          });
+        });
+        scheduleSave();
+        render();
+      });
+    });
+
+    // Bullet inputs
+    app.querySelectorAll('input[data-bullet]').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        const field = inp.getAttribute('data-bullet');
+        const idx = parseInt(inp.getAttribute('data-idx'), 10);
+        maybeCheckpointInput('bullet:' + field + ':' + idx);
+        cur[field][idx] = e.target.value;
+        scheduleSave();
+      });
+    });
+
+    // Action buttons (structural changes -> full render)
+    app.querySelectorAll('[data-action]').forEach(btn => {
+      if (btn.getAttribute('data-action') === 'switch-tab') return; // already bound above
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        const tableId = btn.getAttribute('data-table');
+        const rowId = btn.getAttribute('data-row');
+        if (action === 'add-row') actionAddRow(tableId);
+        else if (action === 'remove-row') actionRemoveRow(tableId, rowId);
+        else if (action === 'toggle-total') actionToggleTotal(tableId, rowId);
+        else if (action === 'remove-table') actionRemoveTable(tableId);
+        else if (action === 'add-bullet') actionAddBullet(btn.getAttribute('data-field'));
+        else if (action === 'remove-bullet') actionRemoveBullet(btn.getAttribute('data-field'), parseInt(btn.getAttribute('data-idx'), 10));
+        else if (action === 'add-table') actionAddTable(btn.getAttribute('data-template'));
+      });
+    });
+  }
+
+  function updateDashboardLinkPreview(cur) {
+    const row = document.querySelector('.link-field-row');
+    if (!row) return;
+    let a = row.querySelector('a.dashboard-link');
+    if (cur.dashboardLinkUrl) {
+      if (!a) {
+        a = document.createElement('a');
+        a.className = 'dashboard-link';
+        a.target = '_blank';
+        a.rel = 'noopener';
+        row.appendChild(a);
+      }
+      a.href = cur.dashboardLinkUrl;
+      a.textContent = (cur.dashboardLinkText || 'Open link') + ' \u2197';
+    } else if (a) {
+      a.remove();
+    }
+  }
+
+  loadData();
+})();
+</script>
