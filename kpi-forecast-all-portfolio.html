@@ -1301,6 +1301,14 @@ const days = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30
 return `${year}-${String(m).padStart(2,'0')}-${days[m-1]}`;
 }
 
+// Guards against out-of-order responses: if Start Month and End Month are
+// both changed in quick succession, two requests fire (one per onchange).
+// Without this guard, whichever response happens to arrive LAST wins and
+// overwrites the screen - even if it was for an older, no-longer-selected
+// date range. Each call gets a ticket number; only the response matching
+// the CURRENT latest ticket is allowed to update the page.
+let stlyRequestSeq = 0;
+
 function loadSTLY(){
 const destination = document.getElementById('destinationInput').value.trim();
 if(!destination){
@@ -1311,23 +1319,34 @@ return;
 toggleSelectedGeoTables();
 setLoading();
 
+const requestId = ++stlyRequestSeq;
+const periodStart = getSelectedStartDate();
+const periodEnd = getSelectedEndDate();
+
 jsonpRequest(BACKEND_URL, {
 action: 'getSTLYData',
 destination: destination,
 property: document.getElementById('propertyInput').value.trim(),
 countries: selectedCountries.join(','),
 allGeo: isAllGeo,
-startDate: getSelectedStartDate(),
-endDate: getSelectedEndDate(),
+startDate: periodStart,
+endDate: periodEnd,
 portfolio: document.getElementById('portfolioInput').value || 'All'
 }).then(data => {
+// A newer request has since been fired (e.g. the user changed another
+// filter while this one was still in flight) - discard this stale result.
+if(requestId !== stlyRequestSeq) return;
+
 lastSTLYData = data;
-document.getElementById('stlyPeriodText').textContent = `Period: ${getSelectedStartDate()} - ${getSelectedEndDate()}`;
+document.getElementById('stlyPeriodText').textContent = `Period: ${periodStart} - ${periodEnd}`;
 renderSTLYTable('selectedMonthBody', data.selectedMonth, 'month');
 renderSTLYTable('selectedCountryBody', data.selectedCountry, 'country');
 renderSTLYTable('allMonthBody', data.allMonth, 'month');
 renderSTLYTable('allCountryBody', data.allCountry, 'country');
-}).catch(err => alert('Load STLY failed: ' + err.message));
+}).catch(err => {
+if(requestId !== stlyRequestSeq) return;
+alert('Load STLY failed: ' + err.message);
+});
 }
 
 function setLoading(){																									
