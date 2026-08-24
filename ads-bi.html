@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ads BI - Destination Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<style>
+  <style>
+    :root{--navy:#07153a;--blue:#0058ff;--line:#e5eaf3;--bg:#f6f8fb;--muted:#738095;--green:#16a34a;--red:#e11d48;--purple:#7a4cff;--gold:#f5b326}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--navy);font-size:14px;-webkit-font-smoothing:antialiased}button,select,input,textarea{font-family:inherit}.loading{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;text-align:center;color:#52607a;font-weight:800}.app{display:none}.topbar{height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:50}.logo{display:flex;align-items:center;gap:12px}.logo-mark{width:30px;height:30px;border-radius:10px;background:#eef4ff;border:1px solid #dbe7ff;display:flex;align-items:center;justify-content:center;overflow:hidden}.logo-mark img{width:100%;height:100%;object-fit:contain;display:none}.logo-mark.has-image img{display:block}.logo-text{font-size:12px;font-weight:800;letter-spacing:.09em;line-height:1.1}.confidential{font-size:11px;color:#8a96aa;text-align:right;line-height:1.35}.main{max-width:100%;margin:0;padding:0 24px}.hero{display:grid;grid-template-columns:1fr 1fr;background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 28px 28px;overflow:hidden}.hero-left{position:relative;overflow:hidden;padding:54px 62px 42px;border-right:1px solid #eef2f7}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.13em;color:#1d2f5c;margin-bottom:24px}.hero h1{margin:0;font-size:50px;line-height:1.05;letter-spacing:-.055em;font-weight:800}.blue{color:var(--blue)}.hero-desc{margin-top:24px;max-width:520px;color:#536079;font-size:16px;line-height:1.7}.hero-img{position:absolute;right:-30px;bottom:62px;width:450px;height:290px;object-fit:cover;opacity:.72;border-radius:78px 0 0 78px;filter:saturate(.9);mask-image:linear-gradient(90deg,transparent 0%,#000 30%,#000 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%,#000 100%)}.feature-row{position:relative;z-index:2;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:54px;max-width:740px}.feature{display:flex;align-items:center;gap:11px;border-right:1px solid #d8e0ef;padding-right:12px}.feature:last-child{border-right:0}.feature-icon{width:32px;height:32px;border-radius:11px;background:#f1f6ff;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:800}.feature-text{font-size:12px;line-height:1.35;color:#1f2b48;font-weight:600}.testimonials{padding:42px;background:#fbfcfe}.section-label{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--blue);margin-bottom:24px}.section-label:before{content:"";width:18px;height:1px;background:#90b5ff}.testimonial-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.testimonial-card{background:#fff;border:1px solid #edf1f8;border-radius:24px;padding:24px;min-height:310px;display:flex;flex-direction:column;justify-content:space-between}.quote-mark{font-size:48px;line-height:.7;color:var(--blue);font-weight:800;margin-bottom:12px}.quote{font-size:14px;line-height:1.75;color:#24314f}.quote b{color:var(--blue)}.person{display:flex;align-items:center;gap:14px;margin-top:20px;padding-top:18px;border-top:1px solid #eef2f8}.person img{width:62px;height:62px;border-radius:50%;object-fit:cover}.person-name{font-weight:700;font-size:15px}.person-role{color:var(--blue);font-size:12px;line-height:1.55;margin-top:4px}.brand{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.08em;margin-top:18px}.dashboard{padding:24px 0 64px}.dashboard-head,.card,.kpi-card,.insight-card{background:#fff;border:1px solid var(--line);border-radius:24px}.dashboard-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;padding:22px;margin-bottom:18px}.dash-title-small,.card-kicker,.label{font-size:12px;letter-spacing:.08em;font-weight:700;color:#7b8798;text-transform:uppercase}.dash-title{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.04em;color:#111827;margin-top:8px}.filters{display:flex;align-items:end;gap:12px;flex-wrap:wrap}.filter-group,.field{display:flex;flex-direction:column;gap:7px}.filter-group label,.field label{font-size:12px;font-weight:700;letter-spacing:.04em;color:#7b8798;text-transform:uppercase}select,input,textarea{border:1px solid #dfe5ee;background:#fff;border-radius:14px;color:#1f2937;font-size:14px;font-weight:500;outline:none}select,input{height:44px;padding:0 13px;min-width:190px}textarea{padding:12px 13px;resize:vertical;min-height:128px;line-height:1.5}.btn{height:44px;border-radius:14px;border:1px solid #dfe5ee;background:#fff;color:#344054;font-size:14px;font-weight:700;padding:0 18px;cursor:pointer}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.kpi-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:18px}.kpi-card{min-height:118px;padding:17px 18px}.kpi-label{font-size:12px;font-weight:700;letter-spacing:.04em;color:#667085;margin-bottom:12px;text-transform:uppercase}.kpi-value{font-size:27px;line-height:1.08;font-weight:800;letter-spacing:-.045em;color:#111827}.kpi-value small{font-size:12px;color:#667085;font-weight:500;margin-left:3px}.kpi-sub{font-size:12px;color:#8a96aa;margin-top:11px;font-weight:500}.change-pill{font-weight:800;white-space:nowrap}.change-pill.good{color:#16a34a}.change-pill.bad{color:#e11d48}.change-pill.neutral{color:#667085}.benchmark-vs-last{margin-top:9px;font-size:12px;line-height:1.35;color:#7b8798;font-weight:600}.benchmark-vs-last b{font-weight:800}.insights-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}.insight-card{padding:18px;min-height:132px}.insight-label{font-size:12px;font-weight:700;letter-spacing:.08em;color:#8a96aa;text-transform:uppercase;margin-bottom:12px}.insight-value{font-size:21px;line-height:1.2;font-weight:800;color:#111827}.insight-desc{font-size:14px;color:#667085;line-height:1.5;margin-top:8px}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.card{padding:22px;min-height:320px;margin-bottom:18px}.card-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:16px}.card-title{font-size:19px;line-height:1.28;font-weight:800;letter-spacing:-.025em;color:#111827;margin-top:8px}.card-note{font-size:14px;color:#788397;line-height:1.5;max-width:380px;text-align:right}.chart-box{height:250px;position:relative}.summary-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.summary-card{background:#f8fafc;border:1px solid #e7ecf4;border-radius:16px;padding:14px}.summary-label{font-size:11px;color:#7a849b;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}.summary-value{font-size:16px;color:#111827;font-weight:800;line-height:1.3}.table-wrap{overflow:auto;max-height:420px;border-radius:16px}table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;color:#8a96aa;font-size:12px;letter-spacing:.06em;font-weight:700;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid #e8edf5;background:#fff;white-space:nowrap}td{padding:13px 10px;border-bottom:1px solid #eef2f7;color:#344054;font-weight:500;white-space:nowrap}td strong{color:#111827;font-weight:700}.money{text-align:right}.bar-cell{width:260px}.bar-inner{display:grid;grid-template-columns:1fr 58px;gap:12px;align-items:center}.bar-track{height:18px;border-radius:999px;background:#eef2f7;overflow:hidden}.bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#c7d2fe,#93c5fd)}.source-row{cursor:pointer}.source-row:hover{background:#f8fbff}tr.row-focused td{background:#eef2ff!important;box-shadow:inset 3px 0 0 #3D5AFE;}tr.row-dimmed td{opacity:.35;}.data-table tbody tr:not(.grandtotal-row):not(.source-row){cursor:pointer;}.source-tooltip{display:none;position:fixed;z-index:999;background:#111827;color:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 16px 45px rgba(15,23,42,.25);font-size:12px;line-height:1.45;pointer-events:none;min-width:210px}.source-tooltip.open{display:block}.source-tooltip b{font-size:14px}.benchmark-layout{display:grid;grid-template-columns:420px 1fr;gap:18px;align-items:start}.form-card{background:#f8fafc;border:1px solid #e7ecf4;border-radius:20px;padding:18px}.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.helper{font-size:12px;line-height:1.45;color:#7b8798;margin-top:6px}.empty{border:1px dashed #cdd7e6;border-radius:18px;background:#f8fafc;color:#7b8798;padding:28px;text-align:center}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.metric-card{background:#fff;border:1px solid #e4e9f2;border-radius:18px;padding:15px}.metric-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px}.metric-label{font-size:12px;line-height:1.2;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a96aa}.status{font-size:11px;font-weight:800;border-radius:999px;padding:5px 8px;white-space:nowrap}.status.good{background:#ecfdf3;color:#16a34a}.status.bad{background:#fff1f2;color:#e11d48}.status.neutral{background:#f2f4f7;color:#667085}.metric-values{display:grid;grid-template-columns:1fr 1fr;gap:9px}.metric-value-box{background:#f8fafc;border:1px solid #e7ecf4;border-radius:13px;padding:10px}.metric-value-label{font-size:11px;color:#7a849b;font-weight:700;margin-bottom:5px}.metric-value-number{font-size:18px;font-weight:800;color:#111827}.gap-line{border-top:1px solid #edf2f8;margin-top:10px;padding-top:10px;display:flex;justify-content:space-between;gap:10px;font-size:13px;color:#738095;font-weight:600}.gap-value{font-weight:800}.gap-value.good{color:#16a34a}.gap-value.bad{color:#e11d48}.gap-value.neutral{color:#667085}.mix-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.benchmark-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.mini-chart{height:210px;position:relative;border:1px solid #e7ecf4;background:#fff;border-radius:16px;padding:12px}.mini-title{font-size:11px;color:#7a849b;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}.error{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:16px;padding:16px;max-width:900px;line-height:1.6;white-space:pre-wrap}@media(max-width:1400px){.insights-grid,.metric-grid{grid-template-columns:repeat(2,1fr)}.benchmark-layout,.mix-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero-left{border-right:0;border-bottom:1px solid #eef2f7}}@media(max-width:900px){.main{padding:0}.topbar{padding:0 16px}.hero-left,.testimonials,.dashboard{padding:18px}.hero h1{font-size:34px}.hero-img{display:none}.feature-row,.testimonial-grid,.kpi-grid,.insights-grid,.grid-2,.metric-grid,.summary-strip,.benchmark-mini-grid{grid-template-columns:1fr}.card{padding:18px;border-radius:20px}.card-head{display:block}.card-note{text-align:left;max-width:100%;margin-top:8px}.chart-box{height:230px}table{min-width:720px}.form-grid-2{grid-template-columns:1fr}}
+
+    .insights-grid.client-short{grid-template-columns:repeat(2,1fr)}
+    #benchmarkResults{min-width:0;max-width:100%;overflow:hidden}
+    .benchmark-layout{grid-template-columns:minmax(340px,420px) minmax(0,1fr)}
+    .behavior-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+    .future-geo-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+    .future-geo-summary-card{background:#f8fafc;border:1px solid #e7ecf4;border-radius:16px;padding:14px}
+    .future-geo-label{font-size:11px;color:#7a849b;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+    .future-geo-value{font-size:18px;color:#111827;font-weight:800}
+    .benchmark-line-chart{height:280px;position:relative;border:1px solid #e7ecf4;background:#fff;border-radius:16px;padding:14px;margin-top:12px}
+    .mix-grid{grid-template-columns:1fr}
+    @media(max-width:900px){.insights-grid.client-short,.behavior-grid,.future-geo-summary{grid-template-columns:1fr}.benchmark-layout{grid-template-columns:1fr}}
+  
+    .booking-summary-bottom{margin-top:16px;margin-bottom:0}
+    .future-filter-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}.future-filter-row select{min-width:180px}
+    .hover-popover{display:none;position:fixed;z-index:9999;width:560px;background:rgba(255,255,255,.98);border:1px solid #dfe7f3;border-radius:24px;box-shadow:0 22px 55px rgba(15,23,42,.14);backdrop-filter:blur(12px);padding:18px;pointer-events:none}.hover-popover.open{display:block}.hover-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #edf2f8}.hover-label{font-size:12px;color:#7c879a;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}.hover-title{font-size:26px;line-height:1.08;font-weight:800;letter-spacing:-.035em;color:#07153a}.hover-badge{border-radius:999px;padding:8px 12px;background:#f2f6ff;color:#0058ff;font-size:11px;line-height:1;letter-spacing:.09em;font-weight:800;white-space:nowrap}.hover-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.hover-kpi{min-height:78px;border:1px solid #e6edf7;border-radius:16px;padding:12px 13px;background:linear-gradient(180deg,#fff 0%,#f8fbff 100%)}.hover-kpi-label{font-size:11px;line-height:1.2;color:#71809a;font-weight:800;margin-bottom:7px}.hover-kpi-value{font-size:20px;line-height:1.05;color:#07153a;font-weight:800;letter-spacing:-.035em}.hover-chart-card{border:1px solid #e6edf7;border-radius:18px;padding:14px 14px 12px;background:#fff}.hover-chart-title{font-size:14px;font-weight:800;color:#07153a;margin-bottom:8px}.hover-chart-box{height:132px;position:relative}
+    .metric-card.no-status .gap-line{display:none}.benchmark-revenue-line{display:none}
+    @media(max-width:900px){.hover-popover{display:none!important}.future-filter-row{display:grid;grid-template-columns:1fr}.mix-grid{grid-template-columns:1fr}}
+
+    .no-inner-scroll{max-height:none!important;overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch;}
+    .top10-table td,.top10-table th,.mix-gap-table td,.mix-gap-table th{padding-top:9px!important;padding-bottom:9px!important;font-size:13px!important;}
+    .future-matrix-card{min-height:0!important;}
+    .matrix-summary{grid-template-columns:repeat(3,1fr);margin-bottom:14px;}
+    .matrix-wrap{width:100%;}
+    .matrix-table{table-layout:fixed;width:100%;font-size:12px!important;}
+    .matrix-table th,.matrix-table td{padding:8px 6px!important;text-align:center;font-size:12px!important;line-height:1.2!important;white-space:nowrap;}
+    .matrix-table .market-col{width:150px;text-align:left!important;}
+    .matrix-table .total-col{width:86px;text-align:right!important;}
+    .heat-cell{border-radius:0;background-clip:padding-box;font-weight:750;color:#10213f;}
+    @media(max-width:1100px){.matrix-wrap{overflow-x:auto!important;}.matrix-table{min-width:980px;}.no-inner-scroll.matrix-wrap{overflow-x:auto!important;}}
+
+    .geo-entry-wrap{border:1px solid #e7ecf4;border-radius:16px;background:#fff;overflow:hidden}
+    .geo-entry-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+    .geo-entry-table th{padding:9px 10px;background:#f4f7fb;color:#7a849b;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid #e7ecf4}
+    .geo-entry-table td{padding:0;border-bottom:1px solid #eef2f7;background:#fff}
+    .geo-entry-table tr:last-child td{border-bottom:0}
+    .geo-entry-table input{width:100%;min-width:0;height:34px;border:0;border-radius:0;background:transparent;padding:0 10px;font-size:13px;font-weight:600;color:#111827;box-shadow:none}
+    .geo-entry-table input:focus{outline:2px solid rgba(0,88,255,.16);outline-offset:-2px;background:#fbfdff}
+    .geo-entry-rank{width:38px;text-align:center;color:#8a96aa;font-weight:800;background:#f8fafc!important}
+    .geo-entry-country{width:58%}.geo-entry-revenue{width:42%}
+    .geo-entry-actions{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}
+    .geo-mini-btn{border:1px solid #dfe5ee;background:#fff;color:#344054;border-radius:10px;height:30px;padding:0 10px;font-size:12px;font-weight:800;cursor:pointer}
+    .geo-mini-btn:hover{background:#f8fafc}
+
+    .card-note,.helper,.benchmark-vs-last{display:none !important;}
+    .card-head{align-items:flex-end !important;}
+    .no-inner-scroll{max-height:none !important;overflow-x:auto !important;overflow-y:visible !important;-webkit-overflow-scrolling:touch;}
+    .top10-table table,.mix-gap-table table{min-width:0 !important;}
+    .top10-table td,.top10-table th,.mix-gap-table td,.mix-gap-table th{padding-top:10px !important;padding-bottom:10px !important;}
+    .metric-card.no-status .metric-head{margin-bottom:12px !important;}
+    .metric-card.no-status .metric-values{margin-bottom:0 !important;}
+    .dashboard{overflow-x:hidden;}
+
+    @media(max-width:1600px){.main{max-width:100%;padding:0 18px;}.benchmark-layout{grid-template-columns:380px minmax(0,1fr);}}
+    @media(max-width:1180px){.main{padding:0 14px;}.dashboard-head{align-items:flex-start;}.filters{width:100%;}.filter-group,.filter-group input,.filter-group select{width:100%;min-width:0;}.grid-2,.behavior-grid,.benchmark-layout,.mix-grid{grid-template-columns:1fr !important;}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.form-card{max-width:none;}}
+    @media(max-width:820px){body{font-size:13px;}.topbar{height:auto;min-height:58px;padding:10px 14px;gap:10px;}.confidential{display:none;}.dashboard{padding:14px 0 40px;}.dashboard-head,.card,.kpi-card,.insight-card{border-radius:18px;}.dashboard-head,.card{padding:16px;}.dash-title{font-size:23px;}.card-title{font-size:18px;}.kpi-grid,.insights-grid,.summary-strip,.metric-grid{grid-template-columns:1fr !important;gap:10px;}.kpi-card{min-height:96px;padding:14px;}.kpi-value{font-size:24px;}.chart-box{height:220px;}.form-grid-2{grid-template-columns:1fr !important;}select,input{width:100%;min-width:0;}.table-wrap{overflow-x:auto !important;max-height:none !important;-webkit-overflow-scrolling:touch;}.top10-table table,.mix-gap-table table{min-width:680px !important;}.matrix-wrap table{min-width:980px !important;}.geo-entry-table{min-width:0 !important;}.source-tooltip,.hover-popover{display:none !important;}}
+    @media(max-width:520px){.main{padding:0 10px;}.logo-text{font-size:10px;}.dash-title{font-size:21px;}.kpi-value{font-size:22px;}.metric-values{grid-template-columns:1fr !important;}.gap-line{display:block;}.gap-value{display:block;margin-top:4px;}}
+
+    .form-card input,.form-card select,.form-card textarea{width:100% !important;min-width:0 !important;}
+    .form-grid-2{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
+    .benchmark-layout{grid-template-columns:minmax(360px,420px) minmax(0,1fr) !important;}
+    .form-card{min-width:0 !important;overflow:hidden !important;}
+    .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+    .metric-card{min-width:0 !important;}
+    .future-geo-summary{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+    .future-geo-summary-card{min-height:92px;display:flex;flex-direction:column;justify-content:center;}
+    .matrix-head-actions{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;}
+    .matrix-export-btn{height:38px;border-radius:12px;border:1px solid #dfe5ee;background:#fff;color:#344054;font-size:13px;font-weight:800;padding:0 14px;cursor:pointer;}
+    .matrix-export-btn:hover{background:#f8fafc;}
+    .matrix-total-row td{background:#f8fafc!important;font-weight:800;border-top:2px solid #dbe4f0;}
+    .matrix-total-row .heat-cell{border-radius:0;background:#f8fafc!important;color:#10213f!important;}
+    .matrix-total-cell{line-height:1.25;}
+    .matrix-total-cell b{display:block;font-size:12px;}
+    .matrix-total-cell span{display:block;font-size:10px;color:#7a849b;font-weight:800;margin-top:2px;}
+    .insights-grid.client-short{grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+    .trend-good{color:#16a34a!important;}
+    .trend-bad{color:#e11d48!important;}
+    .trend-neutral{color:#667085!important;}
+    @media(max-width:1180px){.benchmark-layout{grid-template-columns:1fr !important}.future-geo-summary,.insights-grid.client-short{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}}
+    @media(max-width:820px){.form-grid-2,.metric-grid,.future-geo-summary,.insights-grid.client-short{grid-template-columns:1fr !important}.benchmark-layout{grid-template-columns:1fr !important}.matrix-head-actions{width:100%;justify-content:flex-start}.matrix-export-btn{width:100%;}}
+
+    .lead-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(7,21,58,.48);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
+    .lead-modal.open{display:flex}
+    .lead-modal-box{width:min(620px,100%);background:#fff;border:1px solid #e4e9f2;border-radius:26px;padding:26px;box-shadow:0 28px 80px rgba(7,21,58,.26)}
+    .lead-modal-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:18px}
+    .lead-modal-title{font-size:24px;font-weight:800;letter-spacing:-.04em;color:#111827}
+    .lead-modal-sub{font-size:14px;color:#667085;line-height:1.55;margin-top:8px}
+    .lead-close{border:0;background:#f3f6fb;color:#667085;border-radius:12px;width:38px;height:38px;font-size:22px;cursor:pointer}
+    .lead-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .lead-form-grid .field.full{grid-column:1/-1}
+    .lead-submit-row{display:flex;justify-content:flex-end;gap:10px;align-items:center;margin-top:18px}
+    .lead-error{display:none;margin-top:12px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:14px;padding:11px 12px;font-size:13px;line-height:1.45}
+    .lead-error.open{display:block}
+    .lead-success{display:none;margin-top:12px;background:#ecfdf3;border:1px solid #bbf7d0;color:#166534;border-radius:14px;padding:11px 12px;font-size:13px;font-weight:700}
+    .lead-success.open{display:block}
+    .benchmark-lock-card{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:220px;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 42px rgba(7,21,58,.16)}
+    .benchmark-lock-kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9fc2ff;margin-bottom:10px}
+    .benchmark-lock-title{font-size:24px;line-height:1.15;font-weight:800;letter-spacing:-.04em;margin-bottom:8px}
+    .benchmark-lock-copy{font-size:14px;line-height:1.55;color:#d7e4ff;max-width:520px}
+    .benchmark-lock-card .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;white-space:nowrap}
+    .benchmark-result-locked{position:relative;border-radius:22px;overflow:hidden;}
+    .benchmark-result-locked .benchmark-blur-content{filter:blur(8px);opacity:.42;pointer-events:none;user-select:none;}
+    .benchmark-result-overlay{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:24px;background:linear-gradient(180deg,rgba(248,250,252,.62),rgba(248,250,252,.82));backdrop-filter:blur(2px);}
+    .benchmark-result-unlock{max-width:420px;text-align:center;background:#07153a;color:#fff;border-radius:22px;padding:24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(7,21,58,.18);}
+    .benchmark-result-unlock-title{font-size:22px;line-height:1.15;font-weight:800;letter-spacing:-.035em;margin-bottom:8px;}
+    .benchmark-result-unlock-copy{font-size:14px;line-height:1.5;color:#d7e4ff;margin-bottom:16px;}
+    .benchmark-result-unlock .btn{background:#fff!important;border-color:#fff!important;color:#07153a!important;}
+    #dashboard,#dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .chart-box,#dashboard .table-wrap{filter:none!important;opacity:1!important;pointer-events:auto!important;user-select:auto!important}
+    @media(max-width:820px){.lead-form-grid{grid-template-columns:1fr}.lead-modal-box{padding:20px;border-radius:22px}.lead-submit-row{display:grid;grid-template-columns:1fr}.lead-submit-row .btn{width:100%}.benchmark-lock-card{display:block}.benchmark-lock-card .btn{width:100%;margin-top:16px}}
+  .month-item{padding:10px 14px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:500;color:#1f2937;white-space:nowrap;display:flex;align-items:center;justify-content:space-between;gap:12px;}.month-item:hover{background:#f8fafc;}.month-item.selected{font-weight:600;color:#0058ff;}
+
+  /* ================= POWER BI REPORT THEME ================= */
+  :root{
+    --pbi-yellow:#F2C811; --pbi-bg:#F4F5FA; --pbi-panel:#FFFFFF; --pbi-border:#E4E7F1;
+    --pbi-sidebar:#252423; --pbi-sidebar-hover:#333130; --pbi-sidebar-text:#D6D5D4; --pbi-sidebar-text-dim:#8A8886;
+    --pbi-blue:#3D5AFE; --pbi-darkblue:#12239E; --pbi-orange:#E66C37; --pbi-purple:#6B007B; --pbi-pink:#E044A7; --pbi-violet:#744EC2; --pbi-teal:#197278; --pbi-green:#1AAB40; --pbi-red:#D64550; --pbi-gold:#D9B300;
+    --pbi-text:#252423; --pbi-text-sub:#605E5C;
+  }
+  #dashboard{background:var(--pbi-bg);border-radius:12px;padding:20px 20px 40px;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif}
+  #dashboard .dashboard-head{background:var(--pbi-panel);border:1px solid var(--pbi-border);border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:14px 18px}
+  #dashboard .dash-title-small{color:var(--pbi-blue);font-weight:800;letter-spacing:.09em}
+  #dashboard .dash-title{color:var(--pbi-text);letter-spacing:-.02em}
+  #dashboard select,#dashboard input,#dashboard textarea{border-radius:4px;border-color:var(--pbi-border);height:38px}
+  #dashboard .btn{border-radius:4px;height:38px}
+  #dashboard .btn.primary{background:var(--pbi-blue)}
+  #dashboard .status.good{background:#E6F7EE;color:#0F7B3E}
+  #dashboard .status.bad{background:#FDEEEF;color:#C4314B}
+  .mix-over{color:#0F7B3E;font-weight:800}
+  .mix-under{color:#C4314B;font-weight:800}
+  #sourceHover .hover-title{font-size:19px}
+  #sourceHover .hover-kpi-value{font-size:16px}
+  #dashboard .card,#dashboard .kpi-card,#dashboard .insight-card,#dashboard .metric-card,#dashboard .form-card,#dashboard .summary-card,#dashboard .mini-chart{background:var(--pbi-panel);border:1px solid var(--pbi-border);border-radius:6px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  #dashboard .card,#dashboard .kpi-card,#dashboard .insight-card{border-radius:6px}
+  #dashboard .card-kicker{color:var(--pbi-blue);font-weight:800;letter-spacing:.08em}
+  #dashboard .card-title{color:var(--pbi-text);font-size:16px;letter-spacing:-.01em;margin-top:4px}
+  #dashboard .kpi-card{position:relative;padding:16px 18px;min-height:96px}
+  #dashboard .kpi-label{color:var(--pbi-text-sub);font-weight:700;margin-bottom:0}
+  #dashboard .kpi-value{color:var(--pbi-text);font-weight:700;letter-spacing:-.02em}
+  .kpi-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex:0 0 28px}
+  .kpi-icon svg{width:14px;height:14px}
+  .kpi-icon.kpi-icon-blue,.kpi-icon.kpi-icon-teal,.kpi-icon.kpi-icon-orange,.kpi-icon.kpi-icon-violet,.kpi-icon.kpi-icon-pink,.kpi-icon.kpi-icon-green{background:#E8ECFF;color:var(--pbi-blue)}
+  .kpi-head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+  #dashboard .insight-label{color:var(--pbi-text-sub)}
+  #dashboard .insight-value{color:var(--pbi-text)}
+  #dashboard th{background:#FAFAFA;color:var(--pbi-text-sub);border-bottom:1px solid var(--pbi-border)}
+  #dashboard td{color:var(--pbi-text);border-bottom:1px solid #F0F0F0}
+  #dashboard .bar{background:linear-gradient(90deg,var(--pbi-blue),#59B6FF)}
+
+  .bi-tabs{display:flex;gap:28px;border-bottom:2px solid var(--pbi-border);margin:0 0 20px;padding:0 2px;overflow-x:auto}
+  .bi-tab{background:transparent;border:0;padding:12px 2px;font-size:14px;font-weight:700;color:var(--pbi-text-sub);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;font-family:inherit}
+  .bi-tab-muted{color:#c2c8d2;font-weight:500;margin-left:18px}
+  .bi-tab-muted:hover{color:#9aa3b2}
+  .bi-tab:hover{color:var(--pbi-blue)}
+  .bi-tab.active{color:var(--pbi-blue);border-bottom-color:var(--pbi-blue)}
+  .bi-content{width:100%}
+  .bi-page{display:none}
+  .bi-page.active{display:block}
+  @media(max-width:900px){.bi-tabs{gap:18px}}
+  .matrix-hint{font-size:12px;color:var(--pbi-text-sub);font-weight:600;white-space:nowrap;align-self:flex-end;padding-bottom:2px}
+  .month-th{cursor:pointer;user-select:none;transition:background .12s,color .12s}
+  .month-th:hover{background:#E8ECFF!important;color:var(--pbi-blue)!important}
+  .month-th.month-th-active{background:var(--pbi-yellow)!important;color:#1F1F1F!important}
+  .matrix-col-dim{opacity:.32}
+  @media(max-width:900px){.matrix-hint{display:none}}
+
+  .chart-hover-popover{display:none;position:fixed;z-index:9999;background:#fff;border:1px solid var(--pbi-border);border-radius:8px;box-shadow:0 14px 36px rgba(20,20,20,.18);padding:14px 16px;min-width:250px;max-width:290px;pointer-events:none;font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif}
+  .chart-hover-popover.open{display:block}
+  .chart-hover-title{font-size:13px;font-weight:700;color:var(--pbi-text);margin-bottom:1px}
+  .chart-hover-subtitle{font-size:10.5px;font-weight:700;color:var(--pbi-text-sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:11px;padding-bottom:9px;border-bottom:1px solid #F0F0F0}
+  .chv-row{display:grid;grid-template-columns:70px 1fr 46px;align-items:center;gap:8px;margin-bottom:7px}
+  .chv-row:last-child{margin-bottom:0}
+  .chv-label{color:var(--pbi-text);font-size:11.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chv-bar-track{height:13px;background:#F3F2F1;border-radius:2px;overflow:hidden}
+  .chv-bar{height:100%;background:var(--pbi-blue);border-radius:2px}
+  .chv-value{color:var(--pbi-text);font-weight:700;font-size:11px;text-align:right;white-space:nowrap}
+  .chv-empty{font-size:12px;color:var(--pbi-text-sub)}
+
+  .compare-inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+  .compare-best{background:#E6F7EE;border-radius:4px;font-weight:700}
+  .movers-market-row td{background:#F8F9FC;font-weight:800;color:#111827;padding:12px 12px 8px;border-bottom:1px solid #EEF0F5;font-size:13px}
+  .movers-period-row td{color:var(--pbi-text-sub);font-size:12.5px;padding-top:6px;padding-bottom:6px}
+  .movers-period-row td:first-child{font-weight:600;color:var(--pbi-text)}
+  .movers-change-row td{font-weight:500;font-size:12.5px;border-bottom:2px solid #E4E7F1;padding-top:6px;padding-bottom:10px}
+  .movers-change-row td:first-child{color:var(--pbi-text-sub);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em}
+  #dashboard .movers-change-cell.good{color:#0F7B3E}
+  #dashboard .movers-change-cell.bad{color:#C4314B}
+  #dashboard .movers-change-cell.neutral{color:var(--pbi-text-sub);font-weight:600}
+  @media(max-width:1024px){.compare-inputs{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.compare-inputs{grid-template-columns:1fr}}
+
+  .chart-empty-msg{height:250px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--pbi-text-sub);font-size:13px;border:1px dashed var(--pbi-border);border-radius:8px;padding:20px;background:#FAFAFA}
+  .insight-callout{display:none;align-items:flex-start;gap:10px;background:#F5F7FF;border:1px solid #E4E7F1;border-radius:8px;padding:12px 14px;margin-top:14px;font-size:13px;line-height:1.55;color:#3A3F55}
+  .insight-callout svg{flex:0 0 16px;width:16px;height:16px;color:var(--pbi-blue);margin-top:2px}
+  .insight-callout b{color:#111827;font-weight:700}
+  .top10-table table{table-layout:fixed}
+  .top10-table th:nth-child(1),.top10-table td:nth-child(1){width:24%}
+  .top10-table th:nth-child(2),.top10-table td:nth-child(2){width:16%}
+  .top10-table th:nth-child(3),.top10-table td:nth-child(3){width:34%}
+  .top10-table th:nth-child(4),.top10-table td:nth-child(4){width:13%}
+  .top10-table th:nth-child(5),.top10-table td:nth-child(5){width:13%}
+  .top10-table td:nth-child(1){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .behavior-source-table table{table-layout:fixed}
+  .behavior-source-table th{white-space:nowrap;line-height:1.3}
+  .behavior-source-table td{white-space:nowrap}
+  .behavior-source-table th:nth-child(1),.behavior-source-table td:nth-child(1){width:18%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .behavior-source-table th:nth-child(2),.behavior-source-table td:nth-child(2){width:11%}
+  .behavior-source-table th:nth-child(3),.behavior-source-table td:nth-child(3){width:13%}
+  .behavior-source-table th:nth-child(4),.behavior-source-table td:nth-child(4){width:17%}
+  .behavior-source-table th:nth-child(5),.behavior-source-table td:nth-child(5){width:12%}
+  .behavior-source-table th:nth-child(6),.behavior-source-table td:nth-child(6){width:17%}
+  .behavior-source-table th:nth-child(7),.behavior-source-table td:nth-child(7){width:12%}
+  @media(max-width:900px){.behavior-source-table table{table-layout:auto;min-width:760px}.behavior-source-table th{white-space:nowrap}}
+  .sortable-th{cursor:pointer;user-select:none;position:relative}
+  .sortable-th:hover{color:var(--pbi-blue)}
+  .sortable-th:after{content:'⇅';margin-left:5px;font-size:10px;color:#C9CCD1}
+  .sortable-th.sorted-asc:after{content:'▲';color:var(--pbi-blue)}
+  .sortable-th.sorted-desc:after{content:'▼';color:var(--pbi-blue)}
+  .chart-pair-head{min-height:56px;align-items:center!important}
+  .mini-filter{display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .mini-filter span{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--pbi-text-sub)}
+  .mini-filter input{height:34px;padding:0 10px;min-width:170px;font-size:13px}
+  .view-all-link{color:var(--pbi-blue);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+  .matrix-metric-toggle{display:flex;background:#F0F1F7;border-radius:8px;padding:3px;gap:2px}
+  .matrix-metric-btn{border:0;background:transparent;color:var(--pbi-text-sub);font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap}
+  .matrix-metric-btn.active{background:#fff;color:var(--pbi-blue);box-shadow:0 1px 2px rgba(16,24,40,.08)}
+  .view-all-link:hover{text-decoration:underline}
+  .view-all-link span{font-size:14px;line-height:1}
+  @media(max-width:900px){.mini-filter{flex-wrap:wrap}.top10-table table{table-layout:auto}}
+
+  /* ============ RESPONSIVE PATCH: laptop / desktop / iPad / mobile ============ */
+  .topbar-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:flex-end}
+  @media(max-width:1024px){
+    .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .chart-pair-head{flex-wrap:wrap;height:auto}
+    .chart-pair-head .mini-filter{width:100%;justify-content:flex-start;margin-top:6px}
+  }
+  @media(max-width:768px){
+    .topbar{flex-wrap:wrap;height:auto;padding:12px 16px;gap:10px}
+    .topbar-actions{width:100%;justify-content:flex-start}
+    .topbar-actions .btn{flex:1 1 auto;text-align:center;padding:0 12px}
+    .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .kpi-head-row{flex-wrap:nowrap}
+    .kpi-label{font-size:11px}
+    .bi-tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .chv-row{grid-template-columns:56px 1fr 40px;gap:6px}
+    .chart-hover-popover{max-width:240px;min-width:0}
+  }
+  @media(max-width:480px){
+    .kpi-grid{grid-template-columns:1fr}
+    .logo-text{font-size:10px}
+    .topbar-actions .btn{font-size:12px;height:38px}
+    .chart-hover-popover{max-width:200px;padding:10px 12px}
+    .chv-row{grid-template-columns:50px 1fr 36px}
+  }
+
+  /* ─── ONE-PAGER OVERLAY ──────────────────────────────────────────────── */
+  .onepager-overlay{position:fixed;inset:0;background:#e8ebf2;z-index:9999;overflow:auto;display:none}
+  .onepager-toolbar{position:sticky;top:0;z-index:2;background:#fff;border-bottom:1px solid var(--line);padding:14px 24px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .op-setup-panel{padding:8px 4px 4px}
+  .op-setup-title{font-size:20px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:4px}
+  .op-setup-sub{font-size:13px;color:var(--muted);margin-bottom:26px}
+  .op-setup-row{margin-bottom:24px}
+  .op-setup-label{font-size:11px;font-weight:800;letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+  .op-mode-btns{display:flex;gap:10px}
+  .op-mode-btn{flex:1;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;text-align:left;font-family:inherit}
+  .op-mode-btn.selected{border-color:var(--blue);background:#f1f6ff;box-shadow:inset 0 0 0 1px var(--blue)}
+  .op-mode-btn-title{font-size:14px;font-weight:800;color:var(--navy)}
+  .op-mode-btn-sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .op-combo{position:relative}
+  .op-combo input{width:100%;height:44px;border:1px solid var(--line);border-radius:8px;padding:0 14px;font-size:14px;box-sizing:border-box;font-family:inherit}
+  .op-combo input:focus{outline:2px solid #cddcff;border-color:var(--blue)}
+  .op-combo-list{position:absolute;top:48px;left:0;right:0;max-height:240px;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 28px rgba(7,21,58,.14);z-index:20}
+  .op-combo-item{padding:10px 14px;font-size:13.5px;cursor:pointer;color:#1f2937}
+  .op-combo-item:hover{background:#f1f5ff}
+  .op-combo-empty{color:var(--muted);cursor:default}
+  .op-combo-item.op-combo-empty:hover{background:none}
+  .op-month-chip-grid{display:flex;flex-wrap:wrap;gap:8px}
+  .op-month-chip{border:1px solid var(--line);border-radius:999px;padding:7px 15px;font-size:12.5px;font-weight:700;cursor:pointer;background:#fff;color:#1f2937;font-family:inherit}
+  .op-month-chip.selected{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .op-generate-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:13px 22px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit}
+  .op-generate-btn:disabled{background:#c7d2fe;cursor:not-allowed}
+  .op-dir-table{width:100%;border-collapse:collapse;font-size:13px}
+  .op-dir-table th{background:#f7f9fc;color:var(--muted);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:9.5px;padding:8px 10px;border-bottom:1px solid var(--line);text-align:left}
+  .op-dir-table th.op-right{text-align:right}
+  .op-dir-table td{padding:8px 10px;border-bottom:1px solid var(--line);color:#1f2937;font-weight:600}
+  .op-dir-table td.op-right{text-align:right;color:var(--navy);font-weight:800}
+  .op-dir-table tbody tr:last-child td{border-bottom:none}
+  .ai-fab{position:fixed;bottom:24px;right:24px;z-index:500;background:var(--blue);color:#fff;border:none;border-radius:999px;padding:14px 20px;font-weight:800;font-size:14px;font-family:inherit;cursor:pointer;box-shadow:0 10px 28px rgba(61,90,254,.35);display:flex;align-items:center;gap:8px}
+  .ai-fab:hover{background:#2f4be0}
+  .ai-panel{position:fixed;bottom:88px;right:24px;z-index:501;width:400px;max-width:calc(100vw - 32px);max-height:70vh;background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(7,21,58,.25);display:none;flex-direction:column;overflow:hidden;border:1px solid var(--line)}
+  .ai-panel.open{display:flex}
+  .ai-panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .ai-panel-title{font-weight:800;font-size:14px;color:var(--navy)}
+  .ai-panel-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);padding:2px 6px}
+  .ai-panel-body{flex:1;overflow-y:auto;padding:14px 16px;font-size:13px;line-height:1.6;color:#1f2937}
+  .ai-panel-body .ai-msg{margin-bottom:14px;white-space:pre-wrap}
+  .ai-panel-body .ai-msg.user{color:var(--navy);font-weight:700}
+  .ai-panel-body .ai-empty{color:var(--muted);font-size:12.5px}
+  .ai-panel-foot{border-top:1px solid var(--line);padding:10px 12px;display:flex;gap:8px}
+  .ai-panel-foot input{flex:1;border:1px solid var(--line);border-radius:8px;padding:0 12px;height:38px;font-size:13px;font-family:inherit}
+  .ai-panel-foot button{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:0 14px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}
+  .ai-panel-quick{padding:8px 16px;border-bottom:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+  .ai-panel-quick button{background:#f1f6ff;color:var(--blue);border:1px solid #dbe7ff;border-radius:999px;padding:6px 12px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}
+  .ai-key-row{padding:10px 16px;background:#f7f9fc;font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .ai-key-row a{color:var(--blue);cursor:pointer;font-weight:700}
+  .op-dest-chip-grid{display:flex;flex-wrap:wrap;gap:6px;max-height:220px;overflow:auto;padding:2px}
+  .op-dest-chip{border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-family:inherit;cursor:pointer;background:#fff;text-align:left;line-height:1.35;display:flex;flex-direction:column;min-width:118px}
+  .op-dest-chip-name{font-size:12px;font-weight:800;color:#1f2937}
+  .op-dest-chip-metrics{font-size:10px;color:var(--muted)}
+  .op-dest-chip.selected{background:var(--blue);border-color:var(--blue)}
+  .op-dest-chip.selected .op-dest-chip-name{color:#fff}
+  .op-dest-chip.selected .op-dest-chip-metrics{color:#dbe7ff}
+  .onepager-toolbar .op-hint{font-size:12px;color:var(--muted);font-weight:600}
+  .onepager-toolbar .op-actions{display:flex;gap:10px}
+  .onepager-sheet{max-width:820px;margin:26px auto 60px;background:var(--bg);border-radius:10px;padding:24px;box-shadow:0 18px 50px rgba(7,21,58,.10);display:flex;flex-direction:column;gap:16px}
+  .op-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 26px;page-break-inside:avoid;break-inside:avoid}
+  .op-panel-head{display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+  .op-brand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .op-brand-logo{display:flex;align-items:center;gap:8px}
+  .op-brand-logo img{height:22px;width:auto;object-fit:contain;display:block}
+  .op-brand-logo span{font-weight:800;font-size:13px;letter-spacing:.14em;color:var(--navy)}
+  .op-conf{font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--muted);text-align:right;line-height:1.5}
+  .op-panel-kicker{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--blue);text-transform:uppercase;margin-bottom:6px}
+  .op-panel-title{font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-.02em;margin-bottom:14px}
+  .op-eyebrow2{text-align:center;font-size:21px;font-weight:800;letter-spacing:-.02em;color:var(--navy);margin:2px 0 0}
+  .op-subtitle2{text-align:center;font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--blue);margin:4px 0 18px;text-transform:uppercase}
+  .op-pill-row{display:flex;justify-content:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+  .op-pill{background:#f1f6ff;color:var(--blue);border:1px solid #dbe7ff;border-radius:999px;padding:6px 15px;font-weight:800;font-size:11.5px;white-space:nowrap}
+  .op-headline2{background:#f5f7ff;border:1px solid #e4e7f1;color:#1f2937;border-radius:9px;padding:9px 13px;font-size:12px;line-height:1.5;font-weight:500}
+  .op-headline2-label{display:block;font-size:8.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+  .op-headline2[contenteditable]{outline:1px dashed #c7d2fe;cursor:text}
+  .op-rank-table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+  .op-rank-table th:nth-child(1),.op-rank-table td:nth-child(1){width:6%}
+  .op-rank-table th:nth-child(2),.op-rank-table td:nth-child(2){width:32%}
+  .op-rank-table th:nth-child(3),.op-rank-table td:nth-child(3),
+  .op-rank-table th:nth-child(4),.op-rank-table td:nth-child(4),
+  .op-rank-table th:nth-child(5),.op-rank-table td:nth-child(5),
+  .op-rank-table th:nth-child(6),.op-rank-table td:nth-child(6),
+  .op-rank-table th:nth-child(7),.op-rank-table td:nth-child(7),
+  .op-rank-table th:nth-child(8),.op-rank-table td:nth-child(8){width:10.33%}
+  .op-rank-table th{background:#f7f9fc;color:var(--muted);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:9.5px;padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:normal;word-break:break-word}
+  .op-rank-table th.op-right{text-align:right}
+  .op-rank-table td{padding:7px 8px;border-bottom:1px solid var(--line);color:#1f2937;font-weight:600;white-space:normal;word-break:break-word}
+  .op-rank-table tbody tr:last-child td{border-bottom:none}
+  .op-rank-table .op-rank-num{color:var(--muted);font-weight:800;width:8%}
+  .op-rank-table .op-rank-market{font-weight:700}
+  .op-rank-table .op-right{text-align:right;font-weight:500;color:#344054}
+  .op-rank-table .op-muted-cell{color:var(--muted);font-weight:600}
+  .op-month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .op-month-card{background:#f8fafc;border:1px solid #e7ecf4;border-radius:14px;padding:12px 14px}
+  .op-month-top{display:flex;justify-content:space-between;align-items:flex-start;font-size:10.5px;font-weight:800;letter-spacing:.03em;color:var(--muted);text-transform:uppercase}
+  .op-month-value{font-size:21px;font-weight:800;margin-top:10px;letter-spacing:-.02em;color:#111827}
+  .op-stat-panel{display:flex;gap:12px}
+  .op-stat{flex:1;background:#f8fafc;border:1px solid #e7ecf4;border-radius:12px;padding:9px 8px;text-align:center;height:94px;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;overflow:hidden}
+  .op-stat-label{font-size:9px;letter-spacing:.05em;font-weight:800;text-transform:uppercase;color:var(--muted);margin-bottom:5px;line-height:1.25;height:23px;display:flex;align-items:center;justify-content:center}
+  .op-stat-value{font-size:20px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
+  .op-stat-unit{font-size:9px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+  .op-insight-box{position:relative;background:#f8fafc;border:1px solid #e7ecf4;border-radius:14px;padding:18px 20px}
+  .op-insight-box .op-il{font-size:9.5px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:12px}
+  .op-insight-row{font-size:13px;color:#111827;margin-bottom:8px;line-height:1.6}
+  .op-insight-row:last-child{margin-bottom:0}
+  .op-insight-row b{color:var(--navy)}
+  .op-insight-row[contenteditable]{outline:1px dashed #c7d2fe;cursor:text;min-height:18px;display:block}
+  .op-footer{background:var(--blue);border-radius:14px;color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;font-size:13.5px;font-weight:700;letter-spacing:.01em}
+  .op-matrix-table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+  .op-matrix-table th:nth-child(1),.op-matrix-table td:nth-child(1){width:6%}
+  .op-matrix-table th:nth-child(2),.op-matrix-table td:nth-child(2){width:32%}
+  .op-matrix-table th:nth-child(3),.op-matrix-table td:nth-child(3),
+  .op-matrix-table th:nth-child(4),.op-matrix-table td:nth-child(4),
+  .op-matrix-table th:nth-child(5),.op-matrix-table td:nth-child(5){width:15%}
+  .op-matrix-table th:nth-child(6),.op-matrix-table td:nth-child(6){width:17%}
+  .op-matrix-table th{background:#f7f9fc;color:var(--muted);font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:9.5px;padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:normal;word-break:break-word}
+  .op-matrix-table th:first-child,.op-matrix-table th:nth-child(2){text-align:left}
+  .op-matrix-table td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;font-weight:500;color:#344054;white-space:normal;word-break:break-word}
+  .op-matrix-table td:first-child{text-align:left;color:var(--muted);font-weight:800}
+  .op-matrix-table td:nth-child(2){text-align:left;font-weight:700;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .op-matrix-table tbody tr:last-child td{border-bottom:none}
+  .op-matrix-table .op-total-col{font-weight:800;color:var(--navy);background:#f8fafc}
+  .op-grand-total-row td{border-top:2px solid var(--navy);border-bottom:none !important;font-weight:800;color:var(--navy);background:#f7f9fc}
+  .op-grand-total-row .op-right,.op-grand-total-row .op-muted-cell,.op-grand-total-row .op-total-col{font-weight:800 !important;color:var(--navy) !important}
+  .op-stat-value-sm{font-size:18px;font-weight:800;color:var(--blue);letter-spacing:-.02em;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media print{
+    #onePagerOverlay, #onePagerOverlay *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      color-adjust:exact !important;
+    }
+    body.onepager-printing > *:not(#onePagerOverlay){display:none !important}
+    .onepager-toolbar{display:none !important}
+    .onepager-overlay{position:static !important;overflow:visible !important;background:#fff !important;display:block !important}
+    .onepager-sheet{box-shadow:none !important;margin:0 auto !important;max-width:100% !important;background:#fff !important}
+    .onepager-sheet{width:100% !important;box-sizing:border-box !important;overflow-x:hidden !important}
+    .op-panel{width:100%;box-sizing:border-box;overflow-x:hidden}
+    .onepager-sheet, .onepager-sheet *{max-width:100%}
+    .op-rank-table, .op-matrix-table{table-layout:fixed !important;word-break:break-word}
+    .op-rank-table td, .op-matrix-table td, .op-rank-table th, .op-matrix-table th{overflow:hidden}
+    @page{size:A4 landscape;margin:10mm}
+  }
+  </style>
+
+</style>
+
+<style>
+  .combo-wrap{position:relative;}
+  .combo-list{position:absolute;top:calc(100% + 4px);left:0;right:0;min-width:200px;background:#fff;border:1px solid #dfe5ee;border-radius:10px;box-shadow:0 12px 32px rgba(15,23,42,.14);max-height:260px;overflow-y:auto;z-index:150;display:none;}
+  .combo-item{padding:9px 14px;font-size:13.5px;color:#344054;cursor:pointer;}
+  .combo-item:hover{background:#f6f8fb;}
+  .combo-empty{padding:9px 14px;font-size:13px;color:#9aa5b8;}
+  .date-panel{position:fixed;z-index:200;background:#fff;border:1px solid #dfe5ee;border-radius:14px;box-shadow:0 16px 45px rgba(15,23,42,.16);display:flex;width:600px;max-width:calc(100vw - 24px);}
+  .date-panel-presets{width:160px;border-right:1px solid #eef1f6;padding:10px 0;flex:none;}
+  .date-preset{padding:9px 16px;font-size:13px;color:#344054;cursor:pointer;}
+  .date-preset:hover{background:#f6f8fb;}
+  .date-preset.active{color:#3D5AFE;font-weight:700;}
+  .date-preset .sub{font-size:11px;color:#9aa5b8;font-weight:500;margin-top:1px;}
+  .date-panel-cal{padding:16px 18px;flex:1;min-width:0;}
+  .date-cal-row{display:flex;gap:18px;}
+  .date-cal-month{flex:1;min-width:0;}
+  .date-cal-nav{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#344054;margin-bottom:8px;}
+  .date-cal-nav span{cursor:pointer;width:20px;text-align:center;color:#8a96aa;}
+  .date-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:11.5px;text-align:center;}
+  .date-cal-grid .dow{color:#9aa5b8;font-weight:700;padding:3px 0;}
+  .date-cal-grid .day{padding:5px 0;border-radius:6px;cursor:pointer;color:#344054;}
+  .date-cal-grid .day.muted{color:#d1d7e2;}
+  .date-cal-grid .day.in-range{background:#e8ecff;}
+  .date-cal-grid .day.range-edge{background:#3D5AFE;color:#fff;font-weight:700;}
+  .data-table{table-layout:fixed;width:1730px;}
+  .data-table td:first-child,.data-table th:first-child{white-space:normal;word-break:break-word;}
+  .section-gap{height:26px;}
+  .section-title{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#8a96aa;margin-bottom:10px;}
+  tr.hotel-header-row td{background:#FAFBFD;padding-top:13px;padding-bottom:13px;font-size:14.5px;border-top:1px solid #E5EAF3;}
+  tr.hotel-header-row:hover td{background:#F2F4F8;}
+  tr.summary-row td{background:#F7F8FC;font-weight:700;color:#111827;}
+  tr.summary-row.overall td{border-top:1px solid #E5EAF3;}
+  tr.grandtotal-row td{background:#EEF1F6;font-weight:800;color:#0B1220;border-top:2px solid #C7D0DE;border-bottom:1px solid #E5EAF3;}
+</style>
+
+<style>
+/* ========== FULL-VIEWPORT RESPONSIVE PATCH ========== */
+html, body {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.app,
+.main,
+#dashboard {
+  width: 100%;
+  max-width: none !important;
+  min-width: 0;
+}
+
+.main {
+  margin: 0 !important;
+  padding: 0 12px 24px !important;
+}
+
+#dashboard {
+  border-radius: 0 !important;
+  padding: 14px 14px 32px !important;
+}
+
+.topbar {
+  width: 100%;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+#dashboard .dashboard-head,
+#dashboard .card {
+  width: 100%;
+  min-width: 0;
+}
+
+#dashboard .dashboard-head {
+  display: grid !important;
+  grid-template-columns: minmax(260px, 1fr) auto;
+  align-items: end !important;
+  gap: 14px;
+}
+
+#dashboard .filters {
+  display: grid !important;
+  grid-template-columns:
+    minmax(150px, 1fr)
+    minmax(150px, 1fr)
+    minmax(210px, 1.25fr)
+    minmax(130px, .8fr)
+    auto;
+  width: min(100%, 900px);
+  gap: 10px;
+}
+
+#dashboard .filter-group,
+#dashboard .filter-group input,
+#dashboard .filter-group select {
+  width: 100%;
+  min-width: 0 !important;
+}
+
+#kpiRow {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+#dashboard .kpi-card {
+  min-width: 0;
+  padding: 13px 14px !important;
+}
+
+#dashboard .kpi-value {
+  font-size: clamp(20px, 1.65vw, 28px) !important;
+  overflow-wrap: anywhere;
+}
+
+#dashboard .kpi-label,
+#dashboard .metric-value-label {
+  font-size: 11px !important;
+}
+
+#dashboard .card {
+  padding: 16px !important;
+}
+
+/* Never force a wide data table into a narrow card. */
+#dashboard .table-wrap,
+#dashboard .no-inner-scroll {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  max-height: none !important;
+  border-radius: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+#dashboard table.data-table {
+  width: 100%;
+  min-width: 1260px;
+  table-layout: auto !important;
+  border-collapse: collapse;
+}
+
+#dashboard table.data-table th,
+#dashboard table.data-table td {
+  white-space: nowrap !important;
+  min-width: max-content;
+  padding: 9px 8px !important;
+  font-size: clamp(10px, .72vw, 12.5px) !important;
+  line-height: 1.25;
+}
+
+#dashboard table.data-table th {
+  letter-spacing: .025em !important;
+}
+
+/* Give the two long metric headers enough room. */
+#dashboard table.data-table th:nth-child(8),
+#dashboard table.data-table td:nth-child(8) {
+  min-width: 92px;
+}
+
+#dashboard table.data-table th:nth-child(9),
+#dashboard table.data-table td:nth-child(9) {
+  min-width: 118px;
+}
+
+#dashboard .bi-tabs {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+#dashboard .bi-tab {
+  flex: 0 0 auto;
+}
+
+/* Laptop */
+@media (max-width: 1366px) {
+  .main {
+    padding: 0 8px 20px !important;
+  }
+
+  #dashboard {
+    padding: 10px 10px 26px !important;
+  }
+
+  #dashboard .dashboard-head {
+    grid-template-columns: 230px minmax(0, 1fr);
+  }
+
+  #dashboard .filters {
+    width: 100%;
+    grid-template-columns:
+      minmax(120px, 1fr)
+      minmax(120px, 1fr)
+      minmax(190px, 1.3fr)
+      minmax(110px, .8fr)
+      78px;
+  }
+
+  #dashboard .dash-title {
+    font-size: 23px !important;
+  }
+
+  #dashboard .card {
+    padding: 13px !important;
+  }
+
+  #dashboard table.data-table {
+    min-width: 1180px;
+  }
+
+  #dashboard table.data-table th,
+  #dashboard table.data-table td {
+    padding: 8px 6px !important;
+    font-size: 10.5px !important;
+  }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+  #dashboard .dashboard-head {
+    grid-template-columns: 1fr !important;
+    align-items: start !important;
+  }
+
+  #dashboard .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #dashboard .filters .filter-group:nth-last-child(1) {
+    grid-column: span 2;
+  }
+
+  #dashboard .filters .filter-group:nth-last-child(1) .btn {
+    width: 100%;
+  }
+
+  #kpiRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #kpiRow > :last-child {
+    grid-column: span 2;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .topbar {
+    padding: 10px 12px !important;
+  }
+
+  .confidential {
+    display: none !important;
+  }
+
+  .main {
+    padding: 0 !important;
+  }
+
+  #dashboard {
+    padding: 8px 8px 22px !important;
+  }
+
+  #dashboard .dashboard-head {
+    padding: 13px !important;
+  }
+
+  #dashboard .filters {
+    grid-template-columns: 1fr !important;
+  }
+
+  #dashboard .filters .filter-group:nth-last-child(1) {
+    grid-column: auto;
+  }
+
+  #kpiRow {
+    grid-template-columns: 1fr !important;
+  }
+
+  #kpiRow > :last-child {
+    grid-column: auto;
+  }
+
+  #dashboard table.data-table {
+    min-width: 1120px;
+  }
+
+  #dashboard table.data-table th,
+  #dashboard table.data-table td {
+    font-size: 10px !important;
+    padding: 8px 6px !important;
+  }
+}
+</style>
+
+
+<style>
+/* ========== BALANCED TYPOGRAPHY PATCH ========== */
+/* Keep the dashboard full-width, but avoid extreme text scaling. */
+
+body {
+  font-size: 14px !important;
+}
+
+#dashboard .dash-title {
+  font-size: 25px !important;
+  line-height: 1.15 !important;
+}
+
+#dashboard .dash-title-small,
+#dashboard .card-kicker,
+#dashboard .filter-group label {
+  font-size: 11px !important;
+}
+
+#dashboard .card-title {
+  font-size: 16px !important;
+  line-height: 1.3 !important;
+}
+
+#dashboard .kpi-label {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+#dashboard .kpi-value {
+  font-size: 23px !important;
+  line-height: 1.1 !important;
+}
+
+#dashboard .metric-value-label {
+  font-size: 10.5px !important;
+}
+
+#dashboard .metric-value-number {
+  font-size: 15px !important;
+}
+
+#dashboard .bi-tab,
+#dashboard .op-month-chip,
+#dashboard input,
+#dashboard select,
+#dashboard .btn {
+  font-size: 13px !important;
+}
+
+#dashboard table.data-table th {
+  font-size: 10.5px !important;
+  line-height: 1.25 !important;
+}
+
+#dashboard table.data-table td {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+}
+
+/* Keep long table headers readable without shrinking the whole table. */
+#dashboard table.data-table th:nth-child(8),
+#dashboard table.data-table td:nth-child(8) {
+  min-width: 88px;
+}
+
+#dashboard table.data-table th:nth-child(9),
+#dashboard table.data-table td:nth-child(9) {
+  min-width: 112px;
+}
+
+@media (max-width: 1366px) {
+  #dashboard .dash-title {
+    font-size: 22px !important;
+  }
+
+  #dashboard .kpi-value {
+    font-size: 20px !important;
+  }
+
+  #dashboard .card-title {
+    font-size: 15px !important;
+  }
+
+  #dashboard .bi-tab,
+  #dashboard input,
+  #dashboard select,
+  #dashboard .btn {
+    font-size: 12px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  #dashboard .dash-title {
+    font-size: 21px !important;
+  }
+
+  #dashboard .kpi-value {
+    font-size: 21px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 13px !important;
+  }
+
+  #dashboard .dash-title {
+    font-size: 20px !important;
+  }
+
+  #dashboard .kpi-value {
+    font-size: 22px !important;
+  }
+
+  #dashboard .card-title {
+    font-size: 15px !important;
+  }
+
+  #dashboard .bi-tab,
+  #dashboard input,
+  #dashboard select,
+  #dashboard .btn {
+    font-size: 12px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 11px !important;
+  }
+}
+</style>
+
+
+<style>
+/* ========== TYPOGRAPHY FINE-TUNE ========== */
+/* Larger table text, slightly smaller KPI card text. */
+
+#dashboard .kpi-label {
+  font-size: 10px !important;
+}
+
+#dashboard .kpi-value {
+  font-size: 20px !important;
+}
+
+#dashboard .metric-value-label {
+  font-size: 10px !important;
+}
+
+#dashboard .metric-value-number {
+  font-size: 14px !important;
+}
+
+#dashboard table.data-table th {
+  font-size: 11px !important;
+}
+
+#dashboard table.data-table td {
+  font-size: 13px !important;
+}
+
+@media (max-width: 1366px) {
+  #dashboard .kpi-label {
+    font-size: 9.5px !important;
+  }
+
+  #dashboard .kpi-value {
+    font-size: 18px !important;
+  }
+
+  #dashboard .metric-value-label {
+    font-size: 9.5px !important;
+  }
+
+  #dashboard .metric-value-number {
+    font-size: 13px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10.5px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 1024px) {
+  #dashboard .kpi-value {
+    font-size: 19px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10.5px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #dashboard .kpi-label {
+    font-size: 10px !important;
+  }
+
+  #dashboard .kpi-value {
+    font-size: 20px !important;
+  }
+
+  #dashboard table.data-table th {
+    font-size: 10.5px !important;
+  }
+
+  #dashboard table.data-table td {
+    font-size: 12px !important;
+  }
+}
+</style>
+
+</head>
+<body>
+<div class="app" style="display:block;">
+  <div class="topbar">
+    <div class="logo">
+      <div class="logo-mark has-image"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAG8AAABQCAYAAAAX6SsYAAAJjklEQVR42u2df4gdVxXHzzn33nnzfuzb7tt23exb2jQ/aGywgtWW9p8YpX8IFQshdWv9SUFQKkUQsVIMiFgRX21BhSgWU1DaYDEgbUGqraARLUlIaoprt6FxN41NNi/pm32/Zuae4x87s0zW/Nq31revvV94LO/umzN37mfuvefM3B8I/38hAIiI6HvvvXfaWruBmRkACJyuSCICnueB7mcmrLUQxzEssnNaCTwi6i88AABEBER0RHooN9dUDbAcvHcpPBSRFX927dqFIoKJ4+K0Ss+vX50uTk1NzThvsw/e5u7duwtRFK24wJvNJhaLRdm3b58WERKRpQwNkrOwFqR7qKkiIqpWq/0BAK6LokhWWIMxCAKZnp7GTqdz9cLCAiilBqrWISKUSqWBg5fVOiIaJ6JV3YnMDEQ0UDWPiAay5mXb3TCOY7HWrqa/ck5LP+DhYnXD9K8rShfnOTl4Dp7TWu/z9u7dq670x0ePHsWtW7cKAChXdGsA3t133217OM7WajVeSwHruxLenj17PmHtlfFjZiQiMcbQ3NzcEDODtRZ7BZh9unKlcZ67WTLwPM/b18vL0E6nA51OB3AVpWmtBRFZ8ctYBzCB12q1bI9vspV7kdpneIioHAAXKjg5eE4OnoPn5OA5OXhODp6D5+TgOTl4Dp6Tg+fk4DldVnoN5y19O4sX+C7Lvl8s7XJ2LnZeWWYDAIAvcMPLMrt4CRsXS1uel4tdx0DVvOUZX/qOiEiJMi+Dl9JgcQYTX87Of1ETYUREpVTWrgAAKKWIiChjF5LzSJqnxIYQEWqtKZPGAIBaayKi8/K2/GV2ev5leRiYmicAgEqpsyJSYmadFJ5FxCYzDyNiXSk1CwBdERm11m4konNENMvMMRHdgIgFay0opc4CgLbWDgGAEFGHiDrW2pGk4JcKXWtNAHCGiP4BAJuZeSzlopT6CzMPE9GNycvrjta6KyLD1tqQiM7GcTymtUYAOI6IxxFxi4iMJXMxYkT8KxFNKKWuj6JIELFDRE1r7dUAIMlNeQYRZxExRMT3WGuvy+ZzrcOzxhjNzI8NDw+/2mw2f8nMMDIy8nkRuanVan2diB4SkbeYeYuIrFdKbSyXy48i4kvMvKVcLh+Zm5v7ptZ6e7FY/GEcxxubzebnEBHL5fI31q9fv//IkSMvJQWIImK11iqXy/1uYmLi4Uaj8QHf90++8cYbjwEATU5OfrbZbG4iojc7nc6mTqfzHSL6180337z9wIEDfwaAsdHR0U/V6/XntdbPX3XVVT9rt9sfBIBDrVbrARGZnpiYuD8Mw/eJyEyr1fqoUuoBRHyxWCw+02g0ftTtdkPP83IjIyPfCoKgzczXi8hNInJdHMdyoVq4ZpvNOI6Hn3766V8DwAwiHnvqqad+E0XRMCJCcqdv9jzvdmbenkywbwZB8IVWq1U7ceLEtzds2PAwEUEURQwAcTI5ZAYRzczMzJ1E9FtjDIqIRUQCADsyMvK9119//dFz587V5ubmfoqIo/l8/gfz8/O3B0HwWL1ef7JUKu1n5peZuWStLa1bt+7LSql6EAQaEUFrfdwY81YYhtsajcZXiAgqlcr3T5069ZlGo/HI/Pz8k+Vy+ckoiurM7DNzCAA2+QAzR0T0XqXU7WEY3sbMFx0ntGbhIWK4Y8eOhyqVyndHR0cfnpqaepCIummL4XneW57nnVRKpWmKmRUzAzNv9jwvTJo3LSJijIFisbinXC6fy+fzw9Vq9cdEhFknSESiZLInIGIJEckYU4/jeJOIgFIKoiiqAMCCiDRnZ2c/Vq/X77v22mvvIqJ8FEVxt9u9b35+fpdSat/Y2NhORBStddNau5mZQWtd6Ha7eWbuwuL416IxRhFRIWm+tTHmrDHmJCJ2lzk2gwFPa32q1Wrd2Gq1PhwEwbaFhYUbisXiPACAMSZARF9ExrTWx5OBUNH4+PhzlUrlifHx8U8fO3bsk0QExpgGIlIURQvXXHPNC2fOnLkjjuNJZo4B4I9aawUAESLqIAh2VqvVe8rl8hOVSuWrAHAmCIL7JycnHykWiz/P5XIPEhErpW5VSp0rl8szSqkdp0+fvu2WW275k+d5hoheIKJpZt42Njb27yiK5PTp01+sVqtfK5VKv8jn818CgI2+769DxHa1Wv3b0NDQr0ql0l4AAM/zmiJSFJEx3/dPXMozxscff1x6GT02OzsL3W53VaPHDh8+DM1mc/l8N0FE1FofBQBfRDYmNfE1rXUchuENxphDvu8fJqIwjuOJdrt9pzHmFc/zDjBz1G63twLArcwMnuf9nZlHrLX5XC73ahRFtybneU0ptRCG4ftTb1AphUqp3xcKhVfa7faWMAy3E5EGgGOFQuE5a+1Qu92+RyllSqVS3ff9VzudzocAgHK53IvdbncbEb3p+/4zWuvWwsLCx5l5fTKH8eVCofBiGIbjYRjuTJr6s/l8/llE7DJzvt1u3+N53iFjzCFEjK2117fb7TuY+TyHJZ3WvBbhLTYJyYTLZL46UOZHSqmlY5KBv0BEoJRaurg4jhkRKZu/pL+0iT2FiOeNGU08TkREEJF0XCknYULaFwMRQblchuzxSimw1kLS7y16XtYCM4OIsNaalFIgIhBF0dI5jTHZPJ93Hem1XSCk6f8KSJdSAg0TZwISd1kQkThRNjQSEY7jmEUEE1E2xkptIKJK05MQjbIxVhzHFhElSafs+RLbaRwpzCzJd0luFiUiEoYhL7dhrWVrbWojneshURTZJD+IiCp7bSJC6XUM2hMWukTQThf4f1pQl7KDl+vvMwV7OdvZADsLBFdiI2WQSV+6tsu1au7Zpnsw7eTgOTl4Dp6Tg+fk4Dk5eA6ek4Pn5OA5eE4OnpOD5+TgveOlRcT2uESwWzyu3/AKhYLqdS+fQVoX+h0JLwzDu3pZOM73/Z94njdurZVe1x9TSi3uibOCBcLdak2Zsuj1wFqt9k8R2RzHcc8LhO/fvx8ajQZorQdudfehoaG+nX9pAFIvi6Xu3LlT1Wo1WslSi05vQ7O5wsVS05HFruRcqODk4Dl4TgPX563C41kSXGQWy9vp7TqtbjsaTymFIuJWyh00eABwkpm95TNYrtRjTQL7q9MJH4N0Awzq/nnp5Hm7e/fuj0RRRL7vr8hAuvlhtVrVBw8ePGSMWe92rhywPsdtO7qqsgPP8/qy4S8lG/5qh2Hwal76lEZPTU1Nu5rXn5rn5IJ0p36ECv+zJsA96O6tzPoKLztx3mll8LTW8B+Ur19SGmdtnwAAAABJRU5ErkJggg=="></div>
+      <div class="logo-text">MEDIA CONSOLE<br><span style="font-weight:600;color:#8a96aa;">ADS BI</span></div>
+    </div>
+    <div class="confidential">Ads BI — Destination Performance<br>Internal use only</div>
+  </div>
+
+  <div class="main">
+    <section id="dashboard" class="dashboard">
+
+      <div class="dashboard-head">
+        <div>
+          <div class="dash-title-small">ADS BI</div>
+          <div class="dash-title">Destination Performance</div>
+        </div>
+        <div class="filters">
+          <div class="filter-group combo-wrap">
+            <label>Destination</label>
+            <input id="destinationFilter" type="text" autocomplete="off" placeholder="Select destination" onfocus="onComboFocus('destinationFilter')" oninput="onComboInput('destinationFilter')">
+            <div id="destinationFilter_list" class="combo-list"></div>
+          </div>
+          <div class="filter-group combo-wrap">
+            <label>Hotel</label>
+            <input id="hotelFilterSelect" type="text" autocomplete="off" placeholder="All Hotels" onfocus="onComboFocus('hotelFilterSelect')" oninput="onComboInput('hotelFilterSelect')">
+            <div id="hotelFilterSelect_list" class="combo-list"></div>
+          </div>
+          <div class="filter-group combo-wrap">
+            <label>Campaign</label>
+            <input id="campaignFilterSelect" type="text" autocomplete="off" placeholder="All Campaigns" onfocus="onComboFocus('campaignFilterSelect')" oninput="onComboInput('campaignFilterSelect')">
+            <div id="campaignFilterSelect_list" class="combo-list"></div>
+          </div>
+          <div class="filter-group" style="position:relative;">
+            <label>Date Range</label>
+            <input id="dateRangeInput" value="All Time" readonly style="cursor:pointer;" onclick="toggleDatePanel()">
+            <div id="datePanel" class="date-panel" style="display:none;">
+              <div class="date-panel-presets" id="datePresets"></div>
+              <div class="date-panel-cal">
+                <div class="date-cal-row">
+                  <div class="date-cal-month">
+                    <div class="date-cal-nav"><span onclick="shiftCalMonth(-1)">&#8249;</span><span id="calMonthLabel1"></span><span style="visibility:hidden;">&#8250;</span></div>
+                    <div class="date-cal-grid" id="calGrid1"></div>
+                  </div>
+                  <div class="date-cal-month">
+                    <div class="date-cal-nav"><span style="visibility:hidden;">&#8249;</span><span id="calMonthLabel2"></span><span onclick="shiftCalMonth(1)">&#8250;</span></div>
+                    <div class="date-cal-grid" id="calGrid2"></div>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+                  <button class="btn primary" type="button" style="border-radius:999px;" onclick="applyDateRange()">APPLY</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-group">
+            <label>Currency</label>
+            <select id="currencySelect" onchange="onCurrencyChange(this.value)">
+              <option value="THB">THB (฿)</option>
+              <option value="USD">USD ($)</option>
+            </select>
+            <div id="nativeCurrencyHint" style="font-size:11px;color:#1AAB40;margin-top:4px;display:none;">Showing exact billed amount (no rate conversion)</div>
+          </div>
+          <div class="filter-group" id="rateGroup" style="display:none;">
+            <label>1 USD = __ THB</label>
+            <input id="rateInput" type="number" step="0.01" min="0.01" style="width:100px;" onchange="onRateChange(this.value)">
+          </div>
+          <div class="filter-group">
+            <label>&nbsp;</label>
+            <button class="btn primary" type="button" onclick="exportCurrentViewCSV()">Export</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid" style="grid-template-columns:repeat(5,minmax(0,1fr));" id="kpiRow"></div>
+
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-kicker">VIEW MODE</div>
+            <div class="card-title" id="tableTitle">Channel Overview</div>
+          </div>
+        </div>
+
+        <div class="bi-tabs" id="modeTabs"></div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin:-8px 0 18px;flex-wrap:wrap;">
+          <span style="font-size:12px;font-weight:700;color:#8a96aa;text-transform:uppercase;letter-spacing:.3px;">Objective</span>
+          <div class="op-month-chip-grid" id="objectiveChips"></div>
+        </div>
+
+        <div id="tableContainer"></div>
+      </div>
+
+      <div class="card" id="compareCard" style="display:none;">
+        <div class="card-head">
+          <div>
+            <div class="card-kicker" id="compareKicker">COMPARE</div>
+            <div class="card-title" id="compareTitle">Compare Hotels</div>
+          </div>
+          <a href="javascript:void(0)" class="view-all-link" onclick="clearCompare()">Clear <span>&times;</span></a>
+        </div>
+        <div class="compare-inputs" style="grid-template-columns:200px repeat(5,1fr);">
+          <div class="filter-group combo-wrap"><label id="compareDimLabel">Campaign</label><input id="compareDimension" type="text" autocomplete="off" onfocus="onComboFocus('compareDimension')" oninput="onComboInput('compareDimension')"><div id="compareDimension_list" class="combo-list"></div></div>
+          <div class="filter-group"><label>Hotel 1</label><input id="compareHotel1" list="hotelOptions" placeholder="Type or select" oninput="scheduleCompareRender()" autocomplete="off"></div>
+          <div class="filter-group"><label>Hotel 2</label><input id="compareHotel2" list="hotelOptions" placeholder="Type or select" oninput="scheduleCompareRender()" autocomplete="off"></div>
+          <div class="filter-group"><label>Hotel 3 (optional)</label><input id="compareHotel3" list="hotelOptions" placeholder="Type or select" oninput="scheduleCompareRender()" autocomplete="off"></div>
+          <div class="filter-group"><label>Hotel 4 (optional)</label><input id="compareHotel4" list="hotelOptions" placeholder="Type or select" oninput="scheduleCompareRender()" autocomplete="off"></div>
+          <div class="filter-group"><label>Hotel 5 (optional)</label><input id="compareHotel5" list="hotelOptions" placeholder="Type or select" oninput="scheduleCompareRender()" autocomplete="off"></div>
+        </div>
+        <datalist id="hotelOptions"></datalist>
+        <div id="compareEmpty" style="padding:22px 4px;color:#8a96aa;font-size:13.5px;">Select at least 2 hotels above to compare.</div>
+        <div id="compareOutputWrap" style="display:none;">
+          <div class="table-wrap no-inner-scroll">
+            <table id="compareMetricsTable" class="data-table"></table>
+          </div>
+          <div class="chart-box" style="margin-top:18px;height:230px;">
+            <div class="mini-title" id="compareChartTitle" style="margin-bottom:8px;">REVENUE TREND</div>
+            <div style="height:230px;position:relative;">
+              <canvas id="compareTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+
+<script>
+/* ============ date range picker ============ */
+const TODAY = new Date(2026,6,31); // 31 Jul 2026
+function fmtD(d){ const dd=String(d.getDate()).padStart(2,'0'); const mm=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]; return `${dd} ${mm} ${d.getFullYear()}`; }
+function fmtSlash(d){ const dd=String(d.getDate()).padStart(2,'0'); const mm=String(d.getMonth()+1).padStart(2,'0'); return `${dd}/${mm}/${d.getFullYear()}`; }
+function addDays(d,n){ const r=new Date(d); r.setDate(r.getDate()+n); return r; }
+function startOfMonth(d){ return new Date(d.getFullYear(), d.getMonth(), 1); }
+function endOfMonth(d){ return new Date(d.getFullYear(), d.getMonth()+1, 0); }
+
+const presets = [
+  {key:'alltime', label:'All Time', range:()=>[new Date(2020,0,1), new Date(2030,11,31)]},
+  {key:'today', label:'Today', range:()=>[TODAY, TODAY]},
+  {key:'yesterday', label:'Yesterday', range:()=>[addDays(TODAY,-1), addDays(TODAY,-1)]},
+  {key:'last7', label:'Last 7 Days', range:()=>[addDays(TODAY,-6), TODAY]},
+  {key:'last14', label:'Last 14 Days', range:()=>[addDays(TODAY,-13), TODAY]},
+  {key:'last30', label:'Last 30 Days', range:()=>[addDays(TODAY,-29), TODAY]},
+  {key:'thismonth', label:'This Month', range:()=>[startOfMonth(TODAY), TODAY]},
+  {key:'lastmonth', label:'Last Month', range:()=>{ const m=new Date(TODAY.getFullYear(),TODAY.getMonth()-1,1); return [startOfMonth(m), endOfMonth(m)]; }},
+  {key:'custom', label:'Custom', range:()=>[dateRangeStart, dateRangeEnd]},
+];
+
+let dateRangeStart = new Date(2020,0,1);
+let dateRangeEnd = new Date(2030,11,31);
+let activePreset = 'alltime';
+let calRefMonth = new Date(); // left calendar month
+let pendingPick = null;
+
+function toggleDatePanel(){
+  const panel = document.getElementById('datePanel');
+  const input = document.getElementById('dateRangeInput');
+  const willOpen = panel.style.display === 'none';
+  if(willOpen){
+    const rect = input.getBoundingClientRect();
+    const panelWidth = Math.min(600, window.innerWidth - 24);
+    let left = rect.left;
+    if(left + panelWidth > window.innerWidth - 12) left = window.innerWidth - panelWidth - 12;
+    if(left < 12) left = 12;
+    panel.style.left = left + 'px';
+    panel.style.top = (rect.bottom + 6) + 'px';
+  }
+  panel.style.display = willOpen ? 'flex' : 'none';
+  if(willOpen) renderDatePanel();
+}
+document.addEventListener('click', (e)=>{
+  const panel = document.getElementById('datePanel');
+  const input = document.getElementById('dateRangeInput');
+  if(panel && panel.style.display!=='none' && !panel.contains(e.target) && e.target!==input){
+    panel.style.display='none';
+  }
+});
+document.getElementById('datePanel').addEventListener('click', function(e){
+  e.stopPropagation();
+});
+
+function renderDatePanel(){
+  const presetsEl = document.getElementById('datePresets');
+  presetsEl.innerHTML = presets.map(p=>{
+    const [s,e] = p.range();
+    const sub = p.key==='alltime' ? 'Every date in the Sheet' : (p.key==='today' || p.key==='yesterday' ? fmtD(s) : `${fmtD(s)} - ${fmtD(e)}`);
+    return `<div class="date-preset${p.key===activePreset?' active':''}" data-preset="${p.key}"><div>${p.label}</div><div class="sub">${sub}</div></div>`;
+  }).join('');
+  presetsEl.querySelectorAll('.date-preset').forEach(el=>{
+    el.onclick = ()=>{
+      const p = presets.find(pp=>pp.key===el.dataset.preset);
+      const [s,e] = p.range();
+      activePreset = p.key; dateRangeStart = s; dateRangeEnd = e;
+      calRefMonth = startOfMonth(s);
+      renderDatePanel();
+    };
+  });
+  renderCalendars();
+}
+
+function renderCalendars(){
+  const m1 = new Date(calRefMonth);
+  const m2 = new Date(calRefMonth.getFullYear(), calRefMonth.getMonth()+1, 1);
+  document.getElementById('calMonthLabel1').textContent = m1.toLocaleString('en-US',{month:'long',year:'numeric'});
+  document.getElementById('calMonthLabel2').textContent = m2.toLocaleString('en-US',{month:'long',year:'numeric'});
+  document.getElementById('calGrid1').innerHTML = buildCalGrid(m1);
+  document.getElementById('calGrid2').innerHTML = buildCalGrid(m2);
+  bindCalDays();
+}
+
+function buildCalGrid(monthDate){
+  const dows = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let html = dows.map(d=>`<div class="dow">${d}</div>`).join('');
+  const first = startOfMonth(monthDate);
+  const last = endOfMonth(monthDate);
+  const startPad = first.getDay();
+  for(let i=0;i<startPad;i++){ html += `<div class="day muted"></div>`; }
+  for(let day=1; day<=last.getDate(); day++){
+    const d = new Date(monthDate.getFullYear(), monthDate.getMonth(), day);
+    const inRange = d>=dateRangeStart && d<=dateRangeEnd;
+    const isEdge = d.getTime()===dateRangeStart.getTime() || d.getTime()===dateRangeEnd.getTime();
+    const cls = isEdge ? 'day range-edge' : (inRange ? 'day in-range' : 'day');
+    html += `<div class="${cls}" data-y="${d.getFullYear()}" data-m="${d.getMonth()}" data-d="${day}">${day}</div>`;
+  }
+  return html;
+}
+
+function bindCalDays(){
+  document.querySelectorAll('.date-cal-grid .day:not(.muted)').forEach(el=>{
+    el.onclick = ()=>{
+      const d = new Date(parseInt(el.dataset.y), parseInt(el.dataset.m), parseInt(el.dataset.d));
+      if(!pendingPick){
+        dateRangeStart = d; dateRangeEnd = d; pendingPick = d;
+      } else {
+        if(d < pendingPick){ dateRangeStart = d; dateRangeEnd = pendingPick; } else { dateRangeStart = pendingPick; dateRangeEnd = d; }
+        pendingPick = null;
+      }
+      activePreset = 'custom';
+      renderDatePanel();
+    };
+  });
+}
+
+function shiftCalMonth(dir){
+  calRefMonth = new Date(calRefMonth.getFullYear(), calRefMonth.getMonth()+dir, 1);
+  renderCalendars();
+}
+
+function applyDateRange(){
+  document.getElementById('dateRangeInput').value = activePreset==='alltime' ? 'All Time' : `${fmtD(dateRangeStart)} - ${fmtD(dateRangeEnd)}`;
+  document.getElementById('datePanel').style.display = 'none';
+  if(typeof renderAll === 'function') renderAll();
+  else if(typeof runCompare === 'function') runCompare();
+}
+
+// ===================== LIVE DATA (fetched from the Google Sheet Web App) =====================
+
+// Paste the deployed Web App URL here (Apps Script > Deploy > New deployment > Web app).
+// It should end in /exec. Until this is set, the dashboard shows a setup message instead of data.
+const SHEET_API_URL = "https://script.google.com/a/macros/media-console.com/s/AKfycbzHnCQXPm4ETNBuADCNVCiX9oMMPEIi47Un1hCRPqLaGAo5yMWFRlT-RdVq0p90lN_-/exec";
+
+// A rotating color palette assigned to whichever destinations actually come back from the
+// data (no more hardcoded destination list — this now reflects whatever's in the Sheet).
+const PALETTE = ["#3D5AFE","#1AAB40","#D64550","#744EC2","#197278","#E9A23B","#7b8798","#a8a29e","#0EA5E9","#DB2777"];
+let destColors = {};
+
+let channels = [];   // populated from real data after fetch
+let geos = [];        // populated from real data after fetch
+let currentObjective = "all"; // all | Branding | Conversion
+
+let rawData = {}; // { destination: { hotels: [ { name, campaigns:[ {channel, objective, geo:{GEOCODE:{monthKey:{spend,impr,clicks,conv,revenue}}}} ] } ] } } — built from "Aggregated" (Raw Import - Ads): accurate daily totals, coarse/no real GEO.
+let geoRawData = {}; // same shape, built from "Geo Detail" (Raw Import - Geos): accurate per-country GEO, monthly resolution. Used only by Geo Overview / Hotel vs GEO / Geo vs Campaign.
+
+/**
+ * Shared row->tree builder used for both the Aggregated feed and the Geo
+ * Detail feed (same column shape, same nesting logic — just different rows
+ * and, in practice, different GEO granularity depending on which sheet they
+ * came from). Also folds in a synthetic "All Destinations" entry (union of
+ * every real destination's hotels) so every render/agg function can just
+ * read tree[currentDest].hotels without any special-casing.
+ */
+function buildDestTree(rowList){
+  const channelSet = new Set();
+  const geoSet = new Set();
+  const destMap = new Map();
+
+  rowList.forEach(row=>{
+    const dest = row['Destination'];
+    const hotelCode = row['Hotel Code'];
+    const hotelName = (row['Hotel Name'] || hotelCode || '').toString().trim();
+    const channel = row['Channel'];
+    const objective = row['Objective'];
+    const geo = String(row['GEO'] || '').trim() || '(Unspecified)';
+    if(!dest || !hotelName) return;
+
+    channelSet.add(channel);
+    geoSet.add(geo);
+
+    if(!destMap.has(dest)) destMap.set(dest, new Map());
+    const hotelMap = destMap.get(dest);
+    if(!hotelMap.has(hotelName)) hotelMap.set(hotelName, { name: hotelName, campaignMap: new Map() });
+    const hotelEntry = hotelMap.get(hotelName);
+
+    const campKey = channel + '||' + objective;
+    if(!hotelEntry.campaignMap.has(campKey)) hotelEntry.campaignMap.set(campKey, { channel, objective, geo:{} });
+    const camp = hotelEntry.campaignMap.get(campKey);
+    const monthKey = normalizeMonthKey(row['Month']);
+    if(!camp.geo[geo]) camp.geo[geo] = {};
+    if(!camp.geo[geo][monthKey]) camp.geo[geo][monthKey] = {spend:0, impr:0, clicks:0, videoViews:0, completedViews:0, conv:0, revenue:0, nativeSpend:0, nativeRevenue:0, currency:''};
+    const bucket = camp.geo[geo][monthKey];
+    bucket.spend += pickNumField(row, ['Ad Spend (THB)','Ad Spend']);
+    bucket.impr += Number(row['Impressions'])||0;
+    bucket.clicks += Number(row['Clicks'])||0;
+    bucket.videoViews += Number(row['Video Views'])||0;
+    bucket.completedViews += Number(row['Completed Views'])||0;
+    bucket.conv += Number(row['Conversions'])||0;
+    bucket.revenue += pickNumField(row, ['Revenue (THB)','Revenue']);
+    bucket.nativeSpend += Number(row['Ad Spend (Native)'])||0;
+    bucket.nativeRevenue += Number(row['Revenue (Native)'])||0;
+    if(row['Currency']) bucket.currency = row['Currency']; // consistent within a hotel — last-write is fine
+  });
+
+  const tree = {};
+  destMap.forEach((hotelMap, dest)=>{
+    const hotels = [];
+    hotelMap.forEach(hotelEntry=>{
+      hotels.push({ name: hotelEntry.name, campaigns: Array.from(hotelEntry.campaignMap.values()) });
+    });
+    tree[dest] = { hotels };
+  });
+
+  const allHotels = [];
+  Object.values(tree).forEach(d => allHotels.push(...d.hotels));
+  tree['All Destinations'] = { hotels: allHotels };
+
+  return { tree, channels: Array.from(channelSet).sort(), geos: Array.from(geoSet).sort() };
+}
+
+/**
+ * Fetches the Aggregated sheet (as JSON, via the Apps Script Web App) and
+ * reshapes it from a flat row list into the { destination -> hotels -> campaigns -> geo }
+ * tree the rest of this dashboard is built around. Every row in the Sheet is
+ * Destination x Hotel x Channel x Objective x GEO x Month — this collapses
+ * the Month dimension by summing (so "Ad Spend" etc. here means "total over
+ * whatever's currently in the Sheet"; wire in the Date Range picker later if
+ * you want to filter by Month instead of always summing everything).
+ */
+/**
+ * The Sheet's "Month" column is written as plain text like "2026-06", but
+ * Google Sheets sometimes auto-detects that as an actual date and stores it
+ * as one — which then comes back through the JSON API as a full ISO
+ * timestamp (e.g. "2025-09-30T17:00:00.000Z") instead of the clean string.
+ * This recovers the intended "YYYY-MM" key either way. When it has to
+ * recover from an ISO timestamp, it reads the date at a fixed UTC+7
+ * (Bangkok) offset — the timezone the value was originally written in — so
+ * the recovered month doesn't depend on whatever timezone the viewer's own
+ * browser happens to be in.
+ */
+function normalizeMonthKey(raw){
+  if(!raw) return 'unknown';
+  const str = String(raw).trim();
+  if(/^\d{4}-\d{2}$/.test(str)) return str; // already clean
+  const d = new Date(str);
+  if(isNaN(d.getTime())) return 'unknown';
+  const bangkok = new Date(d.getTime() + 7*60*60*1000);
+  const y = bangkok.getUTCFullYear();
+  const m = String(bangkok.getUTCMonth()+1).padStart(2,'0');
+  return `${y}-${m}`;
+}
+/** "2026-06" -> "Jun 2026" for display. Sorting should always use the raw "YYYY-MM" key, not this. */
+function formatMonthLabel(monthKey){
+  if(monthKey === 'unknown') return 'Unknown';
+  const parts = monthKey.split('-');
+  const y = Number(parts[0]), m = Number(parts[1]);
+  if(!y || !m) return monthKey;
+  const names = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${names[m-1]} ${y}`;
+}
+
+function pickNumField(row, candidateNames){
+  for(const name of candidateNames){
+    if(row[name] !== undefined && row[name] !== ''){ const n = Number(row[name]); if(!isNaN(n)) return n; }
+  }
+  return 0;
+}
+
+function loadRealData(){
+  return new Promise((resolve, reject) => {
+    const callbackName = 'adsBiCallback_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const script = document.createElement('script');
+    let finished = false;
+
+    const cleanup = () => {
+      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch (_) { window[callbackName] = undefined; }
+    };
+
+    const timeoutId = setTimeout(() => {
+      if (finished) return;
+      finished = true;
+      cleanup();
+      reject(new Error('Data request timed out. Please confirm that you are signed in with a media-console.com account.'));
+    }, 30000);
+
+    window[callbackName] = function(data){
+      if (finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      cleanup();
+
+      try {
+        if (!data) throw new Error('The Web App returned an empty response.');
+        if (data.error) throw new Error(data.error);
+
+        let savedRate = null;
+        try{ savedRate = localStorage.getItem('adsbi_usd_rate'); }catch(e){ /* localStorage unavailable */ }
+        if(savedRate){
+          EXCHANGE_RATE_USD = Number(savedRate); // this browser already set its own rate — keep using it
+        } else if(data.rates && data.rates.USD){
+          EXCHANGE_RATE_USD = Number(data.rates.USD); // first visit on this browser — start from the Sheet's rate
+        }
+
+        const adsResult = buildDestTree(data.rows || []);
+        rawData = adsResult.tree;
+        channels = adsResult.channels;
+
+        // Geo Detail (from "Raw Import - Geos") has the real per-country
+        // breakdown; Aggregated (from "Raw Import - Ads") mostly won't. Build
+        // a SEPARATE tree from it so Geo-related view modes (Geo Overview,
+        // Hotel vs GEO, Geo vs Campaign) can read real geo data, while
+        // Campaign-only view modes keep reading the daily-accurate rawData.
+        const geoResult = buildDestTree(data.geoRows || []);
+        geoRawData = geoResult.tree;
+        geos = geoResult.geos.length ? geoResult.geos : adsResult.geos;
+
+        destColors = {};
+        Object.keys(rawData).sort().forEach((dest,i)=>{ destColors[dest] = PALETTE[i % PALETTE.length]; });
+
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    };
+
+    script.onerror = function(){
+      if (finished) return;
+      finished = true;
+      clearTimeout(timeoutId);
+      cleanup();
+      reject(new Error('Failed to load data. Please sign in with a media-console.com account and refresh the page.'));
+    };
+
+    const separator = SHEET_API_URL.includes('?') ? '&' : '?';
+    script.src = SHEET_API_URL + separator +
+      'callback=' + encodeURIComponent(callbackName) +
+      '&_=' + Date.now();
+
+    document.body.appendChild(script);
+  });
+}
+
+/* Original fetch-based data transformation is now handled inside loadRealData() above. */
+function __unusedFetchLoader(){
+  const data = {};
+}
+
+function sumMetrics(list){
+  return list.reduce((acc,m)=>({
+    spend:acc.spend+m.spend, impr:acc.impr+m.impr, clicks:acc.clicks+m.clicks,
+    videoViews:acc.videoViews+(m.videoViews||0), completedViews:acc.completedViews+(m.completedViews||0),
+    conv:acc.conv+m.conv, revenue:acc.revenue+m.revenue,
+    nativeSpend:acc.nativeSpend+(m.nativeSpend||0), nativeRevenue:acc.nativeRevenue+(m.nativeRevenue||0),
+    currency: acc.currency || m.currency || '' // meaningful only when every item in `list` shares one currency (i.e. a single hotel is selected) — display code gates on that
+  }), {spend:0,impr:0,clicks:0,videoViews:0,completedViews:0,conv:0,revenue:0,nativeSpend:0,nativeRevenue:0,currency:''});
+}
+function deriveRates(m){
+  return {
+    cpm: m.impr ? m.spend/m.impr*1000 : 0,
+    cpc: m.clicks ? m.spend/m.clicks : 0,
+    ctr: m.impr ? m.clicks/m.impr*100 : 0,
+    cpa: m.conv ? m.spend/m.conv : 0,
+    cvr: m.clicks ? m.conv/m.clicks*100 : 0,
+    abv: m.conv ? m.revenue/m.conv : 0,
+    roas: m.spend ? m.revenue/m.spend : 0
+  };
+}
+let EXCHANGE_RATE_USD = 36.5; // overwritten from the Sheet's Settings tab once data loads
+let currentCurrency = 'THB'; // THB | USD — all underlying data is stored in THB
+
+function fmtMoney(n){
+  const v = currentCurrency==='USD' ? n/EXCHANGE_RATE_USD : n;
+  const symbol = currentCurrency==='USD' ? '$' : '฿';
+  return symbol+v.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+function fmtMoneyDecimal(n){ // always 2 decimals + thousand separators — kept name for existing call sites
+  return fmtMoney(n);
+}
+/** Formats a number that's ALREADY in the target display currency — no rate
+ * conversion applied. Used for the exact-native-figure path below. */
+function fmtMoneyExact(n){
+  const symbol = currentCurrency==='USD' ? '$' : '฿';
+  return symbol+n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+/**
+ * A fixed exchange rate is only ever an approximation of what a campaign's
+ * spend/revenue "really" was on any given day — and if the rate in Settings
+ * gets updated later without re-running Parse & Aggregate on old data, the
+ * THB-derived USD figure can drift from the true original dollar amount.
+ * When exactly one hotel is selected (so every row shares one currency) and
+ * that hotel's native currency matches the currency toggle, we can sidestep
+ * all of that and show the untouched original figure instead — this returns
+ * true when that's possible for the given metrics object `m`.
+ */
+function canShowExactNative(m){
+  return currentHotelFilter !== 'all' && !!m.currency && m.currency === currentCurrency;
+}
+function fmtNum(n){ return Math.round(n).toLocaleString('en-US', {maximumFractionDigits:0}); }
+function fmtPercent2(n){ return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})+'%'; }
+function fmtRatio2(n){ return n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+/** monthKey is 'YYYY-MM' (or 'unknown' for rows the Sheet couldn't date). */
+function isMonthInRange(monthKey){
+  if(monthKey === 'unknown') return true; // don't silently drop undated rows
+  const parts = monthKey.split('-').map(Number);
+  const y = parts[0], m = parts[1];
+  if(!y || !m) return true;
+  const d = new Date(y, m-1, 1);
+  const startMonth = new Date(dateRangeStart.getFullYear(), dateRangeStart.getMonth(), 1);
+  const endMonth = new Date(dateRangeEnd.getFullYear(), dateRangeEnd.getMonth(), 1);
+  return d >= startMonth && d <= endMonth;
+}
+
+/**
+ * Groups a hotel list's campaigns by Month (YYYY-MM), ignoring the top Date
+ * Range picker entirely — Monthly mode's whole point is showing the full
+ * trend over time, so it always uses every month that exists in the data.
+ * campaignFilterFn: optional (campaign)=>boolean to narrow by channel/objective.
+ * geoFilter: optional exact GEO name to narrow to just one country.
+ */
+function aggByMonthGeneric(hotels, campaignFilterFn, geoFilter){
+  const acc = {};
+  hotels.forEach(h => h.campaigns.forEach(c => {
+    if(campaignFilterFn && !campaignFilterFn(c)) return;
+    Object.keys(c.geo).forEach(g => {
+      if(geoFilter && g !== geoFilter) return;
+      Object.keys(c.geo[g]).forEach(mk => {
+        if(mk === 'unknown') return; // no real date — doesn't belong on a monthly trend
+        if(!acc[mk]) acc[mk] = [];
+        acc[mk].push(c.geo[g][mk]);
+      });
+    });
+  }));
+  return Object.entries(acc)
+    .map(([month,list])=>({label:month, m:sumMetrics(list)}))
+    .sort((a,b)=>a.label.localeCompare(b.label))
+    .map(r=>({...r, label:formatMonthLabel(r.label)}));
+}
+
+/** Collapses a {monthKey: metrics} map down to one flat metrics object, summing only months inside the currently selected Date Range. */
+function geoInRange(monthMap){
+  return sumMetrics(Object.keys(monthMap).filter(isMonthInRange).map(mk=>monthMap[mk]));
+}
+
+/** Combines several {monthKey: metrics} maps into one chronological per-month
+ * series, respecting the current Date Range filter. Used by Monthly mode. */
+function monthlyBreakdown(monthMapsList){
+  const acc = {};
+  monthMapsList.forEach(monthMap=>{
+    Object.keys(monthMap).forEach(mk=>{
+      if(mk === 'unknown' || !isMonthInRange(mk)) return;
+      if(!acc[mk]) acc[mk] = [];
+      acc[mk].push(monthMap[mk]);
+    });
+  });
+  return Object.keys(acc).sort().map(mk=>({month:mk, m:sumMetrics(acc[mk])}));
+}
+function fmtMonthLabel(yyyyMm){
+  const [y,m] = yyyyMm.split('-').map(Number);
+  if(!y || !m) return yyyyMm;
+  return new Date(y, m-1, 1).toLocaleDateString('en-US', {month:'short', year:'numeric'});
+}
+
+function aggByGeoForObjective(dest, obj){
+  const acc = {};
+  getHotelsForGeoAgg(dest).forEach(h=> h.campaigns.forEach(c=>{
+    if(c.objective !== obj) return;
+    Object.keys(c.geo).forEach(g=>{
+      if(!acc[g]) acc[g]=[];
+      acc[g].push(geoInRange(c.geo[g]));
+    });
+  }));
+  return Object.entries(acc).map(([geo,list])=>({label:geo, m:sumMetrics(list)}));
+}
+
+function aggByChannel(dest){
+  const acc = {};
+  getHotelsForAgg(dest).forEach(h=> h.campaigns.forEach(c=>{
+    const key = c.channel + '||' + c.objective;
+    if(!acc[key]) acc[key] = { label:c.channel, objective:c.objective, list:[] };
+    Object.keys(c.geo).forEach(g=> acc[key].list.push(geoInRange(c.geo[g])));
+  }));
+  return Object.values(acc).map(entry=>({label:entry.label, m:sumMetrics(entry.list), objective:entry.objective}));
+}
+function aggByGeo(dest){
+  const acc = {};
+  getHotelsForGeoAgg(dest).forEach(h=> h.campaigns.forEach(c=>{
+    Object.keys(c.geo).forEach(g=>{
+      if(!acc[g]) acc[g]=[];
+      acc[g].push(geoInRange(c.geo[g]));
+    });
+  }));
+  return Object.entries(acc).map(([geo,list])=>({label:geo, m:sumMetrics(list)}));
+}
+function aggByHotelCampaign(dest){
+  return getHotelsForAgg(dest).map(h=>{
+    const hotelAll = [];
+    h.campaigns.forEach(c=> Object.keys(c.geo).forEach(g=> hotelAll.push(geoInRange(c.geo[g]))));
+    return {
+      label:h.name,
+      m:sumMetrics(hotelAll),
+      children:h.campaigns.map(c=>({label:c.channel, m:sumMetrics(Object.keys(c.geo).map(g=>geoInRange(c.geo[g]))), objective:c.objective}))
+    };
+  }).filter(h=>h.children.length);
+}
+function aggByHotelGeo(dest){
+  return getHotelsForGeoAgg(dest).map(h=>{
+    const filteredCampaigns = h.campaigns.filter(c=> currentObjective==='all' || c.objective===currentObjective);
+    const hotelAll = [];
+    const geoAcc = {};
+    filteredCampaigns.forEach(c=> Object.keys(c.geo).forEach(g=>{
+      if(!geoAcc[g]) geoAcc[g]=[];
+      const m = geoInRange(c.geo[g]);
+      hotelAll.push(m);
+      geoAcc[g].push(m);
+    }));
+    return {
+      label:h.name,
+      m:sumMetrics(hotelAll),
+      children:Object.entries(geoAcc).filter(([g,l])=>l.length).map(([g,l])=>({label:g, m:sumMetrics(l)}))
+    };
+  }).filter(h=>h.children.length);
+}
+function aggByGeoCampaign(dest){
+  const acc = {}; // geo -> "channel||objective" -> list
+  getHotelsForGeoAgg(dest).forEach(h=> h.campaigns.forEach(c=>{
+    const key = c.channel + '||' + c.objective;
+    Object.keys(c.geo).forEach(g=>{
+      if(!acc[g]) acc[g] = {};
+      if(!acc[g][key]) acc[g][key] = { label:c.channel, objective:c.objective, list:[] };
+      acc[g][key].list.push(geoInRange(c.geo[g]));
+    });
+  }));
+  return Object.entries(acc).filter(([g,chMap])=>Object.keys(chMap).length)
+    .map(([geo,chMap])=>{
+      const all=[]; Object.values(chMap).forEach(entry=>all.push(...entry.list));
+      return {
+        label:geo,
+        m:sumMetrics(all),
+        children:Object.values(chMap).map(entry=>({label:entry.label, m:sumMetrics(entry.list), objective:entry.objective}))
+      };
+    });
+}
+
+const modes = [
+  { key:"channel", label:"Campaign Overview", col1:"Campaign", fn:aggByChannel, drill:false },
+  { key:"geo", label:"Geo Overview", col1:"GEO", fn:aggByGeo, drill:false },
+  { key:"hotelgeo", label:"Hotel vs GEO", col1:"Hotel / GEO", fn:aggByHotelGeo, drill:true, parentLabel:"Hotel", childLabel:"GEO" },
+  { key:"hotelcamp", label:"Hotel vs Campaign", col1:"Hotel / Campaign", fn:aggByHotelCampaign, drill:true, parentLabel:"Hotel", childLabel:"Campaign" },
+  { key:"geocamp", label:"Geo vs Campaign", col1:"GEO / Campaign", fn:aggByGeoCampaign, drill:true, parentLabel:"GEO", childLabel:"Campaign" },
+  { key:"monthly", label:"Monthly", col1:"Month", fn:aggByChannel, drill:false }, // fn unused — Monthly has its own render path
+];
+
+let currentDest = null;
+let currentMode = "channel";
+let currentHotelFilter = "all";
+let currentCampaignFilter = "all";
+let monthlySubMode = "campaign"; // campaign | geo | hotel
+let monthlySearchQuery = "";
+
+// ===================== Custom combobox (click shows full list, typing filters) =====================
+const comboOptions = {}; // inputId -> array of option strings
+const comboOnSelect = {}; // inputId -> function(value)
+
+function setupCombo(inputId, options, onSelect, currentValue){
+  comboOptions[inputId] = options;
+  comboOnSelect[inputId] = onSelect;
+  document.getElementById(inputId).value = currentValue;
+}
+
+function renderComboList(inputId, optionsToShow){
+  const listEl = document.getElementById(inputId+'_list');
+  if(!optionsToShow.length){
+    listEl.innerHTML = `<div class="combo-empty">No matches</div>`;
+  } else {
+    listEl.innerHTML = optionsToShow.map(o=>`<div class="combo-item">${o}</div>`).join('');
+    Array.from(listEl.children).forEach((el,i)=>{
+      el.onclick = ()=>{
+        document.getElementById(inputId).value = optionsToShow[i];
+        listEl.style.display = 'none';
+        comboOnSelect[inputId](optionsToShow[i]);
+      };
+    });
+  }
+  listEl.style.display = 'block';
+}
+
+function onComboFocus(inputId){
+  renderComboList(inputId, comboOptions[inputId] || []);
+}
+function onComboInput(inputId){
+  const query = document.getElementById(inputId).value.toLowerCase();
+  const all = comboOptions[inputId] || [];
+  const filtered = query ? all.filter(o=>o.toLowerCase().includes(query)) : all;
+  renderComboList(inputId, filtered);
+}
+document.addEventListener('click', (e)=>{
+  document.querySelectorAll('.combo-list').forEach(listEl=>{
+    const wrap = listEl.closest('.combo-wrap');
+    if(wrap && !wrap.contains(e.target)) listEl.style.display = 'none';
+  });
+});
+
+function populateDestSelect(){
+  const destSet = new Set([...Object.keys(rawData), ...Object.keys(geoRawData)]);
+  destSet.delete('All Destinations');
+  setupCombo('destinationFilter', ['All Destinations', ...Array.from(destSet).sort()], onDestChange, currentDest);
+}
+function onDestChange(v){
+  if(!rawData[v] && !geoRawData[v]){ document.getElementById('destinationFilter').value = currentDest; return; }
+  currentDest = v; currentHotelFilter = "all"; currentCampaignFilter = "all"; populateHotelFilter(); populateCampaignFilter(); renderAll();
+}
+
+function onHotelFilterChange(v){
+  const namesInAds = (rawData[currentDest]?.hotels || []).map(h=>h.name);
+  const namesInGeo = (geoRawData[currentDest]?.hotels || []).map(h=>h.name);
+  const valid = v === 'All Hotels' || namesInAds.includes(v) || namesInGeo.includes(v);
+  if(!valid){ document.getElementById('hotelFilterSelect').value = currentHotelFilter==='all' ? 'All Hotels' : currentHotelFilter; return; }
+  currentHotelFilter = (v === 'All Hotels') ? 'all' : v;
+  renderAll();
+}
+
+function populateHotelFilter(){
+  const namesInAds = (rawData[currentDest]?.hotels || []).map(h=>h.name);
+  const namesInGeo = (geoRawData[currentDest]?.hotels || []).map(h=>h.name);
+  const hotelSet = new Set([...namesInAds, ...namesInGeo]);
+  const hotelNames = ['All Hotels', ...Array.from(hotelSet).sort()];
+  setupCombo('hotelFilterSelect', hotelNames, onHotelFilterChange, currentHotelFilter==='all' ? 'All Hotels' : currentHotelFilter);
+}
+
+function onCampaignFilterChange(v){
+  const valid = v === 'All Campaigns' || channels.includes(v);
+  if(!valid){ document.getElementById('campaignFilterSelect').value = currentCampaignFilter==='all' ? 'All Campaigns' : currentCampaignFilter; return; }
+  currentCampaignFilter = (v === 'All Campaigns') ? 'all' : v;
+  renderAll();
+}
+function populateCampaignFilter(){
+  const names = ['All Campaigns', ...channels.slice().sort()];
+  setupCombo('campaignFilterSelect', names, onCampaignFilterChange, currentCampaignFilter==='all' ? 'All Campaigns' : currentCampaignFilter);
+}
+
+function onCurrencyChange(v){ currentCurrency = v; renderAll(); }
+function renderCurrencyToggle(){
+  document.getElementById('currencySelect').value = currentCurrency;
+  const rateGroup = document.getElementById('rateGroup');
+  const rateInput = document.getElementById('rateInput');
+  if(currentCurrency === 'USD'){
+    rateGroup.style.display = '';
+    rateInput.value = EXCHANGE_RATE_USD;
+  } else {
+    rateGroup.style.display = 'none';
+  }
+}
+/**
+ * The exchange rate used for approximate (non-exact) currency display lives
+ * on the dashboard itself, not in the Google Sheet — the Sheet's rate is only
+ * used once, as the initial default the first time this browser loads the
+ * dashboard. This is on purpose: the Sheet is kept locked down to one owner
+ * to avoid accidental edits corrupting the underlying data, but anyone
+ * viewing the dashboard can still tune the display rate for their own use,
+ * saved locally in their browser (localStorage), without needing Sheet access.
+ */
+function onRateChange(v){
+  const rate = Number(v);
+  if(!rate || rate <= 0) { document.getElementById('rateInput').value = EXCHANGE_RATE_USD; return; }
+  EXCHANGE_RATE_USD = rate;
+  try{ localStorage.setItem('adsbi_usd_rate', String(rate)); }catch(e){ /* localStorage unavailable — rate still applies for this session */ }
+  renderAll();
+}
+
+function applyCampaignFilter(hotels){
+  if(currentCampaignFilter === 'all') return hotels;
+  return hotels
+    .map(h=>({...h, campaigns: h.campaigns.filter(c=>c.channel===currentCampaignFilter)}))
+    .filter(h=>h.campaigns.length);
+}
+function getHotelsForAgg(dest){
+  const all = rawData[dest].hotels;
+  const hotels = currentHotelFilter === 'all' ? all : all.filter(h=>h.name===currentHotelFilter);
+  return applyCampaignFilter(hotels);
+}
+
+/** Same as getHotelsForAgg but reads geoRawData (from Geo Detail) — falls back to an empty list if this destination/hotel has no Geo Detail rows at all. */
+function getHotelsForGeoAgg(dest){
+  const all = (geoRawData[dest] && geoRawData[dest].hotels) ? geoRawData[dest].hotels : [];
+  const hotels = currentHotelFilter === 'all' ? all : all.filter(h=>h.name===currentHotelFilter);
+  return applyCampaignFilter(hotels);
+}
+
+const modeTabsEl = document.getElementById('modeTabs');
+function renderModeTabs(){
+  modeTabsEl.innerHTML='';
+  modes.forEach(m=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='bi-tab'+(m.key===currentMode?' active':'');
+    btn.textContent=m.label;
+    btn.onclick=()=>{ currentMode=m.key; renderAll(); };
+    modeTabsEl.appendChild(btn);
+  });
+}
+
+function kpiCard(label, value, iconPath, subs){
+  const subsHtml = subs && subs.length ? `<div class="metric-values" style="margin-top:8px;gap:6px;grid-template-columns:repeat(${subs.length},1fr);">` +
+    subs.map(s=>`<div class="metric-value-box" style="padding:6px 8px;"><div class="metric-value-label" style="font-size:10px;margin-bottom:2px;">${s.label}</div><div class="metric-value-number" style="font-size:12.5px;">${s.value}</div></div>`).join('') +
+    `</div>` : '';
+  return `<div class="kpi-card" style="min-height:0;padding:12px 14px;"><div class="kpi-head-row" style="margin-bottom:6px;"><div class="kpi-label" style="margin-bottom:0;font-size:11px;">${label}</div>
+    <div class="kpi-icon kpi-icon-blue" style="width:22px;height:22px;flex:0 0 22px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;">${iconPath}</svg></div></div>
+    <div class="kpi-value" style="font-size:19px;">${value}</div>${subsHtml}</div>`;
+}
+
+const ICONS = {
+  spend: '<line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>',
+  impr: '<circle cx="12" cy="12" r="3"></circle><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path>',
+  clicks: '<path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51z"></path>',
+  conv: '<path d="M20 6L9 17l-5-5"></path>',
+  revenue: '<path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path>'
+};
+
+function renderKpis(){
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  const rows = modeCfg.fn(currentDest);
+  const all = sumMetrics(rows.map(r=>r.m));
+  const useNative = canShowExactNative(all);
+  const rates = useNative ? deriveRates({...all, spend:all.nativeSpend, revenue:all.nativeRevenue}) : deriveRates(all);
+  const money = useNative ? fmtMoneyExact : fmtMoney;
+  const moneyDec = useNative ? fmtMoneyExact : fmtMoneyDecimal;
+  const displaySpend = useNative ? all.nativeSpend : all.spend;
+  const displayRevenue = useNative ? all.nativeRevenue : all.revenue;
+  const hintEl = document.getElementById('nativeCurrencyHint');
+  if(hintEl) hintEl.style.display = useNative ? 'block' : 'none';
+  const kpiRow = document.getElementById('kpiRow');
+  kpiRow.innerHTML =
+    kpiCard('Ad Spend', money(displaySpend), ICONS.spend, null) +
+    kpiCard('Impressions', fmtNum(all.impr), ICONS.impr, [
+      {label:'CPM', value:moneyDec(rates.cpm)}
+    ]) +
+    kpiCard('Clicks', fmtNum(all.clicks), ICONS.clicks, [
+      {label:'CPC', value:moneyDec(rates.cpc)},
+      {label:'CTR', value:fmtPercent2(rates.ctr)}
+    ]) +
+    kpiCard('Conversions', fmtNum(all.conv), ICONS.conv, [
+      {label:'CPA', value:moneyDec(rates.cpa)},
+      {label:'CVR', value:fmtPercent2(rates.cvr)}
+    ]) +
+    kpiCard('Revenue', money(displayRevenue), ICONS.revenue, [
+      {label:'ROAS', value:fmtRatio2(rates.roas)}
+    ]);
+}
+
+function rowCellsGlobal(m){
+  const useNative = canShowExactNative(m);
+  const rt = useNative ? deriveRates({...m, spend:m.nativeSpend, revenue:m.nativeRevenue}) : deriveRates(m);
+  const money = useNative ? fmtMoneyExact : fmtMoney;
+  const moneyDec = useNative ? fmtMoneyExact : fmtMoneyDecimal;
+  const displaySpend = useNative ? m.nativeSpend : m.spend;
+  const displayRevenue = useNative ? m.nativeRevenue : m.revenue;
+  return `<td class="money">${money(displaySpend)}</td><td class="money">${fmtNum(m.impr)}</td><td class="money">${moneyDec(rt.cpm)}</td>
+    <td class="money">${fmtNum(m.clicks)}</td><td class="money">${moneyDec(rt.cpc)}</td><td class="money">${fmtPercent2(rt.ctr)}</td>
+    <td class="money">${fmtNum(m.videoViews||0)}</td><td class="money">${fmtNum(m.completedViews||0)}</td>
+    <td class="money">${fmtNum(m.conv)}</td><td class="money">${moneyDec(rt.cpa)}</td><td class="money">${fmtPercent2(rt.cvr)}</td>
+    <td class="money">${money(rt.abv)}</td><td class="money">${money(displayRevenue)}</td><td class="money">${fmtRatio2(rt.roas)}</td>`;
+}
+
+function buildNestedObjectiveSections(children){
+  const brandingItems = children.filter(c=>c.objective==='Branding' && c.m.spend>0).sort((a,b)=>b.m.spend-a.m.spend);
+  const conversionItems = children.filter(c=>c.objective==='Conversion' && c.m.spend>0).sort((a,b)=>b.m.spend-a.m.spend);
+  const brandingTotal = sumMetrics(brandingItems.map(c=>c.m));
+  const conversionTotal = sumMetrics(conversionItems.map(c=>c.m));
+
+  let html = '';
+  if(brandingItems.length){
+    let body = brandingItems.map(c=>`<tr><td><strong>${c.label}</strong></td>${rowCellsGlobal(c.m)}</tr>`).join('');
+    body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(brandingTotal)}</tr>`;
+    html += `<div class="section-title">BRANDING CAMPAIGNS</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Campaign')}<tbody>${body}</tbody></table></div>`;
+  }
+  if(conversionItems.length){
+    if(html) html += '<div class="section-gap"></div>';
+    let body = conversionItems.map(c=>`<tr><td><strong>${c.label}</strong></td>${rowCellsGlobal(c.m)}</tr>`).join('');
+    body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(conversionTotal)}</tr>`;
+    html += `<div class="section-title">CONVERSION CAMPAIGNS</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Campaign')}<tbody>${body}</tbody></table></div>`;
+  }
+  return html;
+}
+
+const colgroupHtml = '<colgroup><col style="width:260px">' + Array(14).fill('<col style="width:105px">').join('') + '</colgroup>';
+
+function theadHtml(colLabel){
+  return `${colgroupHtml}<thead><tr><th>${colLabel}</th><th class="money">Ad Spend</th><th class="money">Impr.</th><th class="money">CPM</th>
+     <th class="money">Clicks</th><th class="money">CPC</th><th class="money">CTR</th><th class="money">VDO VIEWS</th><th class="money">COMP. VIEWS</th>
+     <th class="money">Conv.</th><th class="money">CPA</th><th class="money">CVR</th><th class="money">ABV</th><th class="money">Revenue</th><th class="money">ROAS</th></tr></thead>`;
+}
+
+function simpleTheadHtml(colLabel){
+  return `${colgroupHtml}<thead><tr><th colspan="15">${colLabel}</th></tr></thead>`;
+}
+
+// ===================== Ranked list: search + top-10 + view all (Geo Overview, Geo vs Campaign) =====================
+const rankedRowsStore = {};
+const rankedRendererStore = {};
+const rankedState = {};
+
+/**
+ * Renders a search box + "View All" toggle + a table placeholder. Only the
+ * placeholder's contents get replaced on search/toggle (never the input
+ * itself), so the search box keeps focus while typing.
+ */
+function renderRankedList(sectionId, allRowsSortedBySpend, opts){
+  rankedRowsStore[sectionId] = allRowsSortedBySpend;
+  rankedRendererStore[sectionId] = opts;
+  if(!rankedState[sectionId]) rankedState[sectionId] = {showAll:false, query:''};
+  const searchId = 'search_'+sectionId, tableWrapId = 'tablewrap_'+sectionId, viewAllId = 'viewall_'+sectionId;
+  const titleHtml = opts.sectionTitle ? `<div class="section-title" style="margin-bottom:0;">${opts.sectionTitle}</div>` : `<div></div>`;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;">
+      ${titleHtml}
+      <div style="display:flex;align-items:center;gap:12px;">
+        <input id="${searchId}" type="text" placeholder="Search ${opts.colLabel}..." value="${rankedState[sectionId].query||''}" oninput="updateRankedSection('${sectionId}')" style="border:1px solid #dedad0;border-radius:8px;padding:8px 12px;font-size:13px;width:220px;">
+        <a href="javascript:void(0)" id="${viewAllId}" onclick="toggleRankedShowAll('${sectionId}')" style="font-size:13px;color:#3D5AFE;font-weight:600;display:none;white-space:nowrap;"></a>
+      </div>
+    </div>
+    <div id="${tableWrapId}"></div>`;
+}
+
+function computeRankedBody(sectionId){
+  const rows = rankedRowsStore[sectionId] || [];
+  const opts = rankedRendererStore[sectionId];
+  const state = rankedState[sectionId];
+  const query = (state.query||'').toLowerCase();
+  const filtered = query ? rows.filter(r=>r.label.toLowerCase().includes(query)) : rows;
+  const displayRows = state.showAll ? filtered : filtered.slice(0,10);
+
+  let body = displayRows.map((r,i)=>opts.rowRenderer(r,i)).join('');
+  if(opts.grandTotalRowHtml) body += opts.grandTotalRowHtml;
+
+  const wrapEl = document.getElementById('tablewrap_'+sectionId);
+  if(wrapEl){
+    wrapEl.innerHTML = `<div class="table-wrap no-inner-scroll"><table class="data-table">${opts.theadHtml}<tbody>${body}</tbody></table></div>`;
+  }
+  const viewAllEl = document.getElementById('viewall_'+sectionId);
+  if(viewAllEl){
+    if(filtered.length > 10){
+      viewAllEl.style.display = 'inline';
+      viewAllEl.textContent = state.showAll ? 'Show Top 10' : `View All (${filtered.length})`;
+    } else {
+      viewAllEl.style.display = 'none';
+    }
+  }
+}
+
+function updateRankedSection(sectionId){
+  const input = document.getElementById('search_'+sectionId);
+  rankedState[sectionId].query = input.value;
+  computeRankedBody(sectionId);
+}
+function toggleRankedShowAll(sectionId){
+  rankedState[sectionId].showAll = !rankedState[sectionId].showAll;
+  computeRankedBody(sectionId);
+}
+
+function renderTable(){
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  if(modeCfg.key === 'monthly'){ renderMonthlyMode(); return; }
+  let rows = modeCfg.fn(currentDest);
+  rows = rows.filter(r=>r.m.spend>0); // only show entities that actually spent something
+  const hotelSuffix = currentHotelFilter !== 'all' ? ` — ${currentHotelFilter}` : '';
+  document.getElementById('tableTitle').textContent = `${currentDest}${hotelSuffix} — ${modeCfg.label}`;
+  const container = document.getElementById('tableContainer');
+
+  // ===== Campaign Overview: Section 1 (Branding/Conversion/Grand Total), gap, Section 2 (detail breakdown) =====
+  if(modeCfg.key === 'channel'){
+    const brandingRows = rows.filter(r=>r.objective==='Branding').sort((a,b)=>b.m.spend-a.m.spend);
+    const conversionRows = rows.filter(r=>r.objective==='Conversion').sort((a,b)=>b.m.spend-a.m.spend);
+    const brandingTotal = sumMetrics(brandingRows.map(r=>r.m));
+    const conversionTotal = sumMetrics(conversionRows.map(r=>r.m));
+    const grandTotal = sumMetrics([brandingTotal, conversionTotal]);
+
+    const donutsHtml = donutRowHtml([
+      {id:'donutObjectiveSpend', title:'SPEND: BRANDING VS CONVERSION'},
+      {id:'donutCampaignSpend', title:'SPEND BY CAMPAIGN'},
+      {id:'donutCampaignRevenue', title:'REVENUE BY CAMPAIGN'}
+    ]);
+
+    let sec1 = `<div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Campaign')}<tbody>
+      <tr><td><strong>Branding</strong></td>${rowCellsGlobal(brandingTotal)}</tr>
+      <tr><td><strong>Conversion</strong></td>${rowCellsGlobal(conversionTotal)}</tr>
+      <tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(grandTotal)}</tr>
+    </tbody></table></div>`;
+
+    let sec2 = '';
+    if(brandingRows.length){
+      let body = brandingRows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+      body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(brandingTotal)}</tr>`;
+      sec2 += `<div class="section-title">BRANDING CAMPAIGNS</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Campaign')}<tbody>${body}</tbody></table></div>`;
+    }
+    if(conversionRows.length){
+      if(sec2) sec2 += '<div class="section-gap"></div>';
+      let body = conversionRows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+      body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(conversionTotal)}</tr>`;
+      sec2 += `<div class="section-title">CONVERSION CAMPAIGNS</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Campaign')}<tbody>${body}</tbody></table></div>`;
+    }
+
+    container.innerHTML = donutsHtml + sec1 + '<div class="section-gap"></div>' + sec2;
+
+    renderDonut('donutObjectiveSpend', [
+      {label:'Branding', value:brandingTotal.spend},
+      {label:'Conversion', value:conversionTotal.spend}
+    ], fmtMoney);
+    renderDonut('donutCampaignSpend', rows.map(r=>({label:r.label, value:r.m.spend})), fmtMoney);
+    renderDonut('donutCampaignRevenue', rows.map(r=>({label:r.label, value:r.m.revenue})), fmtMoney);
+
+    enableRowFocus(container);
+    return;
+  }
+
+  // ===== Geo Overview: Section 1 overview+grand total, Section 2 Branding by GEO, Section 3 Conversion by GEO =====
+  if(modeCfg.key === 'geo'){
+    const geoRowRenderer = r => `<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`;
+
+    const sortedRows = rows.slice().sort((a,b)=>b.m.spend-a.m.spend);
+    const total = sumMetrics(rows.map(r=>r.m));
+
+    const donutsHtml = donutRowHtml([
+      {id:'donutGeoSpend', title:'SPEND BY GEO'},
+      {id:'donutGeoBookings', title:'BOOKINGS BY GEO'},
+      {id:'donutGeoRevenue', title:'REVENUE BY GEO'}
+    ]);
+
+    let sec1Html = renderRankedList('geoOverview', sortedRows, {
+      theadHtml: theadHtml('GEO'), colLabel:'GEO', rowRenderer: geoRowRenderer,
+      grandTotalRowHtml: `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(total)}</tr>`
+    });
+
+    const brandingGeoRows = aggByGeoForObjective(currentDest, 'Branding').filter(r=>r.m.spend>0).sort((a,b)=>b.m.spend-a.m.spend);
+    const brandingGeoTotal = sumMetrics(brandingGeoRows.map(r=>r.m));
+    let sec2Html = renderRankedList('geoBranding', brandingGeoRows, {
+      theadHtml: theadHtml('GEO'), colLabel:'GEO', rowRenderer: geoRowRenderer, sectionTitle:'BRANDING BY GEO',
+      grandTotalRowHtml: `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(brandingGeoTotal)}</tr>`
+    });
+
+    const conversionGeoRows = aggByGeoForObjective(currentDest, 'Conversion').filter(r=>r.m.spend>0).sort((a,b)=>b.m.spend-a.m.spend);
+    const conversionGeoTotal = sumMetrics(conversionGeoRows.map(r=>r.m));
+    let sec3Html = renderRankedList('geoConversion', conversionGeoRows, {
+      theadHtml: theadHtml('GEO'), colLabel:'GEO', rowRenderer: geoRowRenderer, sectionTitle:'CONVERSION BY GEO',
+      grandTotalRowHtml: `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(conversionGeoTotal)}</tr>`
+    });
+
+    container.innerHTML = donutsHtml + sec1Html + '<div class="section-gap"></div>' + sec2Html + '<div class="section-gap"></div>' + sec3Html;
+    computeRankedBody('geoOverview');
+    computeRankedBody('geoBranding');
+    computeRankedBody('geoConversion');
+
+    renderDonut('donutGeoSpend', sortedRows.map(r=>({label:r.label, value:r.m.spend})), fmtMoney);
+    renderDonut('donutGeoBookings', sortedRows.map(r=>({label:r.label, value:r.m.conv})), fmtNum);
+    renderDonut('donutGeoRevenue', sortedRows.map(r=>({label:r.label, value:r.m.revenue})), fmtMoney);
+
+    enableRowFocus(container);
+    return;
+  }
+
+  // ===== Hotel → Campaign: drill, parent row = name only (no numbers), children as nested stacked sections =====
+  if(modeCfg.key === 'hotelcamp'){
+    const sortedRows = rows.slice().sort((a,b)=>b.m.spend-a.m.spend);
+    let body = '';
+    sortedRows.forEach((r,ri)=>{
+      body += `<tr class="source-row hotel-header-row" data-row="${ri}"><td colspan="15"><span style="display:inline-block;width:14px;color:#3D5AFE;">▸</span><strong>${r.label}</strong></td></tr>`;
+      body += `<tr data-parent="${ri}" style="display:none;"><td colspan="15" style="padding:18px 24px 18px 36px;">${buildNestedObjectiveSections(r.children)}</td></tr>`;
+    });
+    container.innerHTML = `<div class="table-wrap no-inner-scroll"><table class="data-table">${simpleTheadHtml(modeCfg.col1)}<tbody>${body}</tbody></table></div>`;
+    bindSourceRowToggle();
+    enableRowFocus();
+    return;
+  }
+
+  // ===== Geo → Campaign: drill, parent row = name only (no numbers), children as nested stacked sections =====
+  if(modeCfg.key === 'geocamp'){
+    const sortedRows = rows.slice().sort((a,b)=>b.m.spend-a.m.spend);
+    const rowRenderer = r => {
+      const safeId = 'gc_'+r.label.replace(/[^a-zA-Z0-9]/g,'_');
+      return `<tr class="source-row hotel-header-row" data-row="${safeId}"><td colspan="15"><span style="display:inline-block;width:14px;color:#3D5AFE;">▸</span><strong>${r.label}</strong></td></tr>` +
+             `<tr data-parent="${safeId}" style="display:none;"><td colspan="15" style="padding:18px 24px 18px 36px;">${buildNestedObjectiveSections(r.children)}</td></tr>`;
+    };
+    container.innerHTML = renderRankedList('geocamp', sortedRows, {
+      theadHtml: simpleTheadHtml(modeCfg.col1), colLabel:'GEO', rowRenderer, grandTotalRowHtml: ''
+    });
+    computeRankedBody('geocamp');
+    bindSourceRowToggle();
+    enableRowFocus();
+    return;
+  }
+
+  // ===== Hotel → Geo: drill (unchanged children), Grand Total row appended at bottom =====
+  if(modeCfg.key === 'hotelgeo'){
+    const sortedRows = rows.slice().sort((a,b)=>b.m.spend-a.m.spend);
+    const donutsHtml = donutRowHtml([
+      {id:'donutHotelSpend', title:'SPEND BY HOTEL'},
+      {id:'donutHotelRevenue', title:'REVENUE BY HOTEL'}
+    ]);
+    let body = '';
+    sortedRows.forEach((r,ri)=>{
+      body += `<tr class="source-row" data-row="${ri}"><td><strong><span style="display:inline-block;width:14px;color:#3D5AFE;">▸</span>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`;
+      r.children.filter(ch=>ch.m.spend>0).sort((a,b)=>b.m.spend-a.m.spend).forEach(ch=>{
+        body += `<tr data-parent="${ri}" style="display:none;"><td style="padding-left:36px;">${ch.label}</td>${rowCellsGlobal(ch.m)}</tr>`;
+      });
+    });
+    const total = sumMetrics(rows.map(r=>r.m));
+    body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(total)}</tr>`;
+    container.innerHTML = donutsHtml + `<div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml(modeCfg.col1)}<tbody>${body}</tbody></table></div>`;
+
+    renderDonut('donutHotelSpend', sortedRows.map(r=>({label:r.label, value:r.m.spend})), fmtMoney);
+    renderDonut('donutHotelRevenue', sortedRows.map(r=>({label:r.label, value:r.m.revenue})), fmtMoney);
+
+    bindSourceRowToggle();
+    enableRowFocus(container);
+    return;
+  }
+}
+
+function csvEscape(text){
+  text = text.trim().replace(/\s+/g,' ');
+  if(text.includes(',') || text.includes('"') || text.includes('\n')){
+    text = '"'+text.replace(/"/g,'""')+'"';
+  }
+  return text;
+}
+
+function exportCurrentViewCSV(){
+  const tables = document.querySelectorAll('#tableContainer table');
+  if(!tables.length) return;
+  const lines = [];
+  tables.forEach(table=>{
+    table.querySelectorAll('tr').forEach(tr=>{
+      const cells = Array.from(tr.querySelectorAll('th,td'));
+      lines.push(cells.map(td=>csvEscape(td.innerText)).join(','));
+    });
+    lines.push('');
+  });
+
+  const csvContent = '\uFEFF' + lines.join('\n');
+  const blob = new Blob([csvContent], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  const hotelPart = currentHotelFilter!=='all' ? '_'+currentHotelFilter.replace(/\s+/g,'-') : '';
+  const filename = `AdsBI_${currentDest}${hotelPart}_${modeCfg.label.replace(/\s+/g,'-')}.csv`;
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ===================== MONTHLY VIEW MODE =====================
+
+let monthlyCampaignSearch = ""; // empty = show the all-campaigns-combined overview
+let monthlyGeoSearch = "";      // empty = show a "search to begin" placeholder
+let monthlyHotelSearch = "";    // empty = show a "search to begin" placeholder
+
+function setMonthlySubMode(k){ monthlySubMode = k; renderTable(); }
+
+function monthlySubTabsHtml(){
+  const labels = {campaign:'Campaign', geo:'Geo', hotel:'Hotel'};
+  return `<div class="bi-tabs" style="margin-bottom:18px;">` +
+    Object.keys(labels).map(k=>`<button type="button" class="bi-tab${monthlySubMode===k?' active':''}" onclick="setMonthlySubMode('${k}')">${labels[k]}</button>`).join('') +
+    `</div>`;
+}
+
+/** Builds "Overview by Month" + "Branding by Month" + "Conversion by Month" — the shared 3-block layout used by both the Campaign-overview and Hotel-searched views. */
+function buildMonthlyOverviewWithSplit(hotels){
+  const overviewRows = aggByMonthGeneric(hotels).filter(r=>r.m.spend>0);
+  const total = sumMetrics(overviewRows.map(r=>r.m));
+  let sec1Body = overviewRows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+  sec1Body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(total)}</tr>`;
+  const sec1Html = `<div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Month')}<tbody>${sec1Body}</tbody></table></div>`;
+
+  const brandingRows = aggByMonthGeneric(hotels, c=>c.objective==='Branding').filter(r=>r.m.spend>0);
+  const brandingTotal = sumMetrics(brandingRows.map(r=>r.m));
+  let sec2Body = brandingRows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+  sec2Body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(brandingTotal)}</tr>`;
+  const sec2Html = `<div class="section-title">BRANDING BY MONTH</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Month')}<tbody>${sec2Body}</tbody></table></div>`;
+
+  const conversionRows = aggByMonthGeneric(hotels, c=>c.objective==='Conversion').filter(r=>r.m.spend>0);
+  const conversionTotal = sumMetrics(conversionRows.map(r=>r.m));
+  let sec3Body = conversionRows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+  sec3Body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(conversionTotal)}</tr>`;
+  const sec3Html = `<div class="section-title">CONVERSION BY MONTH</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Month')}<tbody>${sec3Body}</tbody></table></div>`;
+
+  return sec1Html + '<div class="section-gap"></div>' + sec2Html + '<div class="section-gap"></div>' + sec3Html;
+}
+
+function searchBoxHtml(inputId, placeholder, clearVisible){
+  return `<div style="display:flex;justify-content:flex-end;align-items:center;margin-bottom:16px;gap:10px;">
+      ${clearVisible ? `<a href="javascript:void(0)" onclick="clearMonthlySearch('${inputId}')" style="font-size:13px;color:#8a96aa;">Clear</a>` : ''}
+      <div class="combo-wrap" style="width:220px;">
+        <input id="${inputId}" type="text" autocomplete="off" placeholder="${placeholder}" style="width:100%;box-sizing:border-box;border:1px solid #dedad0;border-radius:8px;padding:8px 12px;font-size:13px;" onfocus="onComboFocus('${inputId}')" oninput="onComboInput('${inputId}')">
+        <div id="${inputId}_list" class="combo-list"></div>
+      </div>
+    </div>`;
+}
+function clearMonthlySearch(inputId){
+  if(inputId==='monthlyCampaignSearchInput') monthlyCampaignSearch = '';
+  if(inputId==='monthlyGeoSearchInput') monthlyGeoSearch = '';
+  if(inputId==='monthlyHotelSearchInput') monthlyHotelSearch = '';
+  renderTable();
+}
+
+function renderMonthlyCampaign(container){
+  const hotels = getHotelsForAgg(currentDest);
+  let bodyHtml;
+  if(monthlyCampaignSearch && channels.includes(monthlyCampaignSearch)){
+    const rows = aggByMonthGeneric(hotels, c=>c.channel===monthlyCampaignSearch).filter(r=>r.m.spend>0);
+    const total = sumMetrics(rows.map(r=>r.m));
+    let body = rows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+    body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(total)}</tr>`;
+    bodyHtml = `<div class="section-title">${monthlyCampaignSearch} — MONTHLY TREND</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Month')}<tbody>${body}</tbody></table></div>`;
+  } else {
+    bodyHtml = buildMonthlyOverviewWithSplit(hotels);
+  }
+  container.innerHTML = monthlySubTabsHtml() + searchBoxHtml('monthlyCampaignSearchInput', 'Search a specific campaign (leave blank for overview)', !!monthlyCampaignSearch) + bodyHtml;
+  setupCombo('monthlyCampaignSearchInput', channels, (v)=>{ monthlyCampaignSearch = channels.includes(v) ? v : ''; renderTable(); }, monthlyCampaignSearch);
+  enableRowFocus();
+}
+
+function renderMonthlyGeo(container){
+  const hotels = getHotelsForGeoAgg(currentDest);
+  let bodyHtml;
+  if(monthlyGeoSearch && geos.includes(monthlyGeoSearch)){
+    const rows = aggByMonthGeneric(hotels, null, monthlyGeoSearch).filter(r=>r.m.spend>0);
+    const total = sumMetrics(rows.map(r=>r.m));
+    let body = rows.map(r=>`<tr><td><strong>${r.label}</strong></td>${rowCellsGlobal(r.m)}</tr>`).join('');
+    body += `<tr class="grandtotal-row"><td><strong>Grand Total</strong></td>${rowCellsGlobal(total)}</tr>`;
+    bodyHtml = `<div class="section-title">${monthlyGeoSearch} — MONTHLY TREND</div><div class="table-wrap no-inner-scroll"><table class="data-table">${theadHtml('Month')}<tbody>${body}</tbody></table></div>`;
+  } else {
+    bodyHtml = `<div style="padding:60px 20px;text-align:center;color:#8a96aa;">Search for a GEO above to see its month-by-month trend.</div>`;
+  }
+  container.innerHTML = monthlySubTabsHtml() + searchBoxHtml('monthlyGeoSearchInput', 'Search a GEO to see its monthly trend', !!monthlyGeoSearch) + bodyHtml;
+  setupCombo('monthlyGeoSearchInput', geos, (v)=>{ monthlyGeoSearch = geos.includes(v) ? v : ''; renderTable(); }, monthlyGeoSearch);
+  enableRowFocus();
+}
+
+function renderMonthlyHotel(container){
+  const allHotels = (rawData[currentDest] && rawData[currentDest].hotels) ? rawData[currentDest].hotels : [];
+  const hotelNames = Array.from(new Set(allHotels.map(h=>h.name))).sort();
+  let bodyHtml;
+  if(monthlyHotelSearch && hotelNames.includes(monthlyHotelSearch)){
+    const hotels = allHotels.filter(h=>h.name===monthlyHotelSearch);
+    bodyHtml = `<div class="section-title">${monthlyHotelSearch}</div>` + buildMonthlyOverviewWithSplit(hotels);
+  } else {
+    bodyHtml = `<div style="padding:60px 20px;text-align:center;color:#8a96aa;">Search for a hotel above to see its month-by-month trend.</div>`;
+  }
+  container.innerHTML = monthlySubTabsHtml() + searchBoxHtml('monthlyHotelSearchInput', 'Search a hotel to see its monthly trend', !!monthlyHotelSearch) + bodyHtml;
+  setupCombo('monthlyHotelSearchInput', hotelNames, (v)=>{ monthlyHotelSearch = hotelNames.includes(v) ? v : ''; renderTable(); }, monthlyHotelSearch);
+  enableRowFocus();
+}
+
+function renderMonthlyMode(){
+  const container = document.getElementById('tableContainer');
+  const hotelSuffix = currentHotelFilter !== 'all' ? ` — ${currentHotelFilter}` : '';
+  document.getElementById('tableTitle').textContent = `${currentDest}${hotelSuffix} — Monthly`;
+  if(monthlySubMode === 'geo') return renderMonthlyGeo(container);
+  if(monthlySubMode === 'hotel') return renderMonthlyHotel(container);
+  return renderMonthlyCampaign(container);
+}
+
+function bindSourceRowToggle(){
+  const container = document.getElementById('tableContainer');
+  container.onclick = (e)=>{
+    const row = e.target.closest('tr.source-row');
+    if(!row) return;
+    const idx = row.dataset.row;
+    const caretSpan = row.querySelector('span');
+    const isOpen = caretSpan.textContent === '▾';
+    caretSpan.textContent = isOpen ? '▸' : '▾';
+    container.querySelectorAll(`tr[data-parent="${idx}"]`).forEach(r=>{ r.style.display = isOpen ? 'none' : 'table-row'; });
+  };
+}
+
+// Click a data row to focus it (dims every other row in that same table so you
+// can pick one out of a long list). Click it again, or click elsewhere, to
+// clear. Uses delegation on the stable #tableContainer so it keeps working
+// even when inner tables get rebuilt (search, view-all, mode switches, etc.)
+// — set up once, not re-attached per render.
+let rowFocusDelegationReady = false;
+function enableRowFocus(){
+  if(rowFocusDelegationReady) return;
+  rowFocusDelegationReady = true;
+  const container = document.getElementById('tableContainer');
+  container.addEventListener('click', (e)=>{
+    const tr = e.target.closest('tbody tr');
+    if(!tr) return;
+    if(tr.classList.contains('source-row')) return;    // accordion rows: let bindSourceRowToggle handle the click
+    if(tr.classList.contains('grandtotal-row')) return; // never dim/focus the total row
+    const table = tr.closest('table');
+    if(!table) return;
+    const wasFocused = tr.classList.contains('row-focused');
+    table.querySelectorAll('tr').forEach(r=>{ r.classList.remove('row-focused','row-dimmed'); });
+    if(!wasFocused){
+      tr.classList.add('row-focused');
+      table.querySelectorAll('tbody tr').forEach(r=>{ if(r!==tr && !r.classList.contains('grandtotal-row')) r.classList.add('row-dimmed'); });
+    }
+  });
+}
+
+let compareDebounceTimer=null;
+function scheduleCompareRender(){
+  if(compareDebounceTimer) clearTimeout(compareDebounceTimer);
+  compareDebounceTimer = setTimeout(runCompare, 200);
+}
+function clearCompare(){
+  [1,2,3,4,5].forEach(i=>{ const el=document.getElementById('compareHotel'+i); if(el) el.value=''; });
+  runCompare();
+}
+
+function renderCompare(){
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  const compareCard = document.getElementById('compareCard');
+  if(modeCfg.key!=='hotelcamp' && modeCfg.key!=='hotelgeo'){ compareCard.style.display='none'; return; }
+  compareCard.style.display='block';
+
+  const isCamp = modeCfg.key==='hotelcamp';
+  document.getElementById('compareKicker').textContent = isCamp ? 'CAMPAIGN COMPARE' : 'GEO COMPARE';
+  document.getElementById('compareDimLabel').textContent = isCamp ? 'Campaign' : 'GEO';
+  document.getElementById('compareTitle').textContent = isCamp ? 'Compare Hotels — by Campaign' : 'Compare Hotels — by GEO';
+
+  const dimInput = document.getElementById('compareDimension');
+  const dimOptions = isCamp ? channels : geos;
+  const prevDim = dimInput.value;
+  const placeholder = isCamp ? 'Select Campaign' : 'Select GEO';
+  dimInput.placeholder = placeholder;
+  const keptValue = dimOptions.includes(prevDim) ? prevDim : '';
+  setupCombo('compareDimension', dimOptions, (v)=>{ runCompare(); }, keptValue);
+
+  const hotelOptionsEl = document.getElementById('hotelOptions');
+  const hotelNames = rawData[currentDest].hotels.map(h=>h.name);
+  hotelOptionsEl.innerHTML = hotelNames.map(n=>`<option value="${n}">`).join('');
+
+  runCompare();
+}
+
+function runCompare(){
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  if(modeCfg.key!=='hotelcamp' && modeCfg.key!=='hotelgeo') return;
+  const isCamp = modeCfg.key==='hotelcamp';
+  const dim = document.getElementById('compareDimension').value;
+
+  const names = [1,2,3,4,5].map(i=>{
+    const el = document.getElementById('compareHotel'+i);
+    return el ? el.value.trim() : '';
+  }).filter(v=>v.length);
+  const uniqueNames = [...new Set(names)];
+
+  const empty = document.getElementById('compareEmpty');
+  const output = document.getElementById('compareOutputWrap');
+
+  if(!dim){
+    empty.style.display='block';
+    empty.textContent = isCamp ? 'Select a Campaign above to compare.' : 'Select a GEO above to compare.';
+    output.style.display='none';
+    if(charts['compareTrendChart']){ charts['compareTrendChart'].destroy(); delete charts['compareTrendChart']; }
+    return;
+  }
+
+  if(uniqueNames.length < 2){
+    empty.style.display='block';
+    empty.textContent='Select at least 2 hotels above to compare.';
+    output.style.display='none';
+    if(charts['compareTrendChart']){ charts['compareTrendChart'].destroy(); delete charts['compareTrendChart']; }
+    return;
+  }
+
+  const hotelRows = isCamp ? aggByHotelCampaign(currentDest) : aggByHotelGeo(currentDest);
+  const found = uniqueNames.map(name=>{
+    const hRow = hotelRows.find(h=>h.label.toLowerCase()===name.toLowerCase());
+    if(!hRow) return null;
+    const childRow = (hRow.children||[]).find(c=>c.label.toLowerCase()===dim.toLowerCase());
+    return childRow ? {label:hRow.label, m:childRow.m} : {label:hRow.label, m:{spend:0,impr:0,clicks:0,conv:0,revenue:0}};
+  });
+  const missing = uniqueNames.filter((n,i)=>!found[i]);
+  if(missing.length){
+    empty.style.display='block';
+    empty.textContent='No data found for: '+missing.join(', ');
+    output.style.display='none';
+    if(charts['compareTrendChart']){ charts['compareTrendChart'].destroy(); delete charts['compareTrendChart']; }
+    return;
+  }
+
+  empty.style.display='none';
+  output.style.display='block';
+
+  const metricDefs = [
+    {key:'spend', label:'Ad Spend', fmt:v=>fmtMoney(v), get:(m,r)=>m.spend, lowerBetter:false},
+    {key:'impr', label:'Impressions', fmt:v=>fmtNum(v), get:(m,r)=>m.impr, lowerBetter:false},
+    {key:'cpm', label:'CPM', fmt:v=>fmtMoneyDecimal(v), get:(m,r)=>r.cpm, lowerBetter:true},
+    {key:'clicks', label:'Clicks', fmt:v=>fmtNum(v), get:(m,r)=>m.clicks, lowerBetter:false},
+    {key:'cpc', label:'CPC', fmt:v=>fmtMoneyDecimal(v), get:(m,r)=>r.cpc, lowerBetter:true},
+    {key:'ctr', label:'CTR', fmt:v=>fmtPercent2(v), get:(m,r)=>r.ctr, lowerBetter:false},
+    {key:'videoViews', label:'VDO VIEWS', fmt:v=>fmtNum(v), get:(m,r)=>m.videoViews||0, lowerBetter:false},
+    {key:'completedViews', label:'COMP. VIEWS', fmt:v=>fmtNum(v), get:(m,r)=>m.completedViews||0, lowerBetter:false},
+    {key:'conv', label:'Conversions', fmt:v=>fmtNum(v), get:(m,r)=>m.conv, lowerBetter:false},
+    {key:'cpa', label:'CPA', fmt:v=>fmtMoneyDecimal(v), get:(m,r)=>r.cpa, lowerBetter:true},
+    {key:'cvr', label:'CVR', fmt:v=>fmtPercent2(v), get:(m,r)=>r.cvr, lowerBetter:false},
+    {key:'abv', label:'ABV', fmt:v=>fmtMoney(v), get:(m,r)=>r.abv, lowerBetter:false},
+    {key:'revenue', label:'Revenue', fmt:v=>fmtMoney(v), get:(m,r)=>m.revenue, lowerBetter:false},
+    {key:'roas', label:'ROAS', fmt:v=>fmtRatio2(v), get:(m,r)=>r.roas, lowerBetter:false},
+  ];
+
+  const computed = found.map(f=>({label:f.label, rates:deriveRates(f.m), m:f.m}));
+  const bestByMetric = {};
+  metricDefs.forEach(md=>{
+    const vals = computed.map(c=>md.get(c.m, c.rates));
+    bestByMetric[md.key] = md.lowerBetter ? Math.min(...vals) : Math.max(...vals);
+  });
+
+  const thead = `<thead><tr><th>${isCamp?'Campaign':'GEO'}: ${dim}</th>${metricDefs.map(m=>`<th class="money">${m.label}</th>`).join('')}</tr></thead>`;
+  const tbody = '<tbody>' + computed.map(c=>{
+    const cells = metricDefs.map(md=>{
+      const v = md.get(c.m, c.rates);
+      const isBest = v === bestByMetric[md.key] && v>0;
+      return `<td class="money${isBest?' compare-best':''}">${md.fmt(v)}</td>`;
+    }).join('');
+    return `<tr><td><strong>${c.label}</strong></td>${cells}</tr>`;
+  }).join('') + '</tbody>';
+
+  document.getElementById('compareMetricsTable').innerHTML = colgroupHtml + thead + tbody;
+  renderCompareChart(computed);
+}
+
+function monthsInRange(start, end){
+  const months = [];
+  let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+  const endCursor = new Date(end.getFullYear(), end.getMonth(), 1);
+  let guard = 0;
+  while(cursor <= endCursor && guard < 36){
+    months.push({ short: cursor.toLocaleString('en-US',{month:'short'}), year: cursor.getFullYear() });
+    cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1);
+    guard++;
+  }
+  if(months.length===0){
+    months.push({ short: start.toLocaleString('en-US',{month:'short'}), year: start.getFullYear() });
+  }
+  return months;
+}
+
+function seededRand(str, i){
+  let h=0; for(let k=0;k<str.length;k++){ h = (h*31 + str.charCodeAt(k) + i*97) % 100000; }
+  return (h % 1000) / 1000;
+}
+function monthlyRevenueSeries(label, totalRevenue, monthCount){
+  const weights = [];
+  for(let i=0;i<monthCount;i++){ weights.push(0.6 + seededRand(label, i)*0.8); }
+  const sum = weights.reduce((a,b)=>a+b,0);
+  return weights.map(w => (w/sum) * totalRevenue);
+}
+
+function fmtCompact(n){
+  const v = currentCurrency==='USD' ? n/EXCHANGE_RATE_USD : n;
+  const symbol = currentCurrency==='USD' ? '$' : '฿';
+  if(v>=1000000) return symbol+(v/1000000).toFixed(1)+'M';
+  if(v>=1000) return symbol+(v/1000).toFixed(0)+'K';
+  return symbol+Math.round(v);
+}
+
+const charts = {};
+function createChart(id, config){
+  const ctx = document.getElementById(id);
+  if(!ctx || typeof Chart==='undefined') return;
+  if(charts[id]){ charts[id].destroy(); }
+  charts[id] = new Chart(ctx, config);
+}
+
+const DONUT_COLORS = ['#3D5AFE','#1AAB40','#D64550','#744EC2','#197278','#E9A23B','#7b8798','#0EA5E9','#DB2777','#a8a29e','#F97316','#14B8A6'];
+
+/** rows: [{label, value}] — renders a doughnut chart into <canvas id="canvasId">. */
+function renderDonut(canvasId, rows, formatFn){
+  const filtered = rows.filter(r=>r.value>0);
+  const total = filtered.reduce((a,r)=>a+r.value,0);
+  createChart(canvasId, {
+    type: 'doughnut',
+    data: {
+      labels: filtered.map(r=>r.label),
+      datasets: [{
+        data: filtered.map(r=>r.value),
+        backgroundColor: filtered.map((_,i)=>DONUT_COLORS[i%DONUT_COLORS.length]),
+        borderWidth: 2, borderColor: '#fff'
+      }]
+    },
+    plugins: (typeof ChartDataLabels !== 'undefined') ? [ChartDataLabels] : [],
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 11 }, usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: { callbacks: { label: (ctx)=>{
+          const pct = total ? (ctx.parsed/total*100).toFixed(1) : '0.0';
+          return ` ${ctx.label}: ${formatFn ? formatFn(ctx.parsed) : ctx.parsed} (${pct}%)`;
+        } } },
+        datalabels: {
+          color: '#fff',
+          font: { size: 11, weight: 700 },
+          formatter: (value)=>{
+            const pct = total ? (value/total*100) : 0;
+            return pct < 4 ? '' : pct.toFixed(1)+'%'; // hide labels on slivers too small to read
+          }
+        }
+      }
+    }
+  });
+}
+
+/** Returns the HTML for a row of N donut-chart cards. Call renderDonut() for each canvasId right after inserting this HTML into the DOM. */
+function donutRowHtml(cards){
+  return `<div style="display:grid;grid-template-columns:repeat(${cards.length},1fr);gap:14px;margin-bottom:16px;">` +
+    cards.map(c=>`<div class="summary-card" style="padding:14px;">
+        <div class="summary-label">${c.title}</div>
+        <div style="height:230px;"><canvas id="${c.id}"></canvas></div>
+      </div>`).join('') +
+    `</div>`;
+}
+
+function renderCompareChart(computed){
+  const colors = ['#3D5AFE','#1AAB40','#D64550','#744EC2','#197278'];
+  const monthsArr = monthsInRange(dateRangeStart, dateRangeEnd);
+  const labels = monthsArr.map(m => m.short+' '+m.year);
+
+  const titleEl = document.getElementById('compareChartTitle');
+  if(titleEl){
+    titleEl.textContent = labels.length>1
+      ? `REVENUE TREND (${labels[0]} – ${labels[labels.length-1]})`
+      : `REVENUE TREND (${labels[0]})`;
+  }
+
+  const datasets = computed.map((c,i)=>{
+    const color = colors[i % colors.length];
+    return {
+      label: c.label,
+      data: monthlyRevenueSeries(c.label, c.m.revenue, monthsArr.length),
+      borderColor: color,
+      backgroundColor: color+'1A',
+      fill: false,
+      tension: .35,
+      pointRadius: 3,
+      pointBackgroundColor: '#fff',
+      pointBorderColor: color,
+      pointBorderWidth: 2,
+      borderWidth: 2.3
+    };
+  });
+
+  const opts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display:true, position:'top', labels:{ boxWidth:10, usePointStyle:true, font:{size:11}, color:'#374151' } },
+      tooltip: {
+        backgroundColor:'#111827', titleColor:'#fff', bodyColor:'#e5edff', padding:12, cornerRadius:12, displayColors:false,
+        callbacks:{ label:function(c){ return c.dataset.label+': '+fmtCompact(c.raw); } }
+      }
+    },
+    scales: {
+      x: { grid:{display:false}, border:{display:false}, ticks:{color:'#66748d'} },
+      y: { grid:{color:'rgba(16,33,63,.05)'}, border:{display:false}, ticks:{color:'#66748d', callback:function(v){ return fmtCompact(v); }} }
+    }
+  };
+
+  createChart('compareTrendChart', { type:'line', data:{ labels:labels, datasets:datasets }, options:opts });
+}
+
+
+
+function renderObjectiveChips(){
+  const modeCfg = modes.find(m=>m.key===currentMode);
+  const wrap = document.getElementById('objectiveChips').parentElement;
+  const selfSplitting = modeCfg.key==='channel' || modeCfg.key==='geo' || modeCfg.key==='hotelcamp' || modeCfg.key==='geocamp' || modeCfg.key==='hotelgeo' || modeCfg.key==='monthly';
+  wrap.style.display = selfSplitting ? 'none' : 'flex';
+  if(selfSplitting) return;
+  const el = document.getElementById('objectiveChips');
+  const opts = [{key:'all',label:'All'},{key:'Branding',label:'Branding'},{key:'Conversion',label:'Conversion'}];
+  el.innerHTML = opts.map(o=>
+    `<div class="op-month-chip${currentObjective===o.key?' selected':''}" data-obj="${o.key}">${o.label}</div>`
+  ).join('');
+  el.querySelectorAll('.op-month-chip').forEach(chip=>{
+    chip.onclick=()=>{ currentObjective=chip.dataset.obj; renderAll(); };
+  });
+}
+
+function renderAll(){
+  renderCurrencyToggle();
+  renderObjectiveChips();
+  renderModeTabs();
+  renderKpis();
+  renderTable();
+  renderCompare();
+}
+
+async function init(){
+  const container = document.getElementById('tableContainer');
+  container.innerHTML = `<div style="padding:60px 20px;text-align:center;color:#8a96aa;">Loading data from the Sheet…</div>`;
+
+  if(!SHEET_API_URL || SHEET_API_URL === "PASTE_YOUR_WEB_APP_URL_HERE"){
+    container.innerHTML = `<div style="padding:40px 20px;text-align:center;color:#8a96aa;">
+      <strong>Not connected yet.</strong><br>
+      Paste your deployed Apps Script Web App URL into the <code>SHEET_API_URL</code> constant near the top of the script.
+    </div>`;
+    return;
+  }
+
+  try{
+    await loadRealData();
+    const noAdsData = !rawData['All Destinations'] || rawData['All Destinations'].hotels.length === 0;
+    const noGeoData = !geoRawData['All Destinations'] || geoRawData['All Destinations'].hotels.length === 0;
+    if(noAdsData && noGeoData) throw new Error('The Sheet returned no rows. Run "Ads BI > Run Parse & Aggregate" at least once first.');
+    currentDest = 'All Destinations';
+    populateDestSelect();
+    populateHotelFilter();
+    populateCampaignFilter();
+    renderAll();
+  }catch(err){
+    container.innerHTML = `<div style="padding:40px 20px;text-align:center;color:#8a96aa;">
+      <strong>Couldn't load data.</strong><br>${err.message}<br><br>
+      Confirm that you are signed in with a <code>media-console.com</code> Google account, then refresh the page.
+    </div>`;
+  }
+}
+init();
+</script>
+</body>
+</html>
