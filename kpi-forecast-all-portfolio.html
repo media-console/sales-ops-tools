@@ -2,8 +2,7 @@
 																									
 <!DOCTYPE html>																									
 <html>																									
-<head>
-<title>KPI Forecast - All Portfolio</title>																									
+<head>																									
 <base target="_top">																									
 <meta name="viewport" content="width=device-width, initial-scale=1.0">																									
 																									
@@ -1301,13 +1300,7 @@ const days = [31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30
 return `${year}-${String(m).padStart(2,'0')}-${days[m-1]}`;
 }
 
-// Guards against out-of-order responses: if Start Month and End Month are
-// both changed in quick succession, two requests fire (one per onchange).
-// Without this guard, whichever response happens to arrive LAST wins and
-// overwrites the screen - even if it was for an older, no-longer-selected
-// date range. Each call gets a ticket number; only the response matching
-// the CURRENT latest ticket is allowed to update the page.
-let stlyRequestSeq = 0;
+let stlyRequestSeq = 0; // increments on every loadSTLY() call - used to discard stale/out-of-order responses
 
 function loadSTLY(){
 const destination = document.getElementById('destinationInput').value.trim();
@@ -1319,9 +1312,7 @@ return;
 toggleSelectedGeoTables();
 setLoading();
 
-const requestId = ++stlyRequestSeq;
-const periodStart = getSelectedStartDate();
-const periodEnd = getSelectedEndDate();
+const requestId = ++stlyRequestSeq; // this call's ticket number
 
 jsonpRequest(BACKEND_URL, {
 action: 'getSTLYData',
@@ -1329,22 +1320,23 @@ destination: destination,
 property: document.getElementById('propertyInput').value.trim(),
 countries: selectedCountries.join(','),
 allGeo: isAllGeo,
-startDate: periodStart,
-endDate: periodEnd,
+startDate: getSelectedStartDate(),
+endDate: getSelectedEndDate(),
 portfolio: document.getElementById('portfolioInput').value || 'All'
 }).then(data => {
-// A newer request has since been fired (e.g. the user changed another
-// filter while this one was still in flight) - discard this stale result.
-if(requestId !== stlyRequestSeq) return;
+// A newer request was fired after this one (user changed a filter again
+// before this response came back) - ignore this stale result entirely,
+// the newer in-flight request will render the correct one when it lands.
+if (requestId !== stlyRequestSeq) return;
 
 lastSTLYData = data;
-document.getElementById('stlyPeriodText').textContent = `Period: ${periodStart} - ${periodEnd}`;
+document.getElementById('stlyPeriodText').textContent = `Period: ${getSelectedStartDate()} - ${getSelectedEndDate()}`;
 renderSTLYTable('selectedMonthBody', data.selectedMonth, 'month');
 renderSTLYTable('selectedCountryBody', data.selectedCountry, 'country');
 renderSTLYTable('allMonthBody', data.allMonth, 'month');
 renderSTLYTable('allCountryBody', data.allCountry, 'country');
 }).catch(err => {
-if(requestId !== stlyRequestSeq) return;
+if (requestId !== stlyRequestSeq) return; // stale error, ignore too
 alert('Load STLY failed: ' + err.message);
 });
 }
