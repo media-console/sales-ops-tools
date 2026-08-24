@@ -1,0 +1,364 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Generic Hotel Proposal Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{margin:0;background:#eef3f8;font-family:Arial,Helvetica,sans-serif;color:#172033}
+.app{display:grid;grid-template-columns:390px 1fr;gap:24px;padding:24px;align-items:start}
+.panel{background:#fff;border:1px solid #dbe3ec;border-radius:16px;padding:20px;position:sticky;top:16px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+.panel h1{font-size:20px;margin:0 0 8px;color:#002B5C}
+.panel p{font-size:13px;line-height:1.5;color:#5b6472;margin:0 0 18px}
+label{display:block;font-size:12px;font-weight:700;color:#374151;margin:14px 0 6px}
+input,textarea{width:100%;box-sizing:border-box;border:1px solid #cfd8e3;border-radius:10px;padding:10px 12px;font-size:13px;font-family:Arial}
+input[type=file]{padding:9px;background:#f8fafc}
+textarea{min-height:94px;resize:vertical}
+button{width:100%;border:0;border-radius:12px;padding:13px 16px;font-weight:700;cursor:pointer;margin-top:14px}
+.primary{background:#0057B8;color:#fff}.secondary{background:#07182f;color:#fff}.tertiary{background:#e8f0fb;color:#003b7a}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.button-row button{margin-top:10px}.status{font-size:12px;color:#475569;margin-top:10px;min-height:18px}
+.warning{font-size:12px;color:#8a5a00;background:#fff8e6;border:1px solid #f2d28a;border-radius:10px;padding:10px;margin-top:12px;line-height:1.45}
+.preview-wrap{background:#eef3f8;padding:16px;border-radius:16px;overflow:auto}
+@media(max-width:900px){.app{grid-template-columns:1fr}.panel{position:static}}
+
+a, a:link, a:visited { text-decoration:none !important; }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="panel">
+
+    <label>Hotel / Brand / Property Name</label>
+    <input id="hotelName" value="[Hotel Name]">
+
+    <label>Deck / Solution Link</label>
+    <input id="deckLink" value="https://insert-deck-link-here.com">
+
+    <label>Hero GIF / Image</label>
+    <input id="heroFile" type="file" accept="image/*">
+
+    <label>Workflow Image / GIF</label>
+    <input id="workflowFile" type="file" accept="image/*">
+<label>Trusted Hotel Brands Image</label>
+    <input id="trustedFile" type="file" accept="image/*">
+
+    <label>Sender Signature</label>
+    <textarea id="senderSignature">Raphirat Nanaiboon (Dow)
+Operations Manager
+Media Console | US • Thailand
+
+M: +66 87 146 0142
+www.media-console.com</textarea>
+
+    <button class="primary" onclick="generateEmail()">Generate Preview</button>
+    <button class="secondary" onclick="copyEmail()">Copy Email for Outlook</button>
+    <div class="button-row">
+      <button class="tertiary" onclick="saveJSON()">Save JSON</button>
+      <button class="tertiary" onclick="document.getElementById('jsonFile').click()">Load JSON</button>
+    </div>
+    <input id="jsonFile" type="file" accept="application/json,.json" hidden onchange="loadJSON(event)">
+    <div id="status" class="status"></div>
+
+    <div class="warning">Hero and Workflow support GIF. Images are stored inside the JSON file, so large images or GIFs will create a large JSON file.</div>
+  </div>
+
+  <div class="preview-wrap"><div id="emailPreview" contenteditable="true"></div></div>
+</div>
+
+<script>
+let heroData="",heroType="",workflowData="",workflowType="",platformData="",platformType="",trustedData="";
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function nl2br(s){return esc(s).replace(/\n/g,'<br>');}
+function readMedia(input,cb,targetWidth){
+ const f=input.files&&input.files[0]; if(!f){cb("","");return;}
+ if(f.type==="image/gif" || f.type.indexOf("video/")===0){
+  const r=new FileReader(); r.onload=e=>cb(e.target.result,f.type); r.readAsDataURL(f); return;
+ }
+ const r=new FileReader();
+ r.onload=function(e){
+  const img=new Image();
+  img.onload=function(){
+   const w=targetWidth||img.width, scale=w/img.width, h=Math.round(img.height*scale);
+   const c=document.createElement('canvas'); c.width=w; c.height=h;
+   const ctx=c.getContext('2d'); ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,w,h); ctx.drawImage(img,0,0,w,h);
+   cb(c.toDataURL('image/jpeg',0.92),f.type);
+  };
+  img.src=e.target.result;
+ };
+ r.readAsDataURL(f);
+}
+function generateEmail(){
+ readMedia(document.getElementById('heroFile'),function(h,ht){
+  heroData=h||heroData; heroType=ht||heroType;
+  readMedia(document.getElementById('workflowFile'),function(w,wt){
+   workflowData=w||workflowData; workflowType=wt||workflowType;
+   readMedia(document.getElementById('trustedFile'),function(t,tt){
+     trustedData=t||trustedData; renderEmail();
+   },1136);
+  },1136);
+ },1136);
+}
+function mediaBlock(data,type,width,label,dark){
+ if(data && type.indexOf("video/")===0){
+  return `<video src="${data}" width="${width}" style="display:block;border:0;width:${width}px;max-width:100%;height:auto;margin:0 auto;background:#000;" controls muted playsinline></video>
+  <div style="font-size:10px;line-height:1.4;color:${dark ? '#8fbfff':'#6b7280'};text-align:center;margin-top:8px;">If video does not play in Outlook, open the solution deck for the full preview.</div>`;
+ }
+ if(data){
+  return `<img src="${data}" width="${width}" style="display:block;border:0;width:${width}px;max-width:100%;height:auto;margin:0 auto;padding:0;">`;
+ }
+ return `<div style="font-size:12px;color:${dark ? '#8fbfff':'#6b7280'};line-height:1.6;text-transform:uppercase;letter-spacing:.8px;padding:54px 18px;text-align:center;border:1px dashed ${dark ? '#315b91':'#CFE0F7'};background:${dark ? '#07182f':'#F5F7FA'};">Upload ${label}</div>`;
+}
+function renderEmail(){
+ const hotel=esc(document.getElementById('hotelName').value);
+ const deck=esc(document.getElementById('deckLink').value);
+ const signature=nl2br(document.getElementById('senderSignature').value);
+
+ const heroBlock=mediaBlock(heroData,heroType,250,"Hero GIF / Image",false);
+ const workflowBlock=mediaBlock(workflowData,workflowType,568,"Workflow Image / GIF",false);
+ const platformBlock=mediaBlock(platformData,platformType,500,"Platform / Dashboard Image / GIF / Video",true);
+ const trustedBlock=trustedData
+ ? `<img src="${trustedData}" width="568" style="display:block;border:0;width:568px;max-width:100%;height:auto;margin:0 auto;padding:0;">`
+ : `<div style="border:1px dashed #CFE0F7;background:#F5F7FA;padding:28px 20px;font-size:12px;color:#6b7280;line-height:1.6;text-transform:uppercase;letter-spacing:.8px;">Upload Trusted Hotel Brands Image</div>`;
+
+ document.getElementById('emailPreview').innerHTML=`
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#eef3f8;font-family:Arial,Helvetica,sans-serif;color:#172033;">
+<tr><td align="center" style="padding:28px;">
+<table width="640" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border:1px solid #dbe3ec;border-collapse:collapse;width:640px;max-width:640px;overflow:hidden;">
+
+<tr>
+<td style="background:#ffffff;padding:34px 36px 30px 36px;font-size:15px;line-height:1.75;color:#1f2937;">
+Dear ${hotel} Team,<br><br>
+Greetings from Media Console.<br><br>
+We’d like to introduce Media Console and share a brief overview of how we’re helping hotel brands strengthen their direct booking strategy and improve commercial performance.
+</td>
+</tr>
+
+<tr>
+<td style="background:#0c0f14;padding:28px 36px 34px 36px;border-bottom:4px solid #0057B8;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" valign="middle">
+<div style="font-size:28px;font-weight:300;color:#FFFFFF !important;letter-spacing:7px;font-family:Arial,Helvetica,sans-serif;">MEDIA CONSOLE</div>
+<div style="font-size:13px;color:#0057B8;letter-spacing:2px;text-transform:uppercase;margin-top:12px;line-height:1.35;">HOSPITALITY PROGRAMMATIC PERFORMANCE MARKETING AGENCY</div>
+</td>
+<td align="right" valign="middle" width="230">
+<div style="font-size:16px;color:#ffffff;letter-spacing:1.4px;text-transform:uppercase;font-weight:bold;line-height:1.35;text-align:right;white-space:nowrap;">DIRECT BOOKING<br>ACTIVATION</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:42px 36px 38px 36px;background:#ffffff;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="54%" valign="middle" style="padding-right:28px;">
+<div style="font-size:34px;line-height:1.08;font-weight:bold;color:#111827;margin-bottom:18px;text-decoration:none !important;">
+Turn Website<br>Visitors Into<br><span style="display:block;color:#0057B8;text-decoration:none !important;">Direct Bookings</span>
+</div>
+<div style="font-size:15px;line-height:1.65;color:#1f2937;margin-bottom:24px;">
+We help hotels maximize direct booking revenue through performance-driven media, validated booking attribution, and actionable business insights.
+</div>
+<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-collapse:separate;">
+<tr>
+<td align="center" bgcolor="#0057B8" style="background:#0057B8;border-radius:10px;padding:0;">
+<a href="${deck}" target="_blank" style="display:block;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;letter-spacing:.3px;text-transform:uppercase;line-height:18px;padding:13px 22px;mso-padding-alt:13px 22px;white-space:nowrap;">
+SEE&nbsp;HOW&nbsp;THE&nbsp;SOLUTION&nbsp;WORKS
+</a>
+</td>
+</tr>
+</table>
+</td>
+<td width="46%" valign="middle">${heroBlock}</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:14px 36px 34px 36px;background:#f7fbff;">
+<div style="font-size:18px;font-weight:bold;color:#111827;text-align:center;text-transform:uppercase;letter-spacing:.4px;margin-bottom:18px;">Why Direct Bookings Matter</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:28px;font-weight:bold;color:#0057B8;">15–30%</div>
+<div style="font-size:13px;line-height:1.5;color:#111827;font-weight:bold;margin-top:6px;">Typical OTA commission rate</div>
+<div style="font-size:12px;line-height:1.55;color:#4b5563;margin-top:8px;">Save on commissions and protect your margin.</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:28px;font-weight:bold;color:#0057B8;">60%</div>
+<div style="font-size:13px;line-height:1.5;color:#111827;font-weight:bold;margin-top:6px;">Higher average booking value</div>
+<div style="font-size:12px;line-height:1.55;color:#4b5563;margin-top:8px;">Direct guests can create stronger booking value.</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:28px;font-weight:bold;color:#0057B8;">100%</div>
+<div style="font-size:13px;line-height:1.5;color:#111827;font-weight:bold;margin-top:6px;">Own your guest data</div>
+<div style="font-size:12px;line-height:1.55;color:#4b5563;margin-top:8px;">Build direct relationships and repeat stays.</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 24px 36px;background:#f7fbff;">
+<div style="font-size:18px;font-weight:bold;color:#111827;text-align:center;text-transform:uppercase;letter-spacing:.4px;margin-bottom:18px;">How We Drive Direct Bookings</div>
+${workflowBlock}
+</td>
+</tr>
+
+<tr>
+<td style="padding:14px 36px 42px 36px;background:#ffffff;">
+<div style="font-size:18px;font-weight:bold;color:#111827;text-align:center;text-transform:uppercase;letter-spacing:.4px;margin-bottom:20px;">What You Can Expect</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33.33%" valign="top" align="left" style="padding:22px 16px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:24px;line-height:1;font-weight:bold;color:#0057B8;margin-bottom:10px;">01</div>
+<div style="font-size:10px;color:#0057B8;letter-spacing:.8px;text-transform:uppercase;font-weight:bold;margin-bottom:12px;">Demand Capture</div>
+<div style="font-size:15px;font-weight:bold;color:#002B5C;line-height:1.55;">Capture more existing booking demand</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" align="left" style="padding:22px 16px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:24px;line-height:1;font-weight:bold;color:#0057B8;margin-bottom:10px;">02</div>
+<div style="font-size:10px;color:#0057B8;letter-spacing:.8px;text-transform:uppercase;font-weight:bold;margin-bottom:12px;">Revenue Growth</div>
+<div style="font-size:15px;font-weight:bold;color:#002B5C;line-height:1.55;">Increase direct booking revenue</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" align="left" style="padding:22px 16px;border:1px solid #dbe3ec;background:#ffffff;border-radius:12px;">
+<div style="font-size:24px;line-height:1;font-weight:bold;color:#0057B8;margin-bottom:10px;">03</div>
+<div style="font-size:10px;color:#0057B8;letter-spacing:.8px;text-transform:uppercase;font-weight:bold;margin-bottom:12px;">Verified Measurement</div>
+<div style="font-size:15px;font-weight:bold;color:#002B5C;line-height:1.55;">Measure marketing performance with verified booking data</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+
+<tr>
+<td style="padding:0;background:#07182f;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="62%" valign="middle" style="padding:38px 40px;color:#ffffff;">
+<div style="font-size:24px;font-weight:bold;line-height:1.4;max-width:360px;">
+If helpful, we'd be happy to walk you through how the activation&nbsp;flow&nbsp;works.
+</div>
+</td>
+<td width="38%" valign="middle" align="center" style="padding:38px 32px;">
+<table cellpadding="0" cellspacing="0" border="0" align="center" role="presentation" style="border-collapse:separate;">
+<tr>
+<td align="center" bgcolor="#0057B8" style="background:#0057B8;border-radius:10px;padding:0;">
+<a href="mailto:info@media-console.com?subject=Introductory%20Call%20with%20Media%20Console%20for%20${encodeURIComponent(hotel)}" target="_blank" style="display:block;color:#ffffff;text-decoration:none;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.4px;line-height:18px;padding:16px 22px;mso-padding-alt:16px 22px;white-space:nowrap;">
+SCHEDULE&nbsp;A&nbsp;SHORT&nbsp;INTRO&nbsp;CALL
+</a>
+</td>
+</tr>
+</table>
+<div style="font-size:11px;color:#dbeafe;margin-top:12px;text-align:center;">or simply reply to this email</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+
+<tr>
+<td style="padding:30px 36px 22px 36px;background:#ffffff;">
+<div style="font-size:18px;font-weight:bold;color:#111827;text-align:center;text-transform:uppercase;letter-spacing:.4px;margin-bottom:18px;">SELECTED HOTEL BRANDS WE HAVE WORKED WITH</div>
+${trustedBlock}
+</td>
+</tr>
+
+
+<tr>
+<td style="padding:18px 36px 26px 36px;font-size:14px;line-height:1.8;color:#1f2937;background:#ffffff;">
+Thank you for your time and consideration.<br><br>${signature}
+</td>
+</tr>
+
+</table>
+</td></tr>
+</table>`;
+}
+
+function setStatus(message,isError){
+ const el=document.getElementById('status');
+ el.textContent=message||'';
+ el.style.color=isError?'#b42318':'#475569';
+}
+function safeFilename(value){
+ return String(value||'email-template').trim().replace(/[^a-z0-9-_]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase()||'email-template';
+}
+function saveJSON(){
+ try{
+  const payload={
+   version:1,
+   savedAt:new Date().toISOString(),
+   hotelName:document.getElementById('hotelName').value,
+   deckLink:document.getElementById('deckLink').value,
+   senderSignature:document.getElementById('senderSignature').value,
+   media:{
+    hero:{data:heroData,type:heroType},
+    workflow:{data:workflowData,type:workflowType},
+    trusted:{data:trustedData,type:''}
+   }
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=safeFilename(payload.hotelName)+'-email-generator.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  setStatus('JSON saved successfully.');
+ }catch(err){
+  console.error(err);
+  setStatus('Unable to save JSON: '+err.message,true);
+ }
+}
+function loadJSON(event){
+ const file=event.target.files&&event.target.files[0];
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=function(e){
+  try{
+   const payload=JSON.parse(e.target.result);
+   if(!payload || typeof payload!=='object') throw new Error('Invalid JSON format');
+   document.getElementById('hotelName').value=payload.hotelName||'[Hotel Name]';
+   document.getElementById('deckLink').value=payload.deckLink||'';
+   document.getElementById('senderSignature').value=payload.senderSignature||'';
+   const media=payload.media||{};
+   heroData=(media.hero&&media.hero.data)||'';
+   heroType=(media.hero&&media.hero.type)||'';
+   workflowData=(media.workflow&&media.workflow.data)||'';
+   workflowType=(media.workflow&&media.workflow.type)||'';
+   trustedData=(media.trusted&&media.trusted.data)||'';
+   renderEmail();
+   setStatus('JSON loaded successfully.');
+  }catch(err){
+   console.error(err);
+   setStatus('Unable to load JSON: '+err.message,true);
+  }finally{
+   event.target.value='';
+  }
+ };
+ reader.onerror=function(){setStatus('Unable to read the selected file.',true);};
+ reader.readAsText(file);
+}
+
+function copyEmail(){
+ const el=document.getElementById('emailPreview');
+ const range=document.createRange(); range.selectNodeContents(el);
+ const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+ document.execCommand('copy'); sel.removeAllRanges();
+ alert('Copied. Paste into Outlook compose.');
+}
+renderEmail();
+</script>
+</body>
+</html>
