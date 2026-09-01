@@ -1,0 +1,440 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Wyndham Outreach Email Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{margin:0;background:#F5F7FA;font-family:Arial,Helvetica,sans-serif;color:#1f2937}
+  .app{display:grid;grid-template-columns:380px 1fr;gap:24px;padding:24px;align-items:start}
+  .panel{background:#fff;border:1px solid #dbe3ec;border-radius:14px;padding:20px;position:sticky;top:16px}
+  .panel h1{font-size:20px;margin:0 0 8px;color:#002B5C}
+  label{display:block;font-size:12px;font-weight:700;color:#374151;margin:14px 0 6px}
+  input, textarea{width:100%;box-sizing:border-box;border:1px solid #cfd8e3;border-radius:8px;padding:10px 12px;font-size:13px;font-family:Arial}
+  input[type="file"]{padding:9px;background:#f8fafc}
+  textarea{min-height:90px;resize:vertical}
+  button{width:100%;border:0;border-radius:10px;padding:13px 16px;font-weight:700;cursor:pointer;margin-top:14px}
+  .primary{background:#0057B8;color:#fff}
+  .secondary{background:#002B5C;color:#fff}
+  .tertiary{background:#EAF2FF;color:#0057B8}
+  .button-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .button-row button{margin-top:10px}
+  .hint{font-size:12px;color:#6b7280;margin-top:12px;line-height:1.45}
+  .preview-wrap{background:#F5F7FA;padding:16px;border-radius:14px;overflow:auto}
+
+  @media only screen and (max-width:680px){
+    .email-outer-padding{padding:16px !important;}
+    .email-container{width:100% !important;max-width:640px !important;}
+    .content-pad{padding-left:24px !important;padding-right:24px !important;}
+    .responsive-img{width:100% !important;max-width:100% !important;height:auto !important;}
+  }
+  @media(max-width:900px){.app{grid-template-columns:1fr}.panel{position:static}}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="panel">
+    <h1>Wyndham Outreach Email Generator</h1>
+
+    <label>Hotel / Property Name</label>
+    <input id="hotelName" value="[Property Name]">
+
+    <label>Ad Preview Link</label>
+    <input id="previewLink" value="https://insert-ad-preview-link-here.com">
+
+    <label>Wyndham Deck Link</label>
+    <input id="deckLink" value="https://insert-deck-link-here.com">
+
+    <label>Hotel Mockup / GIF Image</label>
+    <input id="mockupFile" type="file" accept="image/*">
+
+    <label>Wyndham Deck Cover Image</label>
+    <input id="coverFile" type="file" accept="image/*">
+
+    <label>Trusted Hotel Brands Image</label>
+    <input id="trustedFile" type="file" accept="image/*">
+<label>Sender Signature</label>
+    <textarea id="senderSignature">Raphirat Nanaiboon (Dow)
+Operations Manager
+Media Console | US • Thailand
+
+M: +66 87 146 0142
+www.media-console.com</textarea>
+
+    <button class="primary" onclick="generateEmail()">Generate Preview</button>
+    <button class="secondary" onclick="copyEmail()">Copy Email for Outlook</button>
+    <div class="button-row">
+      <button class="tertiary" onclick="saveJSON()">Save JSON</button>
+      <button class="tertiary" onclick="document.getElementById('jsonFile').click()">Load JSON</button>
+    </div>
+    <input id="jsonFile" type="file" accept="application/json,.json" hidden onchange="loadJSON(event)">
+
+  </div>
+
+  <div class="preview-wrap">
+    <div id="emailPreview" contenteditable="true"></div>
+  </div>
+</div>
+
+<script>
+let mockupData = "";
+let coverData = "";
+let trustedData = "";
+
+function esc(s){
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function nl2br(str){
+  return esc(str).replace(/\n/g,'<br>');
+}
+
+function readFile(input, callback, targetWidth){
+  const file = input.files && input.files[0];
+  if(!file){ callback(""); return; }
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const img = new Image();
+    img.onload = function(){
+      const finalWidth = targetWidth || img.width;
+      const scale = finalWidth / img.width;
+      const finalHeight = Math.round(img.height * scale);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = finalWidth;
+      canvas.height = finalHeight;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, finalWidth, finalHeight);
+
+      // JPEG keeps the pasted email lighter and helps Outlook Mobile treat the image as a real large image.
+      callback(canvas.toDataURL('image/jpeg', 0.92));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function generateEmail(){
+
+  // Keep GIF animation for mockup image by NOT resizing through canvas.
+  const mockupInput = document.getElementById('mockupFile');
+  const mockupFile = mockupInput.files && mockupInput.files[0];
+
+  if(mockupFile){
+    const mockupReader = new FileReader();
+    mockupReader.onload = function(e){
+      mockupData = e.target.result;
+
+      // Resize cover/trusted images for Outlook Mobile responsiveness.
+      readFile(document.getElementById('coverFile'), function(c){
+        coverData = c || coverData;
+
+        readFile(document.getElementById('trustedFile'), function(t){
+          trustedData = t || trustedData;
+          renderEmail();
+        }, 1136);
+
+      }, 1136);
+
+    };
+    mockupReader.readAsDataURL(mockupFile);
+
+  } else {
+
+    readFile(document.getElementById('coverFile'), function(c){
+      coverData = c || coverData;
+
+      readFile(document.getElementById('trustedFile'), function(t){
+        trustedData = t || trustedData;
+        renderEmail();
+      }, 1136);
+
+    }, 1136);
+
+  }
+}
+
+function renderEmail(){
+  const hotel = esc(document.getElementById('hotelName').value);
+  const preview = esc(document.getElementById('previewLink').value);
+  const deck = esc(document.getElementById('deckLink').value);
+  const signature = nl2br(document.getElementById('senderSignature').value);
+
+  const mockupBlock = mockupData
+    ? `<a href="${preview}" target="_blank"><img src="${mockupData}" width="250" style="display:block;border:0;width:100%;max-width:250px;height:auto;margin:0 auto;"></a>`
+    : `<div style="font-size:12px;color:#6b7280;line-height:1.6;text-transform:uppercase;letter-spacing:.8px;">Upload Hotel Mockup / GIF in Generator</div>`;
+
+  const coverBlock = coverData
+    ? `<img src="${coverData}" width="568" class="responsive-img" style="display:block;border:0;width:568px;max-width:100%;height:auto;margin:0 auto;padding:0;">`
+    : `<div style="font-size:12px;color:#6b7280;line-height:1.6;text-transform:uppercase;letter-spacing:.8px;padding:42px 20px;text-align:center;border:1px dashed #CFE0F7;background:#F5F7FA;">Upload Wyndham Deck Cover Image in Generator</div>`;
+
+  const trustedBlock = trustedData
+    ? `<img src="${trustedData}" width="568" class="responsive-img" style="display:block;border:0;width:568px;max-width:100%;height:auto;margin:0 auto;padding:0;">`
+    : `<div style="margin-top:24px;border:1px dashed #CFE0F7;background:#F5F7FA;padding:28px 20px;font-size:12px;color:#6b7280;line-height:1.6;text-transform:uppercase;letter-spacing:.8px;">Upload Trusted by Leading Hotel Brands Image in Generator</div>`;
+
+  document.getElementById('emailPreview').innerHTML = `
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F5F7FA;font-family:Arial,Helvetica,sans-serif;color:#1f2937;">
+<tr>
+<td align="center" class="email-outer-padding" style="padding:28px;">
+
+<table width="640" cellpadding="0" cellspacing="0" border="0" class="email-container" style="background:#ffffff;border:1px solid #dbe3ec;overflow:hidden;border-collapse:collapse;width:640px;max-width:640px;">
+
+<tr>
+<td style="background:#0c0f14;padding:22px 36px;border-bottom:4px solid #0057B8;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td align="left" valign="middle">
+        <div style="font-size:28px;font-weight:300;color:#FFFFFF !important;letter-spacing:4px;font-family:Arial,Helvetica,sans-serif;">MEDIA CONSOLE</div>
+        <div style="font-size:11px;color:#0057B8;letter-spacing:1.2px;text-transform:uppercase;margin-top:6px;">Hospitality Programmatic Performance Marketing Agency</div>
+      </td>
+      <td align="right" valign="middle">
+        <div style="font-size:11px;color:#ffffff;letter-spacing:1px;text-transform:uppercase;font-weight:bold;">
+          Wyndham Direct Booking Activation
+        </div>
+      </td>
+    </tr>
+  </table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:34px 36px 22px 36px;font-size:15px;line-height:1.7;color:#1f2937;">
+Dear ${hotel} Team,
+<br><br>
+Greetings from Media Console.
+<br><br>
+We recently created a personalized dynamic ad mockup for ${hotel} and would like to share it with your team.
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 28px 36px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EAF2FF;border:1px solid #CFE0F7;">
+<tr>
+<td width="50%" valign="middle" style="padding:28px;">
+<div style="font-size:11px;color:#0057B8;font-weight:bold;letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px;">
+Personalized Direct Booking Activation
+</div>
+<div style="font-size:18px;font-weight:bold;color:#002B5C;line-height:1.45;margin-bottom:10px;">
+See how your dynamic booking ad could appear.
+</div>
+<div style="font-size:13px;color:#4b5563;line-height:1.55;margin-bottom:22px;">
+Built to re-engage high-intent visitors and bring them back to book direct.
+</div>
+<a href="${preview}" target="_blank" style="background:#0057B8;color:#ffffff;text-decoration:none;padding:13px 20px;display:inline-block;border-radius:10px;font-size:13px;font-weight:bold;letter-spacing:.4px;text-transform:uppercase;line-height:16px;">
+View Ad Preview
+</a>
+</td>
+<td width="50%" align="center" style="padding:24px;background:#ffffff;border-left:1px dashed #b7cbe5;">
+${mockupBlock}
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 24px 36px;font-size:15px;line-height:1.75;color:#1f2937;">
+Driving more direct bookings through the official website and IBE continues to be a key focus for hotel properties. However, many travelers leave the booking journey before completing a reservation, resulting in missed direct booking opportunities.
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 30px 36px;line-height:0;font-size:0;">
+${coverBlock}
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 26px 36px;font-size:15px;line-height:1.75;color:#1f2937;">
+At Media Console, we help hotel brands reconnect with those high-intent travelers through performance-driven display campaigns designed specifically to drive hotel direct bookings.
+<br><br>
+Since the booking and audience structure is already compatible with our activation platform, campaigns can be launched quickly without additional technical setup.
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 30px 36px;">
+<div style="font-size:18px;font-weight:bold;color:#0057B8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:18px;">
+What You Can Expect
+</div>
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;">
+<div style="font-size:24px;font-weight:bold;color:#0057B8;margin-bottom:10px;">01</div>
+<div style="font-size:13.5px;line-height:1.65;color:#002B5C;font-weight:bold;">Recover lost website visitors and booking demand</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;">
+<div style="font-size:24px;font-weight:bold;color:#0057B8;margin-bottom:10px;">02</div>
+<div style="font-size:13.5px;line-height:1.65;color:#002B5C;font-weight:bold;">Drive more direct bookings through official channels</div>
+</td>
+<td width="10"></td>
+<td width="33.33%" valign="top" style="padding:18px;border:1px solid #dbe3ec;background:#ffffff;">
+<div style="font-size:24px;font-weight:bold;color:#0057B8;margin-bottom:10px;">03</div>
+<div style="font-size:13.5px;line-height:1.65;color:#002B5C;font-weight:bold;">Measure booking revenue and ROAS performance</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 18px 36px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0057B8;">
+<tr>
+<td style="padding:22px 24px;font-size:14px;line-height:1.7;color:#ffffff;">
+Explore the Wyndham deck for the full solution, activation flow, and reporting view.
+</td>
+<td align="right" width="210" style="padding:22px 24px;">
+<a href="${deck}" target="_blank" style="background:#ffffff;color:#0057B8;text-decoration:none;padding:12px 16px;display:inline-block;border-radius:10px;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.4px;">
+SEE HOW THE SOLUTION WORKS
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 34px 36px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#002B5C;">
+<tr>
+<td style="padding:24px;font-size:14px;line-height:1.7;color:#ffffff;">
+If helpful, I’d be happy to share the personalized direct booking activation concept we prepared for your team and walk through how the activation flow works.
+</td>
+<td align="right" width="210" style="padding:24px;">
+<a href="mailto:info@media-console.com?subject=Introduction%20Call%20for%20Wyndham%20${encodeURIComponent(hotel)}" style="background:#0057B8;color:#ffffff;text-decoration:none;padding:12px 16px;display:inline-block;border-radius:10px;font-size:13px;font-weight:bold;text-transform:uppercase;letter-spacing:.4px;">
+SCHEDULE A SHORT INTRO CALL
+</a>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+<tr>
+<td style="padding:0 36px 30px 36px;font-size:14px;line-height:1.8;color:#1f2937;">
+Thank you for your time and consideration.<br><br>${signature}
+</td>
+</tr>
+
+<tr>
+<td style="background:#ffffff;border-top:1px solid #dbe3ec;padding:30px 36px 34px 36px;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center">
+<table cellpadding="0" cellspacing="0" border="0" align="center">
+<tr>
+
+<td style="padding:0;font-size:20px;font-weight:bold;color:#222222;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;">SELECT HOTEL BRANDS WE HAVE WORKED WITH</td>
+
+</tr>
+</table>
+<div style="margin-top:24px;text-align:center;width:100%;max-width:568px;margin-left:auto;margin-right:auto;">
+${trustedBlock}
+</div>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+
+</table>
+</td>
+</tr>
+</table>`;
+}
+
+function copyEmail(){
+  const el = document.getElementById('emailPreview');
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  document.execCommand('copy');
+  sel.removeAllRanges();
+  alert('Copied. Paste into Outlook compose.');
+}
+
+function safeFilename(value){
+  return String(value || 'wyndham-property')
+    .trim()
+    .replace(/[^a-z0-9-_]+/gi,'-')
+    .replace(/^-+|-+$/g,'')
+    .toLowerCase() || 'wyndham-property';
+}
+
+function saveJSON(){
+  try{
+    const data = {
+      version: 1,
+      savedAt: new Date().toISOString(),
+      hotelName: document.getElementById('hotelName').value,
+      previewLink: document.getElementById('previewLink').value,
+      deckLink: document.getElementById('deckLink').value,
+      senderSignature: document.getElementById('senderSignature').value,
+      images: {
+        mockupData,
+        coverData,
+        trustedData
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = safeFilename(data.hotelName) + '-wyndham-outreach-email.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    alert('JSON saved with all email details and images.');
+  }catch(error){
+    alert('Unable to save JSON: ' + error.message);
+  }
+}
+
+function loadJSON(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const data = JSON.parse(e.target.result);
+      if(!data || typeof data !== 'object') throw new Error('Invalid JSON format.');
+
+      ['hotelName','previewLink','deckLink','senderSignature'].forEach(function(id){
+        if(data[id] !== undefined) document.getElementById(id).value = data[id];
+      });
+
+      const images = data.images && typeof data.images === 'object' ? data.images : data;
+      if(typeof images.mockupData === 'string') mockupData = images.mockupData;
+      if(typeof images.coverData === 'string') coverData = images.coverData;
+      if(typeof images.trustedData === 'string') trustedData = images.trustedData;
+
+      renderEmail();
+      alert('JSON loaded with all email details and images.');
+    }catch(error){
+      alert('Unable to load JSON: ' + error.message);
+    }finally{
+      event.target.value = '';
+    }
+  };
+  reader.onerror = function(){
+    alert('Unable to read the selected JSON file.');
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+renderEmail();
+</script>
+</body>
+</html>
